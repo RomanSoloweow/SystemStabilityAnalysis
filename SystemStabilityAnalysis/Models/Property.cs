@@ -20,9 +20,9 @@ namespace SystemStabilityAnalysis.Models
         
         public Func<double> Calculate { get; set; }
 
-        public bool Verification()
-        {
+        //public bool Verification()
+        //{
 
-        }
+        //}
     }
 }
