@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemStabilityAnalysis.Models;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -11,6 +12,7 @@ namespace SystemStabilityAnalysis.Controllers
     [Route("[controller]")]
     public class SystemRestrictions : ControllerBase
     {
+
         //Для логирования. Пока что не нужно
         //private readonly ILogger<SystemRestrictions> _logger;
 
