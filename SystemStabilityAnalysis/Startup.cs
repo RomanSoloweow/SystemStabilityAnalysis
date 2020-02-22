@@ -38,6 +38,9 @@ namespace SystemStabilityAnalysis
 
             app.UseHttpsRedirection();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -46,6 +49,7 @@ namespace SystemStabilityAnalysis
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
