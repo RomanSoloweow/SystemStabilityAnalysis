@@ -1,9 +1,6 @@
 $('.menu .item')
  .tab()
 ;
-$('.menu .item')
- .tab()
-;
 
 $('.ui.dropdown')
  .dropdown()
@@ -13,8 +10,8 @@ $(".ui.icon.button.plus").click(addFilter)
 $(".ui.icon.button.minus").click(deleteFilter)
 $(".ui.button.next").click(nextPage)
 $(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()})
-
 $(".ui.dropdown.names").click(getNames);
+$(".ui.dropdown.conditions").click(getConditions);
 
 function nextPage(){
   currentTab = $('.active.item');
@@ -87,8 +84,11 @@ function getNames(){
   });
 }
 
-// .click(function(){
-//   //$('.ui.form').addClass("loading");
-//   
-
-// });
+function getConditions(){
+  $.ajax({
+    method: "GET",
+    url: "",
+  }).done(function(msg){
+    console.log(msg);
+  });
+}
