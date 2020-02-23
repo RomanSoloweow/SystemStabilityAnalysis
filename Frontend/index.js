@@ -70,7 +70,6 @@ function addFilter(){
 }
 
 function deleteFilter(){
-  console.log($( this ).parent().parent().remove())
   if ($(".ui.celled.table tr").length == 1) {
     $(".ui.celled.table").remove()
   }
