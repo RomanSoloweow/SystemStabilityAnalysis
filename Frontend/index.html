@@ -1,98 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.3/dist/semantic.min.css">
 <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.3/dist/semantic.min.js"></script>
 </head>
 <body>
 
-    <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="first">Ограничения</a>
-        <a class="item" data-tab="second">Система</a>
-        <a class="item" data-tab="third">Анализ систем</a>
-      </div>
+  <div class="ui top attached tabular menu">
+    <a class="active item" data-tab="first">Ограничения</a>
+    <a class="item" data-tab="second">Система</a>
+    <a class="item" data-tab="third">Анализ систем</a>
+   </div>
 
-      <div class="ui bottom attached tab segment" data-tab="first">
+   <div class="ui bottom attached tab segment" data-tab="first">
+      <div class="ui relaxed grid padded">
+          <div class="row">
+
             <div class="ui small basic icon buttons">
-                <button class="ui button active"><i class="save icon"></i></button>
-                <button class="ui button active"><i class="download icon"></i></button>
-                <button class="ui right button active next">
-                    Без ограничений
-                </button>
+              <button class="ui button active"><i class="save icon"></i></button>
+              <button class="ui button active"><i class="download icon"></i></button>
+              <button class="ui right button active next">
+                Без ограничений
+              </button>
             </div>
-           
+        </div>
+          <div class="row">
             <div class="ui form">
-                <div class="filter">
-                    <div class="fields">
-                        <div class="three wide field">
-                            <label>Наименование показателя</label>
-                            <select name="skills" class="ui fluid search dropdown">
-                                <option value="">Название</option>
-                                <option value="angular">Angular</option>
-                                <option value="css">CSS</option>
-                                <option value="design">Graphic Design</option>
-                            </select>
-                        </div>
-                        <div class="two wide field disField">
-                            <label>Обозначение</label>
-                            <input type="text" placeholder="">
-                        </div>
-                        <div class="two wide field disField">
-                            <label>Единица измерения</label>
-                            <input type="text" placeholder="Ч" disabled>
-                        </div>
-                        <div class="two wide field">
-                            <label>Условие</label>
-                            <select name="skills" class="ui fluid search dropdown">
-                                <option value="">></option>
-                                <option value="angular">Angular</option>
-                                <option value="css">CSS</option>
-                                <option value="design">Graphic Design</option>
-                            </select>
-                            
-                        </div>
-                        <div class="two wide field">
-                            <label>Значение</label>
-                            <input type="text" placeholder="0">
-                        </div>
-                        <div class="field button">
-                            <label>&ensp;</label>
-                            <button class="ui icon button plus">
-                                <i class="plus icon"></i>
-                            </button>
-                            
-                        </div>
-                        <div class="field button">
-                            <label>&ensp;</label>
-                            <button class="ui button">
-                                Удалить все
-                            </button>
-                            
-                        </div>
-                    </div>
+              <div class="filter">
+                <div class="fields">
+                  <div class="three wide field">
+                    <label>Наименование показателя</label>
+                    <select name="skills" class="ui fluid search dropdown">
+                      <option value="">Название</option>
+                      <option value="angular">Angular</option>
+                      <option value="css">CSS</option>
+                      <option value="design">Graphic Design</option>
+                    </select>
+                  </div>
+                  <div class="two wide field disField">
+                    <label>Обозначение</label>
+                    <input type="text" placeholder="">
+                  </div>
+                  <div class="three wide field disField">
+                    <label>Единица измерения</label>
+                    <input type="text" placeholder="Ч" disabled>
+                  </div>
+                  <div class="two wide field">
+                    <label>Условие</label>
+                    <select name="skills" class="ui fluid search dropdown">
+                      <option value="">></option>
+                      <option value="angular">Angular</option>
+                      <option value="css">CSS</option>
+                      <option value="design">Graphic Design</option>
+                    </select>
+                    
+                  </div>
+                  <div class="two wide field">
+                    <label>Значение</label>
+                    <input type="text" placeholder="0">
+                  </div>
+                  <div class="field button">
+                    <label>&ensp;</label>
+                    <button class="ui icon button plus">
+                      <i class="plus icon"></i>
+                    </button>
+                    
+                  </div>
+                  <div class="field button">
+                    <label>&ensp;</label>
+                    <button class="ui button">
+                      Удалить все
+                    </button>
+                    
+                  </div>
                 </div>
+              </div>
             </div>
-    </div>
-      <style type="text/css">
-.disField ::placeholder {
-    color : black !important;
-}
-::placeholder {
-    opacity: 1 !important;
-}
-  
-  </style>
-      <div class="ui bottom attached active tab segment" data-tab="second">
-        Second
+        </div>
       </div>
-      <div class="ui bottom attached tab segment" data-tab="third">
-        Third
-      </div>
-      <script src="index.js"></script>
+  </div>
+   <div class="ui bottom attached active tab segment" data-tab="second">
+    Second
+   </div>
+   <div class="ui bottom attached tab segment" data-tab="third">
+    Third
+   </div>
+   <script src="index.js"></script>
 </body>
 </html>
