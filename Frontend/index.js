@@ -66,12 +66,13 @@ function addFilter(){
     </table>`)
   }
   $(".ui.icon.button.minus").unbind();
-  $(".ui.icon.button.minus").click(deleteFilter)
+  $(".ui.icon.button.minus").click(deleteFilter);
 }
 
 function deleteFilter(){
+  $( this ).parent().parent().remove();
   if ($(".ui.celled.table tr").length == 1) {
-    $(".ui.celled.table").remove()
+    $(".ui.celled.table").remove();
   }
 }
 
