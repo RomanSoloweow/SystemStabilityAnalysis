@@ -16,21 +16,99 @@ namespace SystemStabilityAnalysis.Controllers
     public class Restrictions : ControllerBase
     {
         [HttpGet]
-        public Dictionary<string, object> GetParameters()
+        public object GetParameters()
         {
-            Dictionary<string, object> Data = new Dictionary<string, object>();
-            Data.Add("Status", Status.Success.GetName());
-            Data.Add("Properties", Enum.GetValues(typeof(ParametersName)).OfType<ParametersName>().Select(x => x.ToJson()));
-            return Data;
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Properties = HelperEnum.GetValuesWithoutDefault<ParametersName>().Select(x => x.ToJson())
+            };
         }
 
         [HttpGet]
-        public Dictionary<string, object> GetConditions()
+        public object GetConditions()
         {
-            Dictionary<string, object> Data = new Dictionary<string, object>();
-            Data.Add("Status", Status.Success.GetName());
-            Data.Add("Conditions", Enum.GetValues(typeof(ConditionType)).OfType<ConditionType>().Select(x => x.ToJson()));
-            return Data;
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Conditions = HelperEnum.GetValuesWithoutDefault<ConditionType>().Select(x => x.ToJson())
+            };
+        }
+        //[HttpGet("{parameter}/{condition}/{value}")]
+        //public object AddRestriction([FromBody]string parameter, string condition, double value = 0)
+        //{
+        //    Status status = Status.Success;
+
+        //    //List<string> Message = new List<string>();
+
+        //    //if (HelperEnum.IsDefault(parameter))
+        //    //{
+        //    //    Message.Add("Параметр указано некорректно");
+        //    //    status = Status.Error;
+        //    //}
+
+        //    //if (HelperEnum.IsDefault(condition))
+        //    //{
+        //    //    Message.Add("Условие указано некорректно");
+        //    //    status = Status.Error;
+        //    //}
+        //    //if (!(value > 0))
+        //    //{
+        //    //    Message.Add("Значение параметра должно быть > 0");
+        //    //    status = Status.Error;
+        //    //}
+
+        //    //if (status == Status.Error)
+        //    //{
+        //    //    return new
+        //    //    {
+        //    //        Status = status.GetName(),
+        //    //        Message = Message
+        //    //    };
+        //    //}
+
+        //    return new
+        //    {
+        //        Status = status.GetName()
+        //    };
+        //}
+        [HttpPost("{parameter}/{condition}/{value}")]
+        public object AddRestriction(ParametersName parameter = ParametersName.NoCorrect, ConditionType condition = ConditionType.NoCorrect, double value = 0)
+        {
+            Status status = Status.Success;
+
+            List<string> Message = new List<string>();
+
+            if (HelperEnum.IsDefault(parameter))
+            {
+                Message.Add("Параметр указано некорректно");
+                status = Status.Error;
+            }
+
+            if (HelperEnum.IsDefault(condition))
+            {
+                Message.Add("Условие указано некорректно");
+                status = Status.Error;
+            }
+            if (!(value > 0))
+            {
+                Message.Add("Значение параметра должно быть > 0");
+                status = Status.Error;
+            }
+
+            if (status == Status.Error)
+            {
+                return new
+                {
+                    Status = status.GetName(),
+                    Message = Message
+                };
+            }
+
+            return new
+            {
+                Status = status.GetName()
+            };
         }
     }
 }

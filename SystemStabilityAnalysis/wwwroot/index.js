@@ -85,16 +85,15 @@ function deleteFilter(){
 
 function getNames(){
   let currentCombobox = $(".ui.dropdown.names");
-  if (currentCombobox.find(".menu").children().length == 1 ) {
     $.ajax({
       method: "GET",
       url: "Restrictions/GetParameters",
     }).done(function(msg){
       
-      if (msg.Status == "Success") {
+      if (msg.status == "Success") {
         currentCombobox.find(".menu").empty();
         currentCombobox.dropdown('refresh')
-        $.each( msg.Properties, function( key, value ) {
+        $.each( msg.properties, function( key, value ) {
           currentCombobox.find(".menu").append(`<div class="item" 
             data-value="${value.value}"
             data-text="${value.description}"
@@ -107,21 +106,19 @@ function getNames(){
         currentCombobox.dropdown('refresh')
       }
     });
-  }
 }
 
 function getConditions(){
   let currentCombobox = $(".ui.dropdown.conditions");
   console.log(currentCombobox)
-  if (currentCombobox.find(".menu").children().length == 1 ) {
     $.ajax({
       method: "GET",
       url: "Restrictions/GetConditions",
     }).done(function(msg){
-      if (msg.Status == "Success") {
+      if (msg.status == "Success") {
         currentCombobox.find(".menu").empty();
         currentCombobox.dropdown('refresh')
-        $.each( msg.Conditions, function( key, value ) {
+        $.each( msg.conditions, function( key, value ) {
           currentCombobox.find(".menu").append(`<div class="item" 
             data-value="${value.value}"
             data-text="${value.name}"
@@ -132,5 +129,4 @@ function getConditions(){
         currentCombobox.dropdown('refresh')
       }
     });
-  }
 }

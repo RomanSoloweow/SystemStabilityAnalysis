@@ -19,5 +19,10 @@ namespace SystemStabilityAnalysis.Models
         {
             return Enum.GetName(typeof(Status), parameter);
         }
+
+        public static void ChangeStatus(this Status parameter)
+        {
+            parameter = (parameter == Status.Success) ? Status.Error : Status.Success;
+        }
     }
 }
