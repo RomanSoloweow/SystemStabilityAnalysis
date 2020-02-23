@@ -11,19 +11,10 @@ using SystemStabilityAnalysis.Models;
 namespace SystemStabilityAnalysis.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class Restrictions : ControllerBase
     {
-
-        //Для логирования. Пока что не нужно
-        //private readonly ILogger<SystemRestrictions> _logger;
-
-        //public SystemRestrictions(ILogger<SystemRestrictions> logger)
-        //{
-        //    _logger = logger;
-        //}
-
-        [HttpPost]
+        [HttpGet]
         public ActionResult GetParameters()
         {
             Dictionary<string, object> Data = new Dictionary<string, object>();
@@ -34,10 +25,9 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        public string GetTest()
         {
-
-            return "Здесь будет ввод ограничений";
+            return "Здесь будет запрос для получения условий";
         }
     }
 }
