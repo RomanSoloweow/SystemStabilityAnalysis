@@ -12,6 +12,7 @@ $('.ui.dropdown')
 $(".ui.icon.button.plus").click(addFilter)
 $(".ui.icon.button.minus").click(deleteFilter)
 $(".ui.button.next").click(nextPage)
+$(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()})
 
 function nextPage(){
   currentTab = $('.active.item');
@@ -29,11 +30,12 @@ function addFilter(){
     <td data-label="Age">24</td>
     <td data-label="Job">Engineer</td>
     <td data-label="Job" class="center aligned" >
-      <button class="ui icon button filter">
+      <button class="ui icon button minus">
         <i class="minus icon"></i>
       </button>
     </td>
     </tr>`)
+    
   }
   else {
     $('.ui.form').append(`<table class="ui celled blue table center aligned">
@@ -55,41 +57,23 @@ function addFilter(){
         <td data-label="Age">24</td>
         <td data-label="Job">Engineer</td>
         <td data-label="Job" class="center aligned" >
-          <button class="ui icon button filter">
-            <i class="minus icon"></i>
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td data-label="Name">Jill</td>
-        <td data-label="Age">26</td>
-        <td data-label="Job">Engineer</td>
-        <td data-label="Age">24</td>
-        <td data-label="Job">Engineer</td>
-        <td data-label="Job" class="center aligned" >
-          <button class="ui icon button filter">
-            <i class="minus icon"></i>
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td data-label="Name">Elyse</td>
-        <td data-label="Age">24</td>
-        <td data-label="Job">Designer</td>
-        <td data-label="Age">24</td>
-        <td data-label="Job">Engineer</td>
-        <td data-label="Job" class="center aligned" >
-          <button class="ui icon button filter">
+          <button class="ui icon button minus">
             <i class="minus icon"></i>
           </button>
         </td>
       </tr>
     </tbody>
     </table>`)
-
   }
-  
-  
+  $(".ui.icon.button.minus").unbind();
+  $(".ui.icon.button.minus").click(deleteFilter)
+}
+
+function deleteFilter(){
+  console.log($( this ).parent().parent().remove())
+  if ($(".ui.celled.table tr").length == 1) {
+    $(".ui.celled.table").remove()
+  }
 }
 
 // .click(function(){
