@@ -75,6 +75,10 @@ namespace SystemStabilityAnalysis.Helpers
 
             throw new ArgumentException(paramName: parameter.ToString(), message:String.Format("Обозначение для параметра {0} не найдено", parameter.ToString()));
         }
+        public static string GetName(this ConditionType parameter)
+        {
+            return Enum.GetName(typeof(ConditionType), parameter);
+        }
     }
 
     public class Condition
@@ -83,6 +87,7 @@ namespace SystemStabilityAnalysis.Helpers
         public double Value { get; set; }
         public string Description { get { return ConditionType.GetDesignation();} }
         public string ErrorMessage{ get { return "Должен быть " + Description + " " + Value.ToString();} }
+
         public Condition(ConditionType conditionType, double value)
         {
             ConditionType = conditionType;

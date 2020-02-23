@@ -9,7 +9,7 @@ namespace SystemStabilityAnalysis.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SystemsAnalysis : ControllerBase
+    public class Analysis : ControllerBase
     {
         
         [HttpGet]

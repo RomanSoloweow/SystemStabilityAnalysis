@@ -13,7 +13,7 @@ namespace SystemStabilityAnalysis.Models
         public List<string> ErrorMessages;
     }
 
-    public enum ParameterName
+    public enum ParametersName
     {
         NoCorrect = 0,
         deltaT,
@@ -73,142 +73,199 @@ namespace SystemStabilityAnalysis.Models
 
     public static class ParametersExtension
     {
-        public static Dictionary<ParameterName, string> Descriptions = new Dictionary<ParameterName, string>()
+        public static Dictionary<ParametersName, string> Descriptions = new Dictionary<ParametersName, string>()
         {
-            {ParameterName.deltaT, "Период устойчивой эксплуатации системы в сутках"},
-            {ParameterName.R, "Стоимость функционирования системы в период ∆T"},
-            {ParameterName.S, "Количество персонала "},
-            {ParameterName.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
-            {ParameterName.N2, "Количество элементов выполняющих функции системы, 2 группа "},
-            {ParameterName.N3, "Количество др. элементов: подсистема обеспечения, резерв,  неисправных и др., 3 группа"},
-            {ParameterName.P1, "Количество элементов 1 группы, введенных (восстановленных) в эксплуатацию"},
-            {ParameterName.A1, "Количество элементов 1 группы не перешедших во 2 группу из-за недостатков ресурсов "},
-            {ParameterName.B1, "Количество элементов 1 группы, вышедших из строя  "},
-            {ParameterName.F1, "Количество элементов 1 группы перешедших во 2 группу "},
-            {ParameterName.Q2, "Количество элементов 2 группы  перешедших в 3 группу (неисправных, но еще подлежащих восстановлению или пригодных для использования)"},
-            {ParameterName.D2, "Количество не подлежащих восстановлению элементов 2 группы"},
-            {ParameterName.H3, "Количество элементов 3 группы перешедших в 1 группу  "},
-            {ParameterName.Lс, "Количество смен в сутках"},
-            {ParameterName.Tс, "Время 1 смены в часах"},
-            {ParameterName.R1, "Макс. расход ресурсов на 1 элемент 1 группы (Стоимость) в сутки"},
-            {ParameterName.Rv2, "Макс. расход ресурсов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
-            {ParameterName.Rcyt1, "Расход ресурсов на  1 группу (Стоимость) в сутки"},
-            {ParameterName.Rf1, "Расход ресурсов на  1 группу (Стоимость) за период функционирования"},
-            {ParameterName.R2, "Макс. расход ресурсов на  1 элемент 2 группы (Стоимость) в сутки"},
-            {ParameterName.Rcyt2, "Расход ресурсов на 2 группу (Стоимость) в сутки"},
-            {ParameterName.Rf2, "Расход ресурсов на  2 группу (Стоимость) за период функционирования"},
-            {ParameterName.R3, "Макс. расход ресурсов на  1 элемент 3 группы (Стоимость) в сутки"},
-            {ParameterName.Rcyt3, "Расход ресурсов на 3 группу (Стоимость) в сутки"},
-            {ParameterName.Rf3, "Расход ресурсов на  3 группу (Стоимость) за период функционирования"},
-            {ParameterName.Rcyt, "Расход ресурсов (Стоимость) функционирования системы за сутки"},
-            {ParameterName.W1, "Макс. расход человеко-часов на 1 элемент 1 группы в сутки"},
-            {ParameterName.Wv2, "Макс. расход человеко-часов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
-            {ParameterName.Wсyt1, "Расход человеко-часов на  1 группу в сутки"},
-            {ParameterName.Wf1, "Расход человеко-часов на  1 группу за период функционирования"},
-            {ParameterName.W2, "Макс. расход человеко-часов на  1 элемент 2 группы в сутки"},
-            {ParameterName.Wcyt2, "Расход человеко-часов на 2 группу в сутки"},
-            {ParameterName.Wf2, "Расход человеко-часов на  2 группу за период функционирования"},
-            {ParameterName.W3, "Макс. расход человеко-часов на  1 элемент 3 группы  в сутки"},
-            {ParameterName.Wcyt3, "Расход человеко-часов на 3 группу в сутки"},
-            {ParameterName.Wf3, "Расход человеко-часов на  3 группу за период функционирования"},
-            {ParameterName.Wcyt, "Расход человеко-часов на функционирование системы за сутки"},
-            {ParameterName.W, "Расход человеко-часов на функционирование системы за период (∆T)"},
-            {ParameterName.Smin1, "Мин. необходимое количество специалистов в 1 смене для 1 группы"},
-            {ParameterName.Smin2, "Мин. необходимое количество специалистов в 1 смене для 2 группы"},
-            {ParameterName.Smin3, "Мин. необходимое количество специалистов в 1 смене для 3 группы"},
-            {ParameterName.SminC, "Мин. необходимое количество персонала в 1 смене для всей системы"},
-            {ParameterName.Smin, "Мин. необходимое кол-во персонала для всей системы на период ∆T"},
-            {ParameterName.Sn1, "Прогнозируемое кол-во потерь специалистов 1 группы за одну смену"},
-            {ParameterName.Sn2, "Прогнозируемое кол-во потерь специалистов 2 группы за одну смену"},
-            {ParameterName.Sn3, "Прогнозируемое кол-во потерь специалистов 3 группы за одну смену"},
-            {ParameterName.S1, "Необходимое количество специалистов в  одной смене для 1 группы"},
-            {ParameterName.S2, "Необходимое количество специалистов в  одной смене для 2 группы"},
-            {ParameterName.S3, "Необходимое количество специалистов в одной смене для 3 группы"},
-            {ParameterName.Sс, "Необходимое количество персонала в одной смене для всей системы"},
-            {ParameterName.SN1, "Из этого количества: в ремонтно-восстановительные формирования"},
-            {ParameterName.SN2, "Непосредственно для обеспечения функционирования (выполнения основных функций) системы"},
-            {ParameterName.SN3, "Для подсистемы обеспечения подсистемы хранения запасов и резервирования"}
+            {ParametersName.deltaT, "Период устойчивой эксплуатации системы в сутках"},
+            {ParametersName.R, "Стоимость функционирования системы в период ∆T"},
+            {ParametersName.S, "Количество персонала "},
+            {ParametersName.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
+            {ParametersName.N2, "Количество элементов выполняющих функции системы, 2 группа "},
+            {ParametersName.N3, "Количество др. элементов: подсистема обеспечения, резерв,  неисправных и др., 3 группа"},
+            {ParametersName.P1, "Количество элементов 1 группы, введенных (восстановленных) в эксплуатацию"},
+            {ParametersName.A1, "Количество элементов 1 группы не перешедших во 2 группу из-за недостатков ресурсов "},
+            {ParametersName.B1, "Количество элементов 1 группы, вышедших из строя  "},
+            {ParametersName.F1, "Количество элементов 1 группы перешедших во 2 группу "},
+            {ParametersName.Q2, "Количество элементов 2 группы  перешедших в 3 группу (неисправных, но еще подлежащих восстановлению или пригодных для использования)"},
+            {ParametersName.D2, "Количество не подлежащих восстановлению элементов 2 группы"},
+            {ParametersName.H3, "Количество элементов 3 группы перешедших в 1 группу  "},
+            {ParametersName.Lс, "Количество смен в сутках"},
+            {ParametersName.Tс, "Время 1 смены в часах"},
+            {ParametersName.R1, "Макс. расход ресурсов на 1 элемент 1 группы (Стоимость) в сутки"},
+            {ParametersName.Rv2, "Макс. расход ресурсов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
+            {ParametersName.Rcyt1, "Расход ресурсов на  1 группу (Стоимость) в сутки"},
+            {ParametersName.Rf1, "Расход ресурсов на  1 группу (Стоимость) за период функционирования"},
+            {ParametersName.R2, "Макс. расход ресурсов на  1 элемент 2 группы (Стоимость) в сутки"},
+            {ParametersName.Rcyt2, "Расход ресурсов на 2 группу (Стоимость) в сутки"},
+            {ParametersName.Rf2, "Расход ресурсов на  2 группу (Стоимость) за период функционирования"},
+            {ParametersName.R3, "Макс. расход ресурсов на  1 элемент 3 группы (Стоимость) в сутки"},
+            {ParametersName.Rcyt3, "Расход ресурсов на 3 группу (Стоимость) в сутки"},
+            {ParametersName.Rf3, "Расход ресурсов на  3 группу (Стоимость) за период функционирования"},
+            {ParametersName.Rcyt, "Расход ресурсов (Стоимость) функционирования системы за сутки"},
+            {ParametersName.W1, "Макс. расход человеко-часов на 1 элемент 1 группы в сутки"},
+            {ParametersName.Wv2, "Макс. расход человеко-часов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
+            {ParametersName.Wсyt1, "Расход человеко-часов на  1 группу в сутки"},
+            {ParametersName.Wf1, "Расход человеко-часов на  1 группу за период функционирования"},
+            {ParametersName.W2, "Макс. расход человеко-часов на  1 элемент 2 группы в сутки"},
+            {ParametersName.Wcyt2, "Расход человеко-часов на 2 группу в сутки"},
+            {ParametersName.Wf2, "Расход человеко-часов на  2 группу за период функционирования"},
+            {ParametersName.W3, "Макс. расход человеко-часов на  1 элемент 3 группы  в сутки"},
+            {ParametersName.Wcyt3, "Расход человеко-часов на 3 группу в сутки"},
+            {ParametersName.Wf3, "Расход человеко-часов на  3 группу за период функционирования"},
+            {ParametersName.Wcyt, "Расход человеко-часов на функционирование системы за сутки"},
+            {ParametersName.W, "Расход человеко-часов на функционирование системы за период (∆T)"},
+            {ParametersName.Smin1, "Мин. необходимое количество специалистов в 1 смене для 1 группы"},
+            {ParametersName.Smin2, "Мин. необходимое количество специалистов в 1 смене для 2 группы"},
+            {ParametersName.Smin3, "Мин. необходимое количество специалистов в 1 смене для 3 группы"},
+            {ParametersName.SminC, "Мин. необходимое количество персонала в 1 смене для всей системы"},
+            {ParametersName.Smin, "Мин. необходимое кол-во персонала для всей системы на период ∆T"},
+            {ParametersName.Sn1, "Прогнозируемое кол-во потерь специалистов 1 группы за одну смену"},
+            {ParametersName.Sn2, "Прогнозируемое кол-во потерь специалистов 2 группы за одну смену"},
+            {ParametersName.Sn3, "Прогнозируемое кол-во потерь специалистов 3 группы за одну смену"},
+            {ParametersName.S1, "Необходимое количество специалистов в  одной смене для 1 группы"},
+            {ParametersName.S2, "Необходимое количество специалистов в  одной смене для 2 группы"},
+            {ParametersName.S3, "Необходимое количество специалистов в одной смене для 3 группы"},
+            {ParametersName.Sс, "Необходимое количество персонала в одной смене для всей системы"},
+            {ParametersName.SN1, "Из этого количества: в ремонтно-восстановительные формирования"},
+            {ParametersName.SN2, "Непосредственно для обеспечения функционирования (выполнения основных функций) системы"},
+            {ParametersName.SN3, "Для подсистемы обеспечения подсистемы хранения запасов и резервирования"}
         };
 
-        public static Dictionary<ParameterName, string> Calculations = new Dictionary<ParameterName, string>()
+        public static Dictionary<ParametersName, string> Calculations = new Dictionary<ParametersName, string>()
         {
-            {ParameterName.deltaT, "Описание"},
-            {ParameterName.R, "Описание"},
-            {ParameterName.S, "Описание"},
-            {ParameterName.N1, "Описание"},
-            {ParameterName.N2, "Описание"},
-            {ParameterName.N3, "Описание"},
-            {ParameterName.P1, "Описание"},
-            {ParameterName.A1, "Описание"},
-            {ParameterName.B1, "Описание"},
-            {ParameterName.F1, "Описание"},
-            {ParameterName.Q2, "Описание"},
-            {ParameterName.D2, "Описание"},
-            {ParameterName.H3, "Описание"},
-            {ParameterName.Lс, "Описание"},
-            {ParameterName.Tс, "Описание"},
-            {ParameterName.R1, "Описание"},
-            {ParameterName.Rv2, "Описание"},
-            {ParameterName.Rcyt1, "Описание"},
-            {ParameterName.Rf1, "Описание"},
-            {ParameterName.R2, "Описание"},
-            {ParameterName.Rcyt2, "Описание"},
-            {ParameterName.Rf2, "Описание"},
-            {ParameterName.R3, "Описание"},
-            {ParameterName.Rcyt3, "Описание"},
-            {ParameterName.Rf3, "Описание"},
-            {ParameterName.Rcyt, "Описание"},
-            {ParameterName.W1, "Описание"},
-            {ParameterName.Wv2, "Описание"},
-            {ParameterName.Wсyt1, "Описание"},
-            {ParameterName.Wf1, "Описание"},
-            {ParameterName.W2, "Описание"},
-            {ParameterName.Wcyt2, "Описание"},
-            {ParameterName.Wf2, "Описание"},
-            {ParameterName.W3, "Описание"},
-            {ParameterName.Wcyt3, "Описание"},
-            {ParameterName.Wf3, "Описание"},
-            {ParameterName.Wcyt, "Описание"},
-            {ParameterName.W, "Описание"},
-            {ParameterName.Smin1, "Описание"},
-            {ParameterName.Smin2, "Описание"},
-            {ParameterName.Smin3, "Описание"},
-            {ParameterName.SminC, "Описание"},
-            {ParameterName.Smin, "Описание"},
-            {ParameterName.Sn1, "Описание"},
-            {ParameterName.Sn2, "Описание"},
-            {ParameterName.Sn3, "Описание"},
-            {ParameterName.S1, "Описание"},
-            {ParameterName.S2, "Описание"},
-            {ParameterName.S3, "Описание"},
-            {ParameterName.Sс, "Описание"},
-            {ParameterName.SN1, "Описание"},
-            {ParameterName.SN2, "Описание"},
-            {ParameterName.SN3, "Описание"}
+            {ParametersName.deltaT, "Описание"},
+            {ParametersName.R, "Описание"},
+            {ParametersName.S, "Описание"},
+            {ParametersName.N1, "Описание"},
+            {ParametersName.N2, "Описание"},
+            {ParametersName.N3, "Описание"},
+            {ParametersName.P1, "Описание"},
+            {ParametersName.A1, "Описание"},
+            {ParametersName.B1, "Описание"},
+            {ParametersName.F1, "Описание"},
+            {ParametersName.Q2, "Описание"},
+            {ParametersName.D2, "Описание"},
+            {ParametersName.H3, "Описание"},
+            {ParametersName.Lс, "Описание"},
+            {ParametersName.Tс, "Описание"},
+            {ParametersName.R1, "Описание"},
+            {ParametersName.Rv2, "Описание"},
+            {ParametersName.Rcyt1, "Описание"},
+            {ParametersName.Rf1, "Описание"},
+            {ParametersName.R2, "Описание"},
+            {ParametersName.Rcyt2, "Описание"},
+            {ParametersName.Rf2, "Описание"},
+            {ParametersName.R3, "Описание"},
+            {ParametersName.Rcyt3, "Описание"},
+            {ParametersName.Rf3, "Описание"},
+            {ParametersName.Rcyt, "Описание"},
+            {ParametersName.W1, "Описание"},
+            {ParametersName.Wv2, "Описание"},
+            {ParametersName.Wсyt1, "Описание"},
+            {ParametersName.Wf1, "Описание"},
+            {ParametersName.W2, "Описание"},
+            {ParametersName.Wcyt2, "Описание"},
+            {ParametersName.Wf2, "Описание"},
+            {ParametersName.W3, "Описание"},
+            {ParametersName.Wcyt3, "Описание"},
+            {ParametersName.Wf3, "Описание"},
+            {ParametersName.Wcyt, "Описание"},
+            {ParametersName.W, "Описание"},
+            {ParametersName.Smin1, "Описание"},
+            {ParametersName.Smin2, "Описание"},
+            {ParametersName.Smin3, "Описание"},
+            {ParametersName.SminC, "Описание"},
+            {ParametersName.Smin, "Описание"},
+            {ParametersName.Sn1, "Описание"},
+            {ParametersName.Sn2, "Описание"},
+            {ParametersName.Sn3, "Описание"},
+            {ParametersName.S1, "Описание"},
+            {ParametersName.S2, "Описание"},
+            {ParametersName.S3, "Описание"},
+            {ParametersName.Sс, "Описание"},
+            {ParametersName.SN1, "Описание"},
+            {ParametersName.SN2, "Описание"},
+            {ParametersName.SN3, "Описание"}
         };
 
-        public static Dictionary<ParameterName, string> Designations = new Dictionary<ParameterName, string>()
+        public static Dictionary<ParametersName, string> Designations = new Dictionary<ParametersName, string>()
         {
-            {ParameterName.deltaT, "∆T"},
-            {ParameterName.Rv2, "Rв2"},
-            {ParameterName.Rcyt1, "Rсут1"},
-            {ParameterName.Rf1, "Rф1"},
-            {ParameterName.Rcyt2, "Rсут2"},
-            {ParameterName.Rf2, "Rф2"},
-            {ParameterName.Rcyt3, "Rсут3"},
-            {ParameterName.Rf3, "Rф3"},
-            {ParameterName.Rcyt, "Rсут"},
-            {ParameterName.Wv2, "Wв2"},
-            {ParameterName.Wсyt1, "Wсут1"},
-            {ParameterName.Wf1, "Wф1"},
-            {ParameterName.Wcyt2, "Wcyt2"},
-            {ParameterName.Wf2, "Wф2"},
-            {ParameterName.Wcyt3, "Wcyt3"},
-            {ParameterName.Wf3, "Wф3"},
-            {ParameterName.Wcyt, "Wсут"}
+            {ParametersName.deltaT, "∆T"},
+            {ParametersName.Rv2, "Rв2"},
+            {ParametersName.Rcyt1, "Rсут1"},
+            {ParametersName.Rf1, "Rф1"},
+            {ParametersName.Rcyt2, "Rсут2"},
+            {ParametersName.Rf2, "Rф2"},
+            {ParametersName.Rcyt3, "Rсут3"},
+            {ParametersName.Rf3, "Rф3"},
+            {ParametersName.Rcyt, "Rсут"},
+            {ParametersName.Wv2, "Wв2"},
+            {ParametersName.Wсyt1, "Wсут1"},
+            {ParametersName.Wf1, "Wф1"},
+            {ParametersName.Wcyt2, "Wcyt2"},
+            {ParametersName.Wf2, "Wф2"},
+            {ParametersName.Wcyt3, "Wcyt3"},
+            {ParametersName.Wf3, "Wф3"},
+            {ParametersName.Wcyt, "Wсут"}
         };
-        
-        public static string GetDescription(this ParameterName parameter)
+
+        public static Dictionary<ParametersName, UnitType> Units = new Dictionary<ParametersName, UnitType>()
+        {
+            { ParametersName.deltaT, UnitType.Point},
+            { ParametersName.N1, UnitType.Point},
+            { ParametersName.N2, UnitType.Point},
+            { ParametersName.N3, UnitType.Point},
+            { ParametersName.P1, UnitType.Point},
+            { ParametersName.A1, UnitType.Point},
+            { ParametersName.B1, UnitType.Point},
+            { ParametersName.F1, UnitType.Point},
+            { ParametersName.Q2, UnitType.Point},
+            { ParametersName.D2, UnitType.Point},
+            { ParametersName.H3, UnitType.Point},
+            { ParametersName.Lс, UnitType.Day},
+            { ParametersName.Tс, UnitType.Hour},
+            { ParametersName.R1, UnitType.ThousandRubles},
+            { ParametersName.Rv2, UnitType.ThousandRubles},
+            { ParametersName.Rcyt1, UnitType.ThousandRubles},
+            { ParametersName.Rf1, UnitType.ThousandRubles},
+            { ParametersName.R2, UnitType.ThousandRubles},
+            { ParametersName.Rcyt2, UnitType.ThousandRubles},
+            { ParametersName.Rf2, UnitType.ThousandRubles},
+            { ParametersName.R3, UnitType.ThousandRubles},
+            { ParametersName.Rcyt3, UnitType.ThousandRubles},
+            { ParametersName.Rf3, UnitType.ThousandRubles},
+            { ParametersName.Rcyt, UnitType.ThousandRubles},
+            { ParametersName.R, UnitType.ThousandRubles},
+            { ParametersName.W1, UnitType.ManHour},
+            { ParametersName.Wv2, UnitType.ManHour},
+            { ParametersName.Wсyt1, UnitType.ManHour},
+            { ParametersName.Wf1, UnitType.ManHour},
+            { ParametersName.W2, UnitType.ManHour},
+            { ParametersName.Wcyt2, UnitType.ManHour},
+            { ParametersName.Wf2, UnitType.ManHour},
+            { ParametersName.W3, UnitType.ManHour},
+            { ParametersName.Wcyt3, UnitType.ManHour},
+            { ParametersName.Wf3, UnitType.ManHour},
+            { ParametersName.Wcyt, UnitType.ManHour},
+            { ParametersName.W, UnitType.ManHour},
+            { ParametersName.Smin1, UnitType.Point},
+            { ParametersName.Smin2, UnitType.Point},
+            { ParametersName.Smin3, UnitType.Point},
+            { ParametersName.SminC, UnitType.Point},
+            { ParametersName.Smin, UnitType.Point},
+            { ParametersName.Sn1, UnitType.Point},
+            { ParametersName.Sn2, UnitType.Point},
+            { ParametersName.Sn3, UnitType.Point},
+            { ParametersName.S1, UnitType.Point},
+            { ParametersName.S2, UnitType.Point},
+            { ParametersName.S3, UnitType.Point},
+            { ParametersName.Sс, UnitType.Point},
+            { ParametersName.S, UnitType.Point},
+            { ParametersName.SN1, UnitType.Point},
+            { ParametersName.SN2, UnitType.Point},
+            { ParametersName.SN3, UnitType.Point}
+        };
+
+        public static string GetDescription(this ParametersName parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
             {
@@ -220,7 +277,7 @@ namespace SystemStabilityAnalysis.Models
             }
         }
 
-        public static string GetDesignation(this ParameterName parameter)
+        public static string GetDesignation(this ParametersName parameter)
         {
             if(Designations.TryGetValue(parameter, out string designation))
             {
@@ -232,31 +289,56 @@ namespace SystemStabilityAnalysis.Models
             }
         }
 
-        public static double Calculate(this ParameterName parameter)
+        public static UnitType GetUnit(this ParametersName parameter)
+        {
+            if (Units.TryGetValue(parameter, out UnitType unitType))
+            {
+                return unitType;
+            }
+
+            throw new ArgumentException(paramName: parameter.ToString(), message: String.Format("Тип для параметра {0} не найден", parameter.ToString()));
+        }
+
+        public static double Calculate(this ParametersName parameter)
         {
             return 0;
+        }
+        public static string GetName(this ParametersName parameter)
+        {
+            return Enum.GetName(typeof(ParametersName), parameter);
         }
     }
 
     public class Property
     {
-        public Unit Unit { get; }
+        [NonSerialized]
+        private Unit _unit;
 
-        public ParameterName Name { get; }
+        [NonSerialized]
+        private ParametersName _parametersName;
 
-        public Property(ParameterName parameter, UnitType unitType)
+        [NonSerialized]
+        public double Value;
+
+        public Property(PropertiesSystem propertiesSystem, ParametersName parameter)
         {
-           Unit = new Unit(unitType);
-           Name = parameter;
+            _parametersName = parameter;
+            _unit = new Unit(_parametersName.GetUnit());
+
+            propertiesSystem.Properties.Add(Name.ToString(), this);
         }
 
-        public Properties Properties { get; }
+        public string Unit { get { return _unit.Description;  }}
 
-        public string Description { get { return Name.GetDescription(); } }
+        public string Name { get { return Enum.GetName(typeof(ParametersName), _parametersName); }}
 
-        public double Value { get; set; }
+        public string Description { get { return _parametersName.GetDescription(); } }
 
-        public Func<double, double> Calculate { get; }
+        public string Designation { get { return _parametersName.GetDesignation(); } }
+
+
+
+        //public Func<double, double> Calculate { get; }
 
         //public double Calculate()
         //{
@@ -266,7 +348,7 @@ namespace SystemStabilityAnalysis.Models
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-            if (StaticData.Conditions.TryGetValue(this.Name, out List<Condition> conditions))
+            if (StaticData.Conditions.TryGetValue(this._parametersName, out List<Condition> conditions))
             {
                 foreach(Condition condition in conditions)
                 {

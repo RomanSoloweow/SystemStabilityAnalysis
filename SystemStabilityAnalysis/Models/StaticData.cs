@@ -8,6 +8,7 @@ namespace SystemStabilityAnalysis.Models
 {
     public static class StaticData
     {
+        public static PropertiesSystem PropertiesSystem { get; private set; } = new PropertiesSystem();
 
         public static Dictionary<string, SystemForAnalys> Systems { get; private set; } = new Dictionary<string, SystemForAnalys>();
 
@@ -18,7 +19,7 @@ namespace SystemStabilityAnalysis.Models
             return systemForAnalys;
         }
 
-        public static Dictionary<ParameterName, List<Condition>> Conditions { get; set; } = new Dictionary<ParameterName, List<Condition>>();
+        public static Dictionary<ParametersName, List<Condition>> Conditions { get; set; } = new Dictionary<ParametersName, List<Condition>>();
 
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SystemStabilityAnalysis.Models
 {
-    public class SystemForAnalys: Properties
+    public class SystemForAnalys: PropertiesSystem
     {
         public SystemForAnalys(string name)
         {
