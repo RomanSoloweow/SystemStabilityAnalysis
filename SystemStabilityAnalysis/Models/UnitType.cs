@@ -8,11 +8,10 @@ namespace SystemStabilityAnalysis.Helpers
 {
     public enum UnitType
     {
-        NoCorrect = 0,
         /// <summary>
         /// Сутки
         /// </summary>
-        Day,
+        Day=0,
         /// <summary>
         /// Штука
         /// </summary>
@@ -67,6 +66,7 @@ namespace SystemStabilityAnalysis.Helpers
         public Unit(UnitType unitType)
         {
             UnitType = unitType;
+
         }
 
     }

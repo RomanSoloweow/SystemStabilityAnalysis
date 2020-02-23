@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using SystemStabilityAnalysis.Helpers;
 
@@ -15,8 +16,7 @@ namespace SystemStabilityAnalysis.Models
 
     public enum ParametersName
     {
-        NoCorrect = 0,
-        deltaT,
+        deltaT=0,
         S,
         R,
         N1,
@@ -128,63 +128,6 @@ namespace SystemStabilityAnalysis.Models
             {ParametersName.SN1, "Из этого количества: в ремонтно-восстановительные формирования"},
             {ParametersName.SN2, "Непосредственно для обеспечения функционирования (выполнения основных функций) системы"},
             {ParametersName.SN3, "Для подсистемы обеспечения подсистемы хранения запасов и резервирования"}
-        };
-
-        public static Dictionary<ParametersName, string> Calculations = new Dictionary<ParametersName, string>()
-        {
-            {ParametersName.deltaT, "Описание"},
-            {ParametersName.R, "Описание"},
-            {ParametersName.S, "Описание"},
-            {ParametersName.N1, "Описание"},
-            {ParametersName.N2, "Описание"},
-            {ParametersName.N3, "Описание"},
-            {ParametersName.P1, "Описание"},
-            {ParametersName.A1, "Описание"},
-            {ParametersName.B1, "Описание"},
-            {ParametersName.F1, "Описание"},
-            {ParametersName.Q2, "Описание"},
-            {ParametersName.D2, "Описание"},
-            {ParametersName.H3, "Описание"},
-            {ParametersName.Lс, "Описание"},
-            {ParametersName.Tс, "Описание"},
-            {ParametersName.R1, "Описание"},
-            {ParametersName.Rv2, "Описание"},
-            {ParametersName.Rcyt1, "Описание"},
-            {ParametersName.Rf1, "Описание"},
-            {ParametersName.R2, "Описание"},
-            {ParametersName.Rcyt2, "Описание"},
-            {ParametersName.Rf2, "Описание"},
-            {ParametersName.R3, "Описание"},
-            {ParametersName.Rcyt3, "Описание"},
-            {ParametersName.Rf3, "Описание"},
-            {ParametersName.Rcyt, "Описание"},
-            {ParametersName.W1, "Описание"},
-            {ParametersName.Wv2, "Описание"},
-            {ParametersName.Wсyt1, "Описание"},
-            {ParametersName.Wf1, "Описание"},
-            {ParametersName.W2, "Описание"},
-            {ParametersName.Wcyt2, "Описание"},
-            {ParametersName.Wf2, "Описание"},
-            {ParametersName.W3, "Описание"},
-            {ParametersName.Wcyt3, "Описание"},
-            {ParametersName.Wf3, "Описание"},
-            {ParametersName.Wcyt, "Описание"},
-            {ParametersName.W, "Описание"},
-            {ParametersName.Smin1, "Описание"},
-            {ParametersName.Smin2, "Описание"},
-            {ParametersName.Smin3, "Описание"},
-            {ParametersName.SminC, "Описание"},
-            {ParametersName.Smin, "Описание"},
-            {ParametersName.Sn1, "Описание"},
-            {ParametersName.Sn2, "Описание"},
-            {ParametersName.Sn3, "Описание"},
-            {ParametersName.S1, "Описание"},
-            {ParametersName.S2, "Описание"},
-            {ParametersName.S3, "Описание"},
-            {ParametersName.Sс, "Описание"},
-            {ParametersName.SN1, "Описание"},
-            {ParametersName.SN2, "Описание"},
-            {ParametersName.SN3, "Описание"}
         };
 
         public static Dictionary<ParametersName, string> Designations = new Dictionary<ParametersName, string>()
@@ -303,52 +246,62 @@ namespace SystemStabilityAnalysis.Models
         {
             return 0;
         }
+
         public static string GetName(this ParametersName parameter)
         {
             return Enum.GetName(typeof(ParametersName), parameter);
+        }
+
+        public static object ToJson(this ParametersName parameter)
+        {
+            return new
+            {
+                Name = parameter.GetDesignation(),
+                Value = parameter.GetName(),
+                Description = parameter.GetDescription(),          
+                Unit = parameter.GetUnit().GetDescription()
+            };
         }
     }
 
     public class Property
     {
-        [NonSerialized]
-        private Unit _unit;
 
-        [NonSerialized]
-        private ParametersName _parametersName;
+        public string Name { get { return Enum.GetName(typeof(ParametersName), ParametersName); } }
 
-        [NonSerialized]
-        public double Value;
+        public string Description { get { return ParametersName.GetDescription(); } }
 
-        public Property(PropertiesSystem propertiesSystem, ParametersName parameter)
+        public string Designation { get { return ParametersName.GetDesignation(); } }
+
+        public Unit Unit { get; }
+
+        public ParametersName ParametersName { get; }
+
+        public double Value { get; set; }
+
+        private Func<double, double> _calculate;
+
+        public Property(PropertiesSystem propertiesSystem, ParametersName parameter, Func<double, double> calculate = null)
         {
-            _parametersName = parameter;
-            _unit = new Unit(_parametersName.GetUnit());
+            ParametersName = parameter;
+            Unit = new Unit(ParametersName.GetUnit());
 
             propertiesSystem.Properties.Add(Name.ToString(), this);
+            _calculate = calculate;
         }
 
-        public string Unit { get { return _unit.Description;  }}
+        public double Calculate()
+        {
+            if (_calculate != null)
+                return _calculate.Invoke(this.Value);
 
-        public string Name { get { return Enum.GetName(typeof(ParametersName), _parametersName); }}
-
-        public string Description { get { return _parametersName.GetDescription(); } }
-
-        public string Designation { get { return _parametersName.GetDesignation(); } }
-
-
-
-        //public Func<double, double> Calculate { get; }
-
-        //public double Calculate()
-        //{
-        //    return StaticData.Calculations[this.Name].Invoke(this.Value);
-        //}
+            return this.Value;
+        }
 
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-            if (StaticData.Conditions.TryGetValue(this._parametersName, out List<Condition> conditions))
+            if (StaticData.Conditions.TryGetValue(this.ParametersName, out List<Condition> conditions))
             {
                 foreach(Condition condition in conditions)
                 {

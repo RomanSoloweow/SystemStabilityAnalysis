@@ -20,15 +20,17 @@ namespace SystemStabilityAnalysis.Controllers
         {
             Dictionary<string, object> Data = new Dictionary<string, object>();
             Data.Add("Status", Status.Success.GetName());
-            Data.Add("Properties", StaticData.PropertiesSystem.Properties);
+            Data.Add("Properties", Enum.GetValues(typeof(ParametersName)).OfType<ParametersName>().Select(x => x.ToJson()));
             return Data;
         }
 
         [HttpGet]
-        public string GetTest()
+        public Dictionary<string, object> GetConditions()
         {
-
-            return "Здесь будет запрос для получения условий";
+            Dictionary<string, object> Data = new Dictionary<string, object>();
+            Data.Add("Status", Status.Success.GetName());
+            Data.Add("Properties", Enum.GetValues(typeof(ConditionType)).OfType<ConditionType>().Select(x => x.ToJson()));
+            return Data;
         }
     }
 }

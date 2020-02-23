@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SystemStabilityAnalysis.Helpers
 {
     public enum ConditionType
     {
-        NoCorrect=0,
         /// <summary>
         /// >
         /// </summary>
@@ -75,17 +75,33 @@ namespace SystemStabilityAnalysis.Helpers
 
             throw new ArgumentException(paramName: parameter.ToString(), message:String.Format("Обозначение для параметра {0} не найдено", parameter.ToString()));
         }
+
         public static string GetName(this ConditionType parameter)
         {
             return Enum.GetName(typeof(ConditionType), parameter);
+        }
+
+        public static object ToJson(this ConditionType parameter)
+        {
+            return new
+            {
+                Name = parameter.GetDesignation(),
+                Value = parameter.GetName()
+            };
         }
     }
 
     public class Condition
     {
         public ConditionType ConditionType { get; }
+
         public double Value { get; set; }
+
+        public string Name { get { return ConditionType.GetName(); } }
+
         public string Description { get { return ConditionType.GetDesignation();} }
+
+        [JsonIgnore]
         public string ErrorMessage{ get { return "Должен быть " + Description + " " + Value.ToString();} }
 
         public Condition(ConditionType conditionType, double value)
