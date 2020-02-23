@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 
 namespace SystemStabilityAnalysis.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SystemRestrictions : ControllerBase
+    public class Restrictions : ControllerBase
     {
 
         //Для логирования. Пока что не нужно
@@ -24,7 +25,9 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public string Get()
         {
-            return "Здесь будет ввод ограничений";
+
+            return ParameterName.Wv2.GetDesignation() + new Condition(ConditionType.MoreOrEqual, 5.5).ErrorMessage;
+            //return "Здесь будет ввод ограничений";
         }
     }
 }

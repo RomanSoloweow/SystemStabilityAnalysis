@@ -8,26 +8,43 @@ namespace SystemStabilityAnalysis.Helpers
     public enum ConditionType
     {
         NoCorrect=0,
-        More=1,
+        /// <summary>
+        /// >
+        /// </summary>
+        More = 1,
+        /// <summary>
+        /// <
+        /// </summary>
         Less,
+        /// <summary>
+        /// >=
+        /// </summary>
         MoreOrEqual,
+        /// <summary>
+        /// <=
+        /// </summary>
         LessOrEqual,
+        /// <summary>
+        /// =
+        /// </summary>
         Equal,
+        /// <summary>
+        /// <>
+        /// </summary>
         NotEqual
     }
 
-    public class Condition
+    public static class ConditionTypeExtension
     {
-        public ConditionType ConditionType { get; }
-
-        public double Value { get; set; }
-
-        public string Description { get { return Designations[ConditionType]; } }
-
-        public bool Comparison(double value)
+        public static Dictionary<ConditionType, string> Designations = new Dictionary<ConditionType, string>()
         {
-            return Comparisons[ConditionType](value, Value);
-        }
+            {ConditionType.More, ">" },
+            {ConditionType.Less, "<" },
+            {ConditionType.MoreOrEqual, ">=" },
+            {ConditionType.LessOrEqual, "<="},
+            {ConditionType.Equal, "=" },
+            {ConditionType.NotEqual, "<>" }
+        };
 
         public static Dictionary<ConditionType, Func<double, double, bool>> Comparisons = new Dictionary<ConditionType, Func<double, double, bool>>()
         {
@@ -39,19 +56,42 @@ namespace SystemStabilityAnalysis.Helpers
             {ConditionType.NotEqual, (x,y)=>x!=y}
         };
 
-        public static Dictionary<ConditionType, string> Designations = new Dictionary<ConditionType, string>()
+        public static bool InvokeComparison(this ConditionType parameter, double leftValue, double rightValue)
         {
-            {ConditionType.More, ">" },
-            {ConditionType.Less, "<" },
-            {ConditionType.MoreOrEqual, ">=" },
-            {ConditionType.LessOrEqual, "<="},
-            {ConditionType.Equal, "=" },
-            {ConditionType.NotEqual, "<>" }
-        };
+            if (Comparisons.TryGetValue(parameter, out Func<double, double, bool> comparison))
+            {
+                return comparison.Invoke(leftValue, rightValue);
+            }
+
+            throw new ArgumentException(paramName: parameter.ToString(), message: String.Format("Метод сравнения для параметра {0} не найден", parameter.ToString()));
+        }
+
+        public static string GetDesignation(this ConditionType parameter)
+        {
+            if (Designations.TryGetValue(parameter, out string designation))
+            {
+                return designation;
+            }
+
+            throw new ArgumentException(paramName: parameter.ToString(), message:String.Format("Обозначение для параметра {0} не найдено", parameter.ToString()));
+        }
+    }
+
+    public class Condition
+    {
+        public ConditionType ConditionType { get; }
+        public double Value { get; set; }
+        public string Description { get { return ConditionType.GetDesignation();} }
+        public string ErrorMessage{ get { return "Должен быть " + Description + " " + Value.ToString();} }
         public Condition(ConditionType conditionType, double value)
         {
             ConditionType = conditionType;
             Value = value;
+        }
+
+        public bool InvokeComparison(double rightValue)
+        {
+            return ConditionType.InvokeComparison(Value, rightValue);
         }
     }
 }

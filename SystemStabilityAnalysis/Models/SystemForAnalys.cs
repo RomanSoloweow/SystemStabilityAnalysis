@@ -7,8 +7,11 @@ namespace SystemStabilityAnalysis.Models
 {
     public class SystemForAnalys: Properties
     {
-        public string Name { get; set; }
+        public SystemForAnalys(string name)
+        {
+            Name = name;
+        }
 
-        public Properties Properties { get; set; }
+        public string Name { get; private set; }
     }
 }
