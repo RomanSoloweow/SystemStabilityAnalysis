@@ -29,7 +29,7 @@ namespace SystemStabilityAnalysis.Controllers
         {
             Dictionary<string, object> Data = new Dictionary<string, object>();
             Data.Add("Status", Status.Success.GetName());
-            Data.Add("Properties", Enum.GetValues(typeof(ConditionType)).OfType<ConditionType>().Select(x => x.ToJson()));
+            Data.Add("Conditions", Enum.GetValues(typeof(ConditionType)).OfType<ConditionType>().Select(x => x.ToJson()));
             return Data;
         }
     }
