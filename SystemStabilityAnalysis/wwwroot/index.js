@@ -12,6 +12,14 @@ $(".ui.button.next").click(nextPage)
 $(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()})
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
+$('.ui.dropdown.names').change(function(){
+  setTimeout(()=>{
+    currentElement = $(".ui.dropdown.names").find(".item.active");
+    $('.disField').find(".name").val(currentElement.attr("data-name"));
+    $('.disField').find(".unit").val(currentElement.attr("data-unit"));
+  }, 1);
+});
+
 
 function nextPage(){
   currentTab = $('.active.item');
@@ -76,19 +84,53 @@ function deleteFilter(){
 }
 
 function getNames(){
-  $.ajax({
-    method: "GET",
-    url: "",
-  }).done(function(msg){
-    console.log(msg);
-  });
+  let currentCombobox = $(".ui.dropdown.names");
+  if (currentCombobox.find(".menu").children().length == 1 ) {
+    $.ajax({
+      method: "GET",
+      url: "Restrictions/GetParameters",
+    }).done(function(msg){
+      
+      if (msg.Status == "Success") {
+        currentCombobox.find(".menu").empty();
+        currentCombobox.dropdown('refresh')
+        $.each( msg.Properties, function( key, value ) {
+          currentCombobox.find(".menu").append(`<div class="item" 
+            data-value="${value.value}"
+            data-text="${value.description}"
+            data-unit="${value.unit}"
+            data-name="${value.name}"
+            > 
+            ${value.description} </div>
+          `)
+        });
+        currentCombobox.dropdown('refresh')
+      }
+    });
+  }
 }
 
 function getConditions(){
-  $.ajax({
-    method: "GET",
-    url: "",
-  }).done(function(msg){
-    console.log(msg);
-  });
+  let currentCombobox = $(".ui.dropdown.conditions");
+  console.log(currentCombobox)
+  if (currentCombobox.find(".menu").children().length == 1 ) {
+    $.ajax({
+      method: "GET",
+      url: "Restrictions/GetConditions",
+    }).done(function(msg){
+      if (msg.Status == "Success") {
+        currentCombobox.find(".menu").empty();
+        currentCombobox.dropdown('refresh')
+        $.each( msg.Conditions, function( key, value ) {
+          currentCombobox.find(".menu").append(`<div class="item" 
+            data-value="${value.value}"
+            data-text="${value.name}"
+            > 
+            ${value.name} </div>
+          `)
+        });
+        currentCombobox.dropdown('refresh')
+      }
+    });
+  }
 }
