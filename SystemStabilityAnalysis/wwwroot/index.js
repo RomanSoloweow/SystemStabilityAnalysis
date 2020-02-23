@@ -14,6 +14,8 @@ $(".ui.icon.button.minus").click(deleteFilter)
 $(".ui.button.next").click(nextPage)
 $(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()})
 
+$(".ui.dropdown.names").click(getNames);
+
 function nextPage(){
   currentTab = $('.active.item');
   currentTab = currentTab.removeClass('active');
@@ -76,9 +78,15 @@ function deleteFilter(){
   }
 }
 
-$('.search.dropdown.names').on('mousedown', function(){
-  alert('clicked');
-});
+function getNames(){
+  $.ajax({
+    method: "GET",
+    url: "",
+  }).done(function(msg){
+    console.log(msg);
+  });
+}
+
 // .click(function(){
 //   //$('.ui.form').addClass("loading");
 //   
