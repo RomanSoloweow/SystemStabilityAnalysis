@@ -85,6 +85,7 @@ function deleteFilter(){
 
 function getNames(){
   let currentCombobox = $(".ui.dropdown.names");
+  if (currentCombobox.find(".menu").children().length == 1 ) {
     $.ajax({
       method: "GET",
       url: "Restrictions/GetParameters",
@@ -106,11 +107,13 @@ function getNames(){
         currentCombobox.dropdown('refresh')
       }
     });
+  }
 }
 
 function getConditions(){
   let currentCombobox = $(".ui.dropdown.conditions");
   console.log(currentCombobox)
+  if (currentCombobox.find(".menu").children().length == 1 ) {
     $.ajax({
       method: "GET",
       url: "Restrictions/GetConditions",
@@ -129,4 +132,5 @@ function getConditions(){
         currentCombobox.dropdown('refresh')
       }
     });
+  }
 }
