@@ -63,7 +63,7 @@ function addFilter(){
     url: `Restrictions/AddRestriction?parameter=${parameter}&condition=${condition}&value=${value}`,
   }).done(function(msg){
     if (msg.status == "Success") {
-      if ($(".ui.celled.table").length == 0 ) {
+      if ($(".ui.celled.table.restructions").length == 0 ) {
         $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
         <thead>
           <tr>
@@ -251,7 +251,7 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
   }).done(function(msg){
     if (msg.status == "Success") {
       $.each( msg.properties, function( key, value ) {
-        $(".tab.segment[data-tab='second/a']").find('tbody').after(`<tr>
+        $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
           <td data-label="description" data-value=${value.value}>${value.description}</td>
           <td data-label="name">${value.name}</td>
           <td data-label="unit">${value.unit}</td>
