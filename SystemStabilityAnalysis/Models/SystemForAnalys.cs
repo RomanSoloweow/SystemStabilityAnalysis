@@ -21,6 +21,8 @@ namespace SystemStabilityAnalysis.Models
 
         public List<object>  GetParametersWithCalculate(out List<string> message)
         {
+
+            
             List<object> parameters = new List<object>();
             message = new List<string>();
             ResultVerification resultVerification;
