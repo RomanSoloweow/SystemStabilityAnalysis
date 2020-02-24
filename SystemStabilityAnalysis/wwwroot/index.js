@@ -238,14 +238,16 @@ function saveSystem(event){
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
-        console.log(4)
       }
   }
 }
 
+$('#FileUpload_FormFile').on('change', function(e) {
+  $('#upload-csv').click();
+});
+
 function uploadCsv(){
-  $( '#FileUpload_FormFile' ).click ();
-  $( '#upload-csv' ).click ();
+  $('#FileUpload_FormFile').click();
 }
 
 $(".item[data-tab='second'").tab({'onVisible':function(){
@@ -292,18 +294,49 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
 async function AJAXSubmit (oFormElement) {
   var resultElement = oFormElement.elements.namedItem("result");
   const formData = new FormData(oFormElement);
-  console.log(formData)
   try {
+
   const response = await fetch(oFormElement.action, {
     method: 'POST',
     body: formData
+  })
+  .then(response => response.text())
+  .then(msg => {
+    $(".ui.celled.table.restructions").remove()
+    $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
+    <thead>
+      <tr>
+        <th>Наименование показателя</th>
+        <th>Обозначение</th>
+        <th>Единица измерения</th>
+        <th>Условие</th>
+        <th>Значение</th>
+        <th class="minus one wide center aligned"></th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>`)
+    console.log(JSON.parse(msg).restrictions)
+    $.each( JSON.parse(msg).restrictions, function( key, value ) {
+
+      $(".ui.celled.table.restructions tbody").append(`<tr>
+      <td data-label="description" data-value=${value.description}>${value.description}</td>
+      <td data-label="name">${value.name}</td>
+      <td data-label="unit">${value.unit}</td>
+      <td data-label="condition">${value.condition}</td>
+      <td data-label="value">${value.value}</td>
+      <td data-label="button" class="center aligned" >
+        <button class="ui icon button minus">
+          <i class="minus icon"></i>
+        </button>
+      </td>
+      </tr>`)
+    });
+    $(".ui.icon.button.minus").unbind();
+    $(".ui.icon.button.minus").click(deleteFilter);
   });
   
-  if (response.ok) {;
-  }
-  
-  resultElement.value = 'Result: ' + response.status + ' ' + 
-    response.statusText;
   } catch (error) {
     console.error('Error:', error);
   }
