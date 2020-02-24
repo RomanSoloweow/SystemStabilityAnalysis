@@ -25,14 +25,19 @@ $('.message .close').on('click', function() {
   $(this).closest('.message').transition('fade');
 });
 
+
+
+
 $(".ui.icon.button.plus").click(addFilter);
 $(".ui.icon.button.minus").click(deleteFilter);
 $(".ui.button.next").click(nextPage);
 $(".ui.button.delete-all").click(deleteAll);
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
-$(".ui.button.save-system").click(saveSystem);
+$(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filename"},saveFile);
+$(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
+$(".ui.button.validate").click(validateSystem);
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -216,7 +221,7 @@ function clearFilters(){
   $('.input.value').val('');
 }
 
-function saveSystem(event){
+function saveFile(event){
   if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
     element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
     element.before(`
@@ -229,7 +234,7 @@ function saveSystem(event){
   else {
     filename = $(".ui.input.save-system").find("input").val();
     if (filename.length > 0) {
-        const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+        const url = `Restrictions/${event.url}?filename=${filename}`;
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
@@ -268,27 +273,47 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
     `)
   $.ajax({
     method: "GET",
-    url: "Systems/GetParameters",
+    url: "Systems/GetParametersWithEnter",
   }).done(function(msg){
     if (msg.status == "Success") {
-      $.each( msg.properties, function( key, value ) {
+      $.each( msg.parametersWithEnter, function( key, value ) {
         $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
           <td data-label="description" data-value=${value.value}>${value.description}</td>
           <td data-label="name">${value.name}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="button" class="center aligned" >
           <div class="ui input">
-            <input type="number" placeholder="">
+            <input type="number" placeholder="" class="system-validate">
           </div
           </td>
           </tr>`
         )
       });
     }
-  });
-  
-  
+  });  
 }});
+
+
+
+
+function validateSystem() {
+  let description = $(".tab.segment[data-tab='second/a']").find('tr [data-label="description"]');
+  let td_value = $(".tab.segment[data-tab='second/a']").find('.system-validate');
+
+  validationArr = []
+  $.each(description, function( index, value ) {
+    validationArr.push({parameterName: $(value).attr("data-value"), value: $(td_value[index]).val()})
+  });
+  $.ajax({
+    method: "POST",
+    url: `Systems/Validate`,
+    data: JSON.stringify(validationArr)
+  }).done(function(msg){
+    $.each(msg.something, function(index, value){
+      
+    })
+  });
+}
 
 
 async function AJAXSubmit (oFormElement) {
@@ -317,7 +342,6 @@ async function AJAXSubmit (oFormElement) {
     <tbody>
     </tbody>
     </table>`)
-    console.log(JSON.parse(msg).restrictions)
     $.each( JSON.parse(msg).restrictions, function( key, value ) {
 
       $(".ui.celled.table.restructions tbody").append(`<tr>
