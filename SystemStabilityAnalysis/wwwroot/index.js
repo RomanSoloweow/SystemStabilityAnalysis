@@ -111,6 +111,7 @@ function deleteFilter(){
   if ($(".ui.celled.table tr").length == 1) {
     $(".ui.celled.table").remove();
   }
+  $(".ui.dropdown.names").find(".menu").empty();
 }
 
 
