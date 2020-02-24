@@ -350,13 +350,14 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
     url: "Systems/GetParametersForAnalysis",
   }).done(function(msg){
     if (msg.status == "Success") {
-      $(".tab.segment[data-tab='second/c']").prepend(`<div class='ui large message'>
-        <div class="header">
-          U = ${msg.u}
-        </div>
-        ${msg.result}
-        </div>`
-      )
+      if ($(".tab.segment[data-tab='second/c']").find(".header").length == 0)
+        $(".tab.segment[data-tab='second/c']").prepend(`<div class='ui large message'>
+          <div class="header">
+            U = ${msg.u}
+          </div>
+          ${msg.result}
+          </div>`
+        )
       $.each( msg.parametersForAnalysis, function( key, value ) {
         $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
           <td data-label="description">${value.description}</td>
