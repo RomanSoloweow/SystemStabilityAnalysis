@@ -217,7 +217,7 @@ function clearFilters(){
 }
 
 function saveSystem(event){
-  if ($(event.target).parent().find(".ui.input.save-system").length == 0) {
+  if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
     element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
     element.before(`
       <div class="ui input save-system">
@@ -227,13 +227,24 @@ function saveSystem(event){
 
   }
   else {
-    //
+    filename = $(".ui.input.save-system").find("input").val();
+    if (filename.length > 0) {
+        const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = 'todo-1.json';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        console.log(4)
+      }
   }
 }
 
 function uploadCsv(){
   $( '#FileUpload_FormFile' ).click ();
-  console.log($( '#upload-csv' ))
   $( '#upload-csv' ).click ();
 }
 
