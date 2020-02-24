@@ -10,6 +10,8 @@ using SystemStabilityAnalysis.Models;
 using System.Text.Json;
 using SystemStabilityAnalysis.Models.Parameters;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.Globalization;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -197,15 +199,66 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
+        public class Foo
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
+  
+           if((file==null)||(string.IsNullOrEmpty(file.FileName)))
+            {
+                return new
+                {
+                    Message = "Файл не выбран",
+                    Status = Status.Error.GetName(),
+                };
+            }
+           
+            //using (var reader = new StreamReader(file.OpenReadStream()))
+            //{
+            //    while (!sr.EndOfStream)
+            //    {
+            //    }
+            //        var record = csv.GetRecords<Foo>();
+            //    var t = record.First();
+            //}
+
+        
+
             return new
             {
-                Message = "Вы достучались до функции загрузки файла . " + file==null?"Но файл пуст":"Похоже у вас получилось что-то загрузить т.к. файл не пуст",
+             
                 Status = Status.Success.GetName(),
             };
         }
+
+        [HttpGet] 
+        public object SaveRestrictionsToFile([FromQuery]string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return new
+                {
+                    Message = "Имя файла не указано",
+                    Status = Status.Error.GetName(),
+                };
+            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(),"test.csv");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+           
+            memory.Position = 0;
+            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
+        }
+
 
 
 
