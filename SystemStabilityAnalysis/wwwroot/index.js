@@ -35,9 +35,10 @@ function nextPage(){
 function addFilter(){
   let notificationMessage = ""
   $.ajax({
-    method: "GET",
-    url: "Restrictions/AddRestirction",
+    method: "POST",
+    url: "Restrictions/AddRestriction",
   }).done(function(msg){
+    console.log(msg)
     if (msg.Status == "Success") {
       if ($(".ui.celled.table").length > 0) {
         $(".ui.celled.table tr:last").after(`<tr>
