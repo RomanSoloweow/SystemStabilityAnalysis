@@ -10,7 +10,7 @@ namespace SystemStabilityAnalysis.Models
     {
         public PropertiesSystem()
         {
-            deltaT = new Property(this, ParametersName.deltaT);
+            deltaT = new Property(this, ParametersName.DeltaT);
             N1 = new Property(this, ParametersName.N1);
             N2 = new Property(this, ParametersName.N2);
             N3 = new Property(this, ParametersName.N3);

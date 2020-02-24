@@ -16,7 +16,8 @@ namespace SystemStabilityAnalysis.Models
 
     public enum ParametersName
     {
-        deltaT=0,
+        NoCorrect = 0,
+        DeltaT,
         S,
         R,
         N1,
@@ -75,7 +76,7 @@ namespace SystemStabilityAnalysis.Models
     {
         public static Dictionary<ParametersName, string> Descriptions = new Dictionary<ParametersName, string>()
         {
-            {ParametersName.deltaT, "Период устойчивой эксплуатации системы в сутках"},
+            {ParametersName.DeltaT, "Период устойчивой эксплуатации системы в сутках"},
             {ParametersName.R, "Стоимость функционирования системы в период ∆T"},
             {ParametersName.S, "Количество персонала "},
             {ParametersName.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
@@ -132,7 +133,7 @@ namespace SystemStabilityAnalysis.Models
 
         public static Dictionary<ParametersName, string> Designations = new Dictionary<ParametersName, string>()
         {
-            {ParametersName.deltaT, "∆T"},
+            {ParametersName.DeltaT, "∆T"},
             {ParametersName.Rv2, "Rв2"},
             {ParametersName.Rcyt1, "Rсут1"},
             {ParametersName.Rf1, "Rф1"},
@@ -153,7 +154,7 @@ namespace SystemStabilityAnalysis.Models
 
         public static Dictionary<ParametersName, UnitType> Units = new Dictionary<ParametersName, UnitType>()
         {
-            { ParametersName.deltaT, UnitType.Point},
+            { ParametersName.DeltaT, UnitType.Point},
             { ParametersName.N1, UnitType.Point},
             { ParametersName.N2, UnitType.Point},
             { ParametersName.N3, UnitType.Point},

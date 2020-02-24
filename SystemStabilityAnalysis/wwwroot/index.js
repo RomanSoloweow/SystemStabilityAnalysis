@@ -104,10 +104,10 @@ function getNames(){
       url: "Restrictions/GetParameters",
     }).done(function(msg){
       
-      if (msg.Status == "Success") {
+      if (msg.status == "Success") {
         currentCombobox.find(".menu").empty();
         currentCombobox.dropdown('refresh')
-        $.each( msg.Properties, function( key, value ) {
+        $.each( msg.properties, function( key, value ) {
           currentCombobox.find(".menu").append(`<div class="item" 
             data-value="${value.value}"
             data-text="${value.description}"
@@ -131,10 +131,10 @@ function getConditions(){
       method: "GET",
       url: "Restrictions/GetConditions",
     }).done(function(msg){
-      if (msg.Status == "Success") {
+      if (msg.status == "Success") {
         currentCombobox.find(".menu").empty();
         currentCombobox.dropdown('refresh')
-        $.each( msg.Conditions, function( key, value ) {
+        $.each( msg.conditions, function( key, value ) {
           currentCombobox.find(".menu").append(`<div class="item" 
             data-value="${value.value}"
             data-text="${value.name}"

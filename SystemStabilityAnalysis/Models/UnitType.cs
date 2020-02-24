@@ -8,10 +8,11 @@ namespace SystemStabilityAnalysis.Helpers
 {
     public enum UnitType
     {
+        NoCorrect = 0,
         /// <summary>
         /// Сутки
         /// </summary>
-        Day=0,
+        Day,
         /// <summary>
         /// Штука
         /// </summary>

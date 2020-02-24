@@ -8,10 +8,11 @@ namespace SystemStabilityAnalysis.Helpers
 {
     public enum ConditionType
     {
+        NoCorrect= 0,
         /// <summary>
         /// >
         /// </summary>
-        More = 1,
+        More,
         /// <summary>
         /// <
         /// </summary>
