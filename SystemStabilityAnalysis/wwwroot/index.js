@@ -256,8 +256,8 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
           <td data-label="name">${value.name}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="button" class="center aligned" >
-          <div class="ui input save-system">
-            <input type="text" placeholder="">
+          <div class="ui input">
+            <input type="number" placeholder="">
           </div
           </td>
           </tr>`
