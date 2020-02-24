@@ -315,8 +315,50 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
   }).done(function(msg){
     if (msg.status == "Success") {
       $.each( msg.parametersWithCalculate, function( key, value ) {
-        console.log(value.correct)
         $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
+          <td data-label="description">${value.description}</td>
+          <td data-label="name">${value.name}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="value">${value.value}</td>
+          </tr>`
+        )
+      });
+    }
+  });  
+}});
+
+
+$(".item[data-tab='second/c'").tab({'onVisible':function(){
+  $(".tab.segment[data-tab='second/c']").find('table').remove();
+  $(".tab.segment[data-tab='second/c']").append(`
+      <table class="ui celled blue table center aligned analys">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParametersForAnalysis",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $(".tab.segment[data-tab='second/c']").prepend(`<div class='ui large message'>
+        <div class="header">
+          U = ${msg.u}
+        </div>
+        ${msg.result}
+        </div>`
+      )
+      $.each( msg.parametersForAnalysis, function( key, value ) {
+        $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
           <td data-label="description">${value.description}</td>
           <td data-label="name">${value.name}</td>
           <td data-label="unit">${value.unit}</td>
@@ -338,7 +380,7 @@ function validateSystem() {
     validationArr.push({parameterName: $(value).attr("data-value"), value: $(td_value[index]).val()})
   });
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: `Systems/Validate`,
     data: JSON.stringify(validationArr)
   }).done(function(msg){
