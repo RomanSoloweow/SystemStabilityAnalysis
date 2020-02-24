@@ -9,6 +9,7 @@ namespace SystemStabilityAnalysis.Helpers
     public enum UnitType
     {
         NoCorrect = 0,
+        NoType,
         /// <summary>
         /// Человек
         /// </summary>
@@ -43,7 +44,8 @@ namespace SystemStabilityAnalysis.Helpers
     {
         public static Dictionary<UnitType, string> Descriptions = new Dictionary<UnitType, string>()
         {
-             {UnitType.Man, "чел." },
+            {UnitType.NoType, "_" },
+            {UnitType.Man, "чел." },
             {UnitType.Day, "сут." },
             {UnitType.Point, "шт." },
             {UnitType.ThousandRubles, "т.р." },

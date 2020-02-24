@@ -5,9 +5,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using SystemStabilityAnalysis.Helpers;
 
-namespace SystemStabilityAnalysis.Models
+namespace SystemStabilityAnalysis.Models.Parameters
 {
-
 
     public enum NameParameterWithEnter
     {
@@ -157,6 +156,19 @@ namespace SystemStabilityAnalysis.Models
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription()
             };
+        }
+
+        public static void AddToRestrictions(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
+        {
+            StaticData.ConditionsForParameterWithEnter.Add(parameter, new Condition(conditionType, value));
+        }
+        public static void DeleteFromRestrictions(this NameParameterWithEnter parameter)
+        {
+            StaticData.ConditionsForParameterWithEnter.Remove(parameter);
+        }
+        public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)
+        {
+            StaticData.ConditionsForParameterWithEnter.Clear();
         }
     }
 
@@ -420,47 +432,37 @@ namespace SystemStabilityAnalysis.Models
     public class ParameterWithEnter
     {
 
-        public string Name { get { return Enum.GetName(typeof(NameParameterWithEnter), ParametersName); } }
+        public string Name { get { return  TypeParameter.GetName(); } }
 
-        public string Description { get { return ParametersName.GetDescription(); } }
+        public string Description { get { return TypeParameter.GetDescription(); } }
 
-        public string Designation { get { return ParametersName.GetDesignation(); } }
+        public string Designation { get { return TypeParameter.GetDesignation(); } }
 
         public Unit Unit { get; }
 
-        public NameParameterWithEnter ParametersName { get; }
+        public NameParameterWithEnter TypeParameter { get; }
 
         public double Value { get; set; }
 
-        private Func<double, double> _calculate;
-
-        public ParameterWithEnter(PropertiesSystem propertiesSystem, NameParameterWithEnter parameter, Func<double, double> calculate = null)
+        public ParameterWithEnter(PropertiesSystem propertiesSystem, NameParameterWithEnter parameter)
         {
-            ParametersName = parameter;
-            Unit = new Unit(ParametersName.GetUnit());
+            TypeParameter = parameter;
 
-            propertiesSystem.Properties.Add(Name.ToString(), this);
-            _calculate = calculate;
-        }
+            Unit = new Unit(TypeParameter.GetUnit());
 
-        public double Calculate()
-        {
-            if (_calculate != null)
-                return _calculate.Invoke(this.Value);
-
-            return this.Value;
+            propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-            if (StaticData.Conditions.TryGetValue(this.ParametersName, out Condition condition))
+            if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
             {
-                    result.IsCorrect = condition.InvokeComparison(Value);
-                    if (!result.IsCorrect)
-                    {
-                        result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
-                    }
+                result.IsCorrect = condition.InvokeComparison(Value);
+                if (!result.IsCorrect)
+                {
+                    result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
+                }
             }
 
             return result;

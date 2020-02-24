@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using System.Text.Json;
+using SystemStabilityAnalysis.Models.Parameters;
+
 namespace SystemStabilityAnalysis.Controllers
 {
     [ApiController]
@@ -21,7 +23,7 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                Properties = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x=> !StaticData.Conditions.ContainsKey(x)).Select(x => x.ToJson())
+                Properties = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x=> !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson())
             };
         }
 
@@ -104,7 +106,7 @@ namespace SystemStabilityAnalysis.Controllers
                 };
             }
 
-            StaticData.Conditions.Add(parameterValue, new Condition(conditionValue, Value));
+            StaticData.ConditionsForParameterWithEnter.Add(parameterValue, new Condition(conditionValue, Value));
 
             return new
             {
@@ -138,7 +140,7 @@ namespace SystemStabilityAnalysis.Controllers
                     Message.Add(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
                     status = Status.Error;
                 }
-                else if(!StaticData.Conditions.ContainsKey(parameterValue))
+                else if(!StaticData.ConditionsForParameterWithEnter.ContainsKey(parameterValue))
                 {
                     Message.Add("Ограничение для данного параметра не найдено");
                     status = Status.Error;
@@ -154,7 +156,7 @@ namespace SystemStabilityAnalysis.Controllers
                 };
             }
 
-            StaticData.Conditions.Remove(parameterValue);
+            StaticData.ConditionsForParameterWithEnter.Remove(parameterValue);
 
             return new
             {
@@ -165,7 +167,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object DeleteAllRestriction()
         {
-            StaticData.Conditions.Clear();
+            StaticData.ConditionsForParameterWithCalculation.Clear();
             return new
             {
                 Status = Status.Success.GetName()

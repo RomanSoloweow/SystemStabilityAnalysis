@@ -8,7 +8,8 @@ using Microsoft.Extensions.Logging;
 namespace SystemStabilityAnalysis.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
+    [Produces("application/json")]
     public class Analysis : ControllerBase
     {
         

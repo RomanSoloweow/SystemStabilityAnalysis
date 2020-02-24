@@ -3,12 +3,105 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemStabilityAnalysis.Helpers;
+using SystemStabilityAnalysis.Models.Parameters;
 
 namespace SystemStabilityAnalysis.Models
 {
     public class PropertiesSystem
     {
         public PropertiesSystem()
+        {
+            InitialParametersWithEnter();
+            InitialParametersForAnalysis();
+            InitialParametersWithCalculation();
+        }
+
+
+        
+        #region ParametersWithCalculation
+        public void InitialParametersWithCalculation()
+        {
+
+        }
+
+        public Dictionary<NameParameterWithCalculation, ParameterWithCalculation> ParametersWithCalculation { get; protected set; } = new Dictionary<NameParameterWithCalculation, ParameterWithCalculation>();
+
+
+
+        #endregion ParametersWithCalculation
+
+        #region ParametersForAnalysis
+
+        public void InitialParametersForAnalysis()
+        {
+            Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, (Rcyt1) => { return Rcyt1 * Rcyt1; });
+            Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, (Rf1) => { return Rf1 * Rf1; });
+            Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, (Rcyt2) => { return Rcyt2 * Rcyt2; });
+            Rf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf2, (Rf2) => { return Rf2 * Rf2; });
+            Rcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt3, (Rcyt3) => { return Rcyt3 * Rcyt3; });
+            Rf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf3, (Rf3) => { return Rf3 * Rf3; });
+            Rcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt, (Rcyt) => { return Rcyt * Rcyt; });
+            R = new ParameterWithCalculation(this, NameParameterWithCalculation.R, (R) => { return R * R; });
+            Wсyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wсyt1, (Wсyt1) => { return Wсyt1 * Wсyt1; });
+            Wf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf1, (Wf1) => { return Wf1 * Wf1; });
+            Wcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt2, (Wcyt2) => { return Wcyt2 * Wcyt2; });
+            Wf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf2, (Wf2) => { return Wf2 * Wf2; });
+            Wcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt3, (Wcyt3) => { return Wcyt3 * Wcyt3; });
+            Wf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf3, (Wf3) => { return Wf3 * Wf3; });
+            Wcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt, (Wcyt) => { return Wcyt * Wcyt; });
+            W = new ParameterWithCalculation(this, NameParameterWithCalculation.W, (W) => { return W * W; });
+
+            Smin1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin1, (Smin1) => { return Smin1 * Smin1; });
+            Smin2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin2, (Smin2) => { return Smin2 * Smin2; });
+            Smin3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin3, (Smin3) => { return Smin3 * Smin3; });
+            SminC = new ParameterWithCalculation(this, NameParameterWithCalculation.SminC, (SminC) => { return SminC * SminC; });
+            Smin = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin, (Smin) => { return Smin * Smin; });
+            S1 = new ParameterWithCalculation(this, NameParameterWithCalculation.S1, (S1) => { return S1 * S1; });
+            S2 = new ParameterWithCalculation(this, NameParameterWithCalculation.S2, (S2) => { return S2 * S2; });
+            S3 = new ParameterWithCalculation(this, NameParameterWithCalculation.S3, (S3) => { return S3 * S3; });
+            Sс = new ParameterWithCalculation(this, NameParameterWithCalculation.Sс, (Sс) => { return Sс * Sс; });
+            S = new ParameterWithCalculation(this, NameParameterWithCalculation.S, (S) => { return S * S; });
+            SN1 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN1, (SN1) => { return SN1 * SN1; });
+            SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, (SN2) => { return SN2 * SN2; });
+            SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, (SN3) => { return SN3 * SN3; });
+        }
+        public Dictionary<NameParameterForAnalysis, ParameterForAnalysis> ParametersForAnalysis { get; protected set; } = new Dictionary<NameParameterForAnalysis, ParameterForAnalysis>();
+        
+        public ParameterWithCalculation Rcyt1 { get; set; }
+        public ParameterWithCalculation Rf1 { get; set; }
+        public ParameterWithCalculation Rcyt2 { get; set; }
+        public ParameterWithCalculation Rf2 { get; set; }
+        public ParameterWithCalculation Rcyt3 { get; set; }
+        public ParameterWithCalculation Rf3 { get; set; }
+        public ParameterWithCalculation Rcyt { get; set; }
+        public ParameterWithCalculation R { get; set; }
+        public ParameterWithCalculation Wсyt1 { get; set; }
+        public ParameterWithCalculation Wf1 { get; set; }
+        public ParameterWithCalculation Wcyt2 { get; set; }
+        public ParameterWithCalculation Wf2 { get; set; }
+        public ParameterWithCalculation Wcyt3 { get; set; }
+        public ParameterWithCalculation Wf3 { get; set; }
+        public ParameterWithCalculation Wcyt { get; set; }
+        public ParameterWithCalculation W { get; set; }
+        public ParameterWithCalculation Smin1 { get; set; }
+        public ParameterWithCalculation Smin2 { get; set; }
+        public ParameterWithCalculation Smin3 { get; set; }
+        public ParameterWithCalculation SminC { get; set; }
+        public ParameterWithCalculation Smin { get; set; }
+        public ParameterWithCalculation S1 { get; set; }
+        public ParameterWithCalculation S2 { get; set; }
+        public ParameterWithCalculation S3 { get; set; }
+        public ParameterWithCalculation Sс { get; set; }
+        public ParameterWithCalculation S { get; set; }
+        public ParameterWithCalculation SN1 { get; set; }
+        public ParameterWithCalculation SN2 { get; set; }
+        public ParameterWithCalculation SN3 { get; set; }
+
+        #endregion ParametersForAnalysis
+
+        #region ParametersWithEnter
+
+        public void InitialParametersWithEnter()
         {
             deltaT = new ParameterWithEnter(this, NameParameterWithEnter.DeltaT);
             N1 = new ParameterWithEnter(this, NameParameterWithEnter.N1);
@@ -34,9 +127,9 @@ namespace SystemStabilityAnalysis.Models
             Sn1 = new ParameterWithEnter(this, NameParameterWithEnter.Sn1);
             Sn2 = new ParameterWithEnter(this, NameParameterWithEnter.Sn2);
             Sn3 = new ParameterWithEnter(this, NameParameterWithEnter.Sn3);
-       
         }
-        public Dictionary<string, ParameterWithEnter> Properties { get; protected set; } = new Dictionary<string, ParameterWithEnter>();
+
+        public Dictionary<NameParameterWithEnter, ParameterWithEnter> ParametersWithEnter { get; protected set; } = new Dictionary<NameParameterWithEnter, ParameterWithEnter>();
 
         public ParameterWithEnter deltaT { get; set; }
         public ParameterWithEnter N1 { get; set; }
@@ -62,6 +155,9 @@ namespace SystemStabilityAnalysis.Models
         public ParameterWithEnter Sn1 { get; set; }
         public ParameterWithEnter Sn2 { get; set; }
         public ParameterWithEnter Sn3 { get; set; }
+
+        #endregion ParametersWithEnter
+
 
     }
     //public class PropertiesSystem
@@ -124,59 +220,7 @@ namespace SystemStabilityAnalysis.Models
     //    }
     //    public Dictionary<string, ParameterWithRestriction> Properties { get; protected set; } = new Dictionary<string, ParameterWithRestriction>();
 
-    //    public ParameterWithRestriction deltaT { get; set; }
-    //    public ParameterWithRestriction N1 { get; set; }
-    //    public ParameterWithRestriction N2 { get; set; }
-    //    public ParameterWithRestriction N3 { get; set; }
-    //    public ParameterWithRestriction P1 { get; set; }
-    //    public ParameterWithRestriction A1 { get; set; }
-    //    public ParameterWithRestriction B1 { get; set; }
-    //    public ParameterWithRestriction F1 { get; set; }
-    //    public ParameterWithRestriction Q2 { get; set; }
-    //    public ParameterWithRestriction D2 { get; set; }
-    //    public ParameterWithRestriction H3 { get; set; }
-    //    public ParameterWithRestriction Lс { get; set; }
-    //    public ParameterWithRestriction Tс { get; set; }
-    //    public ParameterWithRestriction R1 { get; set; }
-    //    public ParameterWithRestriction Rv2 { get; set; }
-    //    public ParameterWithRestriction Rcyt1 { get; set; }
-    //    public ParameterWithRestriction Rf1 { get; set; }
-    //    public ParameterWithRestriction R2 { get; set; }
-    //    public ParameterWithRestriction Rcyt2 { get; set; }
-    //    public ParameterWithRestriction Rf2 { get; set; }
-    //    public ParameterWithRestriction R3 { get; set; }
-    //    public ParameterWithRestriction Rcyt3 { get; set; }
-    //    public ParameterWithRestriction Rf3 { get; set; }
-    //    public ParameterWithRestriction Rcyt { get; set; }
-    //    public ParameterWithRestriction R { get; set; }
-    //    public ParameterWithRestriction W1 { get; set; }
-    //    public ParameterWithRestriction Wv2 { get; set; }
-    //    public ParameterWithRestriction Wсyt1 { get; set; }
-    //    public ParameterWithRestriction Wf1 { get; set; }
-    //    public ParameterWithRestriction W2 { get; set; }
-    //    public ParameterWithRestriction Wcyt2 { get; set; }
-    //    public ParameterWithRestriction Wf2 { get; set; }
-    //    public ParameterWithRestriction W3 { get; set; }
-    //    public ParameterWithRestriction Wcyt3 { get; set; }
-    //    public ParameterWithRestriction Wf3 { get; set; }
-    //    public ParameterWithRestriction Wcyt { get; set; }
-    //    public ParameterWithRestriction W { get; set; }
-    //    public ParameterWithRestriction Smin1 { get; set; }
-    //    public ParameterWithRestriction Smin2 { get; set; }
-    //    public ParameterWithRestriction Smin3 { get; set; }
-    //    public ParameterWithRestriction SminC { get; set; }
-    //    public ParameterWithRestriction Smin { get; set; }
-    //    public ParameterWithRestriction Sn1 { get; set; }
-    //    public ParameterWithRestriction Sn2 { get; set; }
-    //    public ParameterWithRestriction Sn3 { get; set; }
-    //    public ParameterWithRestriction S1 { get; set; }
-    //    public ParameterWithRestriction S2 { get; set; }
-    //    public ParameterWithRestriction S3 { get; set; }
-    //    public ParameterWithRestriction Sс { get; set; }
-    //    public ParameterWithRestriction S { get; set; }
-    //    public ParameterWithRestriction SN1 { get; set; }
-    //    public ParameterWithRestriction SN2 { get; set; }
-    //    public ParameterWithRestriction SN3 { get; set; }
+
 
     //}
 }
