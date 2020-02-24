@@ -41,7 +41,7 @@ $('.message .close').on('click', function() {
   $(this).closest('.message').transition('fade');
 });
 
-$(".ui.icon.button.plus").click(addFilter)
+$(".ui.icon.button.plus").submit(addFilter)
 $(".ui.icon.button.minus").click(deleteFilter)
 $(".ui.button.next").click(nextPage)
 $(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()})
