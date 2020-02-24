@@ -213,7 +213,6 @@ function clearFilters(){
 }
 
 function saveSystem(event){
-  console.log(8)
   if ($(event.target).parent().find(".ui.input.save-system").length == 0) {
     console.log($(event.target).parent())
     $(event.target).before(`
@@ -229,8 +228,8 @@ function saveSystem(event){
 }
 
 $(".item[data-tab='second'").tab({'onVisible':function(){
-  if ($(".tab.segment[data-tab='second/a']").find('table').length == 0) {
-    $(".tab.segment[data-tab='second/a']").append(`
+  $(".tab.segment[data-tab='second/a']").find('table').remove()
+  $(".tab.segment[data-tab='second/a']").append(`
       <table class="ui celled blue table center aligned analys">
             <thead>
               <tr>
@@ -244,7 +243,6 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
         </tbody>
       </table>
     `)
-  }
   $.ajax({
     method: "GET",
     url: "Systems/GetParameters",
