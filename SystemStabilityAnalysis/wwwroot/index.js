@@ -32,6 +32,7 @@ $(".ui.button.delete-all").click(deleteAll);
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
 $(".ui.button.save-system").click(saveSystem);
+$(".ui.button.upload-csv").click(uploadCsv);
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -172,6 +173,11 @@ function getConditions(){
 }
 
 function notification(type, message, tabNum){
+  messages = []
+  $.each(message, function( index, value ) {
+    messages.push(value.replace(/^/,'&#8226 '));
+  });
+  message = messages.join("<br>");
   information = type == "Success" ? ["positive","Успешно!"] : ["negative", "Ошибка!"];
   messageElement =
   `
@@ -221,8 +227,14 @@ function saveSystem(event){
 
   }
   else {
-    //сохранить
+    //
   }
+}
+
+function uploadCsv(){
+  $( '#FileUpload_FormFile' ).click ();
+  console.log($( '#upload-csv' ))
+  $( '#upload-csv' ).click ();
 }
 
 $(".item[data-tab='second'").tab({'onVisible':function(){
@@ -264,3 +276,24 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
   
   
 }});
+
+
+async function AJAXSubmit (oFormElement) {
+  var resultElement = oFormElement.elements.namedItem("result");
+  const formData = new FormData(oFormElement);
+  console.log(formData)
+  try {
+  const response = await fetch(oFormElement.action, {
+    method: 'POST',
+    body: formData
+  });
+  
+  if (response.ok) {;
+  }
+  
+  resultElement.value = 'Result: ' + response.status + ' ' + 
+    response.statusText;
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  }

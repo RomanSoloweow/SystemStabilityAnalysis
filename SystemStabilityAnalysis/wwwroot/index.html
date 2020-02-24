@@ -13,7 +13,7 @@
 <body>
   <form action="Restrictions/LoadRestrictionsFromFile" 
   enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;" 
-  method="post">
+  method="post" hidden>
 <dl>
     <dt>
         <label for="FileUpload_FormFile">File</label>
@@ -24,34 +24,12 @@
     </dd>
 </dl>
 
-<input class="btn" type="submit" value="Upload" multiple/>
+<input id="upload-csv" class="btn" type="submit" value="Upload" multiple/>
 
 <div style="margin-top:15px">
     <output name="result"></output>
 </div>
 </form>
-
-<script>
-async function AJAXSubmit (oFormElement) {
-var resultElement = oFormElement.elements.namedItem("result");
-const formData = new FormData(oFormElement);
-console.log(formData)
-try {
-const response = await fetch(oFormElement.action, {
-  method: 'POST',
-  body: formData
-});
-
-if (response.ok) {;
-}
-
-resultElement.value = 'Result: ' + response.status + ' ' + 
-  response.statusText;
-} catch (error) {
-  console.error('Error:', error);
-}
-}
-</script>
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="first">Ограничения</a>
     <a class="item" data-tab="second">Система</a>
@@ -63,7 +41,7 @@ resultElement.value = 'Result: ' + response.status + ' ' +
       <div class="row">
         <div class="column">
           <button class="ui button save-system"><i class="save icon"></i>Сохранить</button>
-          <button class="ui button "><i class="download icon"></i>Загрузить</button>
+          <button class="ui button upload-csv"><i class="download icon"></i>Загрузить</button>
           <button class="ui button next">Дальше<i class="arrow right icon"></i></button>
         </div>
       </div>
@@ -103,8 +81,6 @@ resultElement.value = 'Result: ' + response.status + ' ' +
                   Удалить все
                   <i class="trash right icon"></i>
                 </button>
-                <input id="FileUpload_FormFile" type="file" 
-                name="FileUpload.FormFile"  multiple hidden/>
               </div>
             </div>
           </div>
