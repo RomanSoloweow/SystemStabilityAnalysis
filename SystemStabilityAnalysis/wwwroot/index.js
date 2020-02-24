@@ -284,7 +284,7 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
           <td data-label="button" class="center aligned" >
           <div class="ui input">
             <input type="number" placeholder="" class="system-validate">
-          </div
+          </div>
           </td>
           </tr>`
         )
@@ -293,7 +293,40 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
   });  
 }});
 
-
+$(".item[data-tab='second/b'").tab({'onVisible':function(){
+  $(".tab.segment[data-tab='second/b']").find('table').remove()
+  $(".tab.segment[data-tab='second/b']").append(`
+      <table class="ui celled blue table center aligned analys">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParametersWithCalculate",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.parametersWithCalculate, function( key, value ) {
+        console.log(value.correct)
+        $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
+          <td data-label="description">${value.description}</td>
+          <td data-label="name">${value.name}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="value">${value.value}</td>
+          </tr>`
+        )
+      });
+    }
+  });  
+}});
 
 
 function validateSystem() {
