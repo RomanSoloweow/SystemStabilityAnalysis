@@ -10,6 +10,10 @@ namespace SystemStabilityAnalysis.Helpers
     {
         NoCorrect = 0,
         /// <summary>
+        /// Человек
+        /// </summary>
+        Man,
+        /// <summary>
         /// Сутки
         /// </summary>
         Day,
@@ -39,10 +43,11 @@ namespace SystemStabilityAnalysis.Helpers
     {
         public static Dictionary<UnitType, string> Descriptions = new Dictionary<UnitType, string>()
         {
+             {UnitType.Man, "чел." },
             {UnitType.Day, "сут." },
             {UnitType.Point, "шт." },
-            {UnitType.ThousandRubles, "т. р." },
-            {UnitType.ManHour, "чел. ч" },
+            {UnitType.ThousandRubles, "т.р." },
+            {UnitType.ManHour, "чел.ч." },
             {UnitType.Shift, "смена"},
             {UnitType.Hour, "час" }
         };

@@ -10,115 +10,177 @@ namespace SystemStabilityAnalysis.Models
     {
         public PropertiesSystem()
         {
-            deltaT = new Property(this, ParametersName.DeltaT);
-            N1 = new Property(this, ParametersName.N1);
-            N2 = new Property(this, ParametersName.N2);
-            N3 = new Property(this, ParametersName.N3);
-            P1 = new Property(this, ParametersName.P1);
-            A1 = new Property(this, ParametersName.A1);
-            B1 = new Property(this, ParametersName.B1);
-            F1 = new Property(this, ParametersName.F1);
-            Q2 = new Property(this, ParametersName.Q2);
-            D2 = new Property(this, ParametersName.D2);
-            H3 = new Property(this, ParametersName.H3);
-            Lс = new Property(this, ParametersName.Lс);
-            Tс = new Property(this, ParametersName.Tс);
-            R1 = new Property(this, ParametersName.R1);
-            Rv2 = new Property(this, ParametersName.Rv2);
-            Rcyt1 = new Property(this, ParametersName.Rcyt1);
-            Rf1 = new Property(this, ParametersName.Rf1);
-            R2 = new Property(this, ParametersName.R2);
-            Rcyt2 = new Property(this, ParametersName.Rcyt2);
-            Rf2 = new Property(this, ParametersName.Rf2);
-            R3 = new Property(this, ParametersName.R3);
-            Rcyt3 = new Property(this, ParametersName.Rcyt3);
-            Rf3 = new Property(this, ParametersName.Rf3);
-            Rcyt = new Property(this, ParametersName.Rcyt);
-            R = new Property(this, ParametersName.R);
-            W1 = new Property(this, ParametersName.W1);
-            Wv2 = new Property(this, ParametersName.Wv2);
-            Wсyt1 = new Property(this, ParametersName.Wсyt1);
-            Wf1 = new Property(this, ParametersName.Wf1);
-            W2 = new Property(this, ParametersName.W2);
-            Wcyt2 = new Property(this, ParametersName.Wcyt2);
-            Wf2 = new Property(this, ParametersName.Wf2);
-            W3 = new Property(this, ParametersName.W3);
-            Wcyt3 = new Property(this, ParametersName.Wcyt3);
-            Wf3 = new Property(this, ParametersName.Wf3);
-            Wcyt = new Property(this, ParametersName.Wcyt);
-            W = new Property(this, ParametersName.W);
-            Smin1 = new Property(this, ParametersName.Smin1);
-            Smin2 = new Property(this, ParametersName.Smin2);
-            Smin3 = new Property(this, ParametersName.Smin3);
-            SminC = new Property(this, ParametersName.SminC);
-            Smin = new Property(this, ParametersName.Smin);
-            Sn1 = new Property(this, ParametersName.Sn1);
-            Sn2 = new Property(this, ParametersName.Sn2);
-            Sn3 = new Property(this, ParametersName.Sn3);
-            S1 = new Property(this, ParametersName.S1);
-            S2 = new Property(this, ParametersName.S2);
-            S3 = new Property(this, ParametersName.S3);
-            Sс = new Property(this, ParametersName.Sс);
-            S = new Property(this, ParametersName.S);
-            SN1 = new Property(this, ParametersName.SN1);
-            SN2 = new Property(this, ParametersName.SN2);
-            SN3 = new Property(this, ParametersName.SN3);
+            deltaT = new ParameterWithRestriction(this, NameParameterWithRestriction.DeltaT);
+            S = new ParameterWithRestriction(this, NameParameterWithRestriction.S);
+            R = new ParameterWithRestriction(this, NameParameterWithRestriction.R);
+            N1 = new ParameterWithRestriction(this, NameParameterWithRestriction.N1);
+            N2 = new ParameterWithRestriction(this, NameParameterWithRestriction.N2);
+            N3 = new ParameterWithRestriction(this, NameParameterWithRestriction.N3);
+            P1 = new ParameterWithRestriction(this, NameParameterWithRestriction.P1);
+            A1 = new ParameterWithRestriction(this, NameParameterWithRestriction.A1);
+            B1 = new ParameterWithRestriction(this, NameParameterWithRestriction.B1);
+            F1 = new ParameterWithRestriction(this, NameParameterWithRestriction.F1);
+            Q2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Q2);
+            D2 = new ParameterWithRestriction(this, NameParameterWithRestriction.D2);
+            H3 = new ParameterWithRestriction(this, NameParameterWithRestriction.H3);
+            Lс = new ParameterWithRestriction(this, NameParameterWithRestriction.Lс);
+            Tс = new ParameterWithRestriction(this, NameParameterWithRestriction.Tс);
+            R1 = new ParameterWithRestriction(this, NameParameterWithRestriction.R1);
+            Rv2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Rv2);
+            R2 = new ParameterWithRestriction(this, NameParameterWithRestriction.R2);
+            R3 = new ParameterWithRestriction(this, NameParameterWithRestriction.R3);
+            W1 = new ParameterWithRestriction(this, NameParameterWithRestriction.W1);
+            Wv2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Wv2);
+            W2 = new ParameterWithRestriction(this, NameParameterWithRestriction.W2);
+            W3 = new ParameterWithRestriction(this, NameParameterWithRestriction.W3);
+            Sn1 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn1);
+            Sn2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn2);
+            Sn3 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn3);
+       
         }
-        public Dictionary<string, Property> Properties { get; protected set; } = new Dictionary<string, Property>();
+        public Dictionary<string, ParameterWithRestriction> Properties { get; protected set; } = new Dictionary<string, ParameterWithRestriction>();
 
-        public Property deltaT { get; set; }
-        public Property N1 { get; set; }
-        public Property N2 { get; set; }
-        public Property N3 { get; set; }
-        public Property P1 { get; set; }
-        public Property A1 { get; set; }
-        public Property B1 { get; set; }
-        public Property F1 { get; set; }
-        public Property Q2 { get; set; }
-        public Property D2 { get; set; }
-        public Property H3 { get; set; }
-        public Property Lс { get; set; }
-        public Property Tс { get; set; }
-        public Property R1 { get; set; }
-        public Property Rv2 { get; set; }
-        public Property Rcyt1 { get; set; }
-        public Property Rf1 { get; set; }
-        public Property R2 { get; set; }
-        public Property Rcyt2 { get; set; }
-        public Property Rf2 { get; set; }
-        public Property R3 { get; set; }
-        public Property Rcyt3 { get; set; }
-        public Property Rf3 { get; set; }
-        public Property Rcyt { get; set; }
-        public Property R { get; set; }
-        public Property W1 { get; set; }
-        public Property Wv2 { get; set; }
-        public Property Wсyt1 { get; set; }
-        public Property Wf1 { get; set; }
-        public Property W2 { get; set; }
-        public Property Wcyt2 { get; set; }
-        public Property Wf2 { get; set; }
-        public Property W3 { get; set; }
-        public Property Wcyt3 { get; set; }
-        public Property Wf3 { get; set; }
-        public Property Wcyt { get; set; }
-        public Property W { get; set; }
-        public Property Smin1 { get; set; }
-        public Property Smin2 { get; set; }
-        public Property Smin3 { get; set; }
-        public Property SminC { get; set; }
-        public Property Smin { get; set; }
-        public Property Sn1 { get; set; }
-        public Property Sn2 { get; set; }
-        public Property Sn3 { get; set; }
-        public Property S1 { get; set; }
-        public Property S2 { get; set; }
-        public Property S3 { get; set; }
-        public Property Sс { get; set; }
-        public Property S { get; set; }
-        public Property SN1 { get; set; }
-        public Property SN2 { get; set; }
-        public Property SN3 { get; set; }
+        public ParameterWithRestriction deltaT { get; set; }
+        public ParameterWithRestriction R { get; set; }
+        public ParameterWithRestriction S { get; set; }
+        public ParameterWithRestriction N1 { get; set; }
+        public ParameterWithRestriction N2 { get; set; }
+        public ParameterWithRestriction N3 { get; set; }
+        public ParameterWithRestriction P1 { get; set; }
+        public ParameterWithRestriction A1 { get; set; }
+        public ParameterWithRestriction B1 { get; set; }
+        public ParameterWithRestriction F1 { get; set; }
+        public ParameterWithRestriction Q2 { get; set; }
+        public ParameterWithRestriction D2 { get; set; }
+        public ParameterWithRestriction H3 { get; set; }
+        public ParameterWithRestriction Lс { get; set; }
+        public ParameterWithRestriction Tс { get; set; }
+        public ParameterWithRestriction R1 { get; set; }
+        public ParameterWithRestriction R2 { get; set; }
+        public ParameterWithRestriction Rv2 { get; set; }
+        public ParameterWithRestriction R3 { get; set; }
+        public ParameterWithRestriction W1 { get; set; }
+        public ParameterWithRestriction Wv2 { get; set; }
+        public ParameterWithRestriction W2 { get; set; }
+        public ParameterWithRestriction W3 { get; set; }
+        public ParameterWithRestriction Sn1 { get; set; }
+        public ParameterWithRestriction Sn2 { get; set; }
+        public ParameterWithRestriction Sn3 { get; set; }
 
     }
+    //public class PropertiesSystem
+    //{
+    //    public PropertiesSystem()
+    //    {
+    //        deltaT = new ParameterWithRestriction(this, ParameterWithRestriction.DeltaT);
+    //        N1 = new ParameterWithRestriction(this, ParameterWithRestriction.N1);
+    //        N2 = new ParameterWithRestriction(this, ParameterWithRestriction.N2);
+    //        N3 = new ParameterWithRestriction(this, ParameterWithRestriction.N3);
+    //        P1 = new ParameterWithRestriction(this, ParameterWithRestriction.P1);
+    //        A1 = new ParameterWithRestriction(this, ParameterWithRestriction.A1);
+    //        B1 = new ParameterWithRestriction(this, ParameterWithRestriction.B1);
+    //        F1 = new ParameterWithRestriction(this, ParameterWithRestriction.F1);
+    //        Q2 = new ParameterWithRestriction(this, ParameterWithRestriction.Q2);
+    //        D2 = new ParameterWithRestriction(this, ParameterWithRestriction.D2);
+    //        H3 = new ParameterWithRestriction(this, ParameterWithRestriction.H3);
+    //        Lс = new ParameterWithRestriction(this, ParameterWithRestriction.Lс);
+    //        Tс = new ParameterWithRestriction(this, ParameterWithRestriction.Tс);
+    //        R1 = new ParameterWithRestriction(this, ParameterWithRestriction.R1);
+    //        Rv2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rv2);
+    //        Rcyt1 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt1);
+    //        Rf1 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf1);
+    //        R2 = new ParameterWithRestriction(this, ParameterWithRestriction.R2);
+    //        Rcyt2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt2);
+    //        Rf2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf2);
+    //        R3 = new ParameterWithRestriction(this, ParameterWithRestriction.R3);
+    //        Rcyt3 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt3);
+    //        Rf3 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf3);
+    //        Rcyt = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt);
+    //        R = new ParameterWithRestriction(this, ParameterWithRestriction.R);
+    //        W1 = new ParameterWithRestriction(this, ParameterWithRestriction.W1);
+    //        Wv2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wv2);
+    //        Wсyt1 = new ParameterWithRestriction(this, ParameterWithRestriction.Wсyt1);
+    //        Wf1 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf1);
+    //        W2 = new ParameterWithRestriction(this, ParameterWithRestriction.W2);
+    //        Wcyt2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt2);
+    //        Wf2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf2);
+    //        W3 = new ParameterWithRestriction(this, ParameterWithRestriction.W3);
+    //        Wcyt3 = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt3);
+    //        Wf3 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf3);
+    //        Wcyt = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt);
+    //        W = new ParameterWithRestriction(this, ParameterWithRestriction.W);
+    //        Smin1 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin1);
+    //        Smin2 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin2);
+    //        Smin3 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin3);
+    //        SminC = new ParameterWithRestriction(this, ParameterWithRestriction.SminC);
+    //        Smin = new ParameterWithRestriction(this, ParameterWithRestriction.Smin);
+    //        Sn1 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn1);
+    //        Sn2 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn2);
+    //        Sn3 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn3);
+    //        S1 = new ParameterWithRestriction(this, ParameterWithRestriction.S1);
+    //        S2 = new ParameterWithRestriction(this, ParameterWithRestriction.S2);
+    //        S3 = new ParameterWithRestriction(this, ParameterWithRestriction.S3);
+    //        Sс = new ParameterWithRestriction(this, ParameterWithRestriction.Sс);
+    //        S = new ParameterWithRestriction(this, ParameterWithRestriction.S);
+    //        SN1 = new ParameterWithRestriction(this, ParameterWithRestriction.SN1);
+    //        SN2 = new ParameterWithRestriction(this, ParameterWithRestriction.SN2);
+    //        SN3 = new ParameterWithRestriction(this, ParameterWithRestriction.SN3);
+    //    }
+    //    public Dictionary<string, ParameterWithRestriction> Properties { get; protected set; } = new Dictionary<string, ParameterWithRestriction>();
+
+    //    public ParameterWithRestriction deltaT { get; set; }
+    //    public ParameterWithRestriction N1 { get; set; }
+    //    public ParameterWithRestriction N2 { get; set; }
+    //    public ParameterWithRestriction N3 { get; set; }
+    //    public ParameterWithRestriction P1 { get; set; }
+    //    public ParameterWithRestriction A1 { get; set; }
+    //    public ParameterWithRestriction B1 { get; set; }
+    //    public ParameterWithRestriction F1 { get; set; }
+    //    public ParameterWithRestriction Q2 { get; set; }
+    //    public ParameterWithRestriction D2 { get; set; }
+    //    public ParameterWithRestriction H3 { get; set; }
+    //    public ParameterWithRestriction Lс { get; set; }
+    //    public ParameterWithRestriction Tс { get; set; }
+    //    public ParameterWithRestriction R1 { get; set; }
+    //    public ParameterWithRestriction Rv2 { get; set; }
+    //    public ParameterWithRestriction Rcyt1 { get; set; }
+    //    public ParameterWithRestriction Rf1 { get; set; }
+    //    public ParameterWithRestriction R2 { get; set; }
+    //    public ParameterWithRestriction Rcyt2 { get; set; }
+    //    public ParameterWithRestriction Rf2 { get; set; }
+    //    public ParameterWithRestriction R3 { get; set; }
+    //    public ParameterWithRestriction Rcyt3 { get; set; }
+    //    public ParameterWithRestriction Rf3 { get; set; }
+    //    public ParameterWithRestriction Rcyt { get; set; }
+    //    public ParameterWithRestriction R { get; set; }
+    //    public ParameterWithRestriction W1 { get; set; }
+    //    public ParameterWithRestriction Wv2 { get; set; }
+    //    public ParameterWithRestriction Wсyt1 { get; set; }
+    //    public ParameterWithRestriction Wf1 { get; set; }
+    //    public ParameterWithRestriction W2 { get; set; }
+    //    public ParameterWithRestriction Wcyt2 { get; set; }
+    //    public ParameterWithRestriction Wf2 { get; set; }
+    //    public ParameterWithRestriction W3 { get; set; }
+    //    public ParameterWithRestriction Wcyt3 { get; set; }
+    //    public ParameterWithRestriction Wf3 { get; set; }
+    //    public ParameterWithRestriction Wcyt { get; set; }
+    //    public ParameterWithRestriction W { get; set; }
+    //    public ParameterWithRestriction Smin1 { get; set; }
+    //    public ParameterWithRestriction Smin2 { get; set; }
+    //    public ParameterWithRestriction Smin3 { get; set; }
+    //    public ParameterWithRestriction SminC { get; set; }
+    //    public ParameterWithRestriction Smin { get; set; }
+    //    public ParameterWithRestriction Sn1 { get; set; }
+    //    public ParameterWithRestriction Sn2 { get; set; }
+    //    public ParameterWithRestriction Sn3 { get; set; }
+    //    public ParameterWithRestriction S1 { get; set; }
+    //    public ParameterWithRestriction S2 { get; set; }
+    //    public ParameterWithRestriction S3 { get; set; }
+    //    public ParameterWithRestriction Sс { get; set; }
+    //    public ParameterWithRestriction S { get; set; }
+    //    public ParameterWithRestriction SN1 { get; set; }
+    //    public ParameterWithRestriction SN2 { get; set; }
+    //    public ParameterWithRestriction SN3 { get; set; }
+
+    //}
 }
