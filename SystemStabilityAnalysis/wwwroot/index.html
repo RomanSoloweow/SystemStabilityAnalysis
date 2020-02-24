@@ -11,7 +11,47 @@
 <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.3/dist/semantic.min.js"></script>
 </head>
 <body>
+  <form action="Restrictions/LoadRestrictionsFromFile" 
+  enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;" 
+  method="post">
+<dl>
+    <dt>
+        <label for="FileUpload_FormFile">File</label>
+    </dt>
+    <dd>
+      <input id="FileUpload_FormFile" type="file" 
+      name="FileUpload.FormFile" multiple/>
+    </dd>
+</dl>
 
+<input class="btn" type="submit" value="Upload" multiple/>
+
+<div style="margin-top:15px">
+    <output name="result"></output>
+</div>
+</form>
+
+<script>
+async function AJAXSubmit (oFormElement) {
+var resultElement = oFormElement.elements.namedItem("result");
+const formData = new FormData(oFormElement);
+console.log(formData)
+try {
+const response = await fetch(oFormElement.action, {
+  method: 'POST',
+  body: formData
+});
+
+if (response.ok) {;
+}
+
+resultElement.value = 'Result: ' + response.status + ' ' + 
+  response.statusText;
+} catch (error) {
+  console.error('Error:', error);
+}
+}
+</script>
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="first">Ограничения</a>
     <a class="item" data-tab="second">Система</a>
@@ -22,7 +62,7 @@
     <div class="ui relaxed grid padded">
       <div class="row">
         <div class="column">
-          <button class="ui button save-system">Сохранить</button>
+          <button class="ui button save-system"><i class="save icon"></i></button>
           <button class="ui button "><i class="download icon"></i></button>
           <button class="ui right button  next">
             Без ограничений
@@ -65,6 +105,8 @@
                 <button class="ui button delete-all">
                   Удалить все
                 </button>
+                <input id="FileUpload_FormFile" type="file" 
+                name="FileUpload.FormFile" multiple hidden/>
               </div>
             </div>
           </div>
@@ -82,9 +124,8 @@
       <button class="ui right button next">
         Выбрать из списка систем
       </button>
-      <button class="ui button save-system">
-        Сохранить в списке систем
-      </button>
+      <button class="ui button save-system"><i class="save icon"></i></button>
+
       
     </div>
     <div class="ui bottom attached tab segment" data-tab="second/b">2B</div>

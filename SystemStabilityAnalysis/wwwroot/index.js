@@ -52,11 +52,12 @@ function addFilter(){
   let parameter = $(".ui.names").find(".item.active").attr("data-value");
   let condition = $(".ui.conditions ").find(".item.active").attr("data-value");
   let value = $(".input.value ").val();
-  if (parameter == undefined || condition == undefined || value == undefined)
-    return
+  // if (parameter == undefined || condition == undefined || value == undefined)
+  // return
   $.ajax({
     method: "GET",
-    url: `Restrictions/AddRestriction?parameter=${parameter}&condition=${condition}&value=${value}`,
+    //добавить тернарный
+    url: `Restrictions/AddRestriction?parameter=${parameter }&condition=${condition}&value=${value}`,
   }).done(function(msg){
     if (msg.status == "Success") {
       if ($(".ui.celled.table.restructions").length == 0 ) {
@@ -210,13 +211,13 @@ function clearFilters(){
 
 function saveSystem(event){
   if ($(event.target).parent().find(".ui.input.save-system").length == 0) {
-    console.log($(event.target).parent())
-    $(event.target).before(`
+    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+    element.before(`
       <div class="ui input save-system">
         <input type="text" placeholder="Имя">
       </div>
     `);
-    $(".ui.button.save-system").text("Сохранить");
+
   }
   else {
     //сохранить
