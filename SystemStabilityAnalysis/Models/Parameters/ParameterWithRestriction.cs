@@ -460,17 +460,13 @@ namespace SystemStabilityAnalysis.Models
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-            if (StaticData.Conditions.TryGetValue(this.ParametersName, out List<Condition> conditions))
+            if (StaticData.Conditions.TryGetValue(this.ParametersName, out Condition condition))
             {
-                foreach(Condition condition in conditions)
-                {
-                    result.IsCorrect = result.IsCorrect & condition.InvokeComparison(Value);
-
-                    if(!result.IsCorrect)
+                    result.IsCorrect = condition.InvokeComparison(Value);
+                    if (!result.IsCorrect)
                     {
                         result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
                     }
-                }
             }
 
             return result;

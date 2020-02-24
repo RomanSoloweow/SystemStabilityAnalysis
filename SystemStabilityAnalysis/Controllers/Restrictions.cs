@@ -69,6 +69,7 @@ namespace SystemStabilityAnalysis.Controllers
                     Message = Message
                 };
             }
+            StaticData.Conditions.Add(parameter, new Condition(condition, value));
 
             return new
             {
@@ -82,6 +83,48 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
+        [HttpGet]
+        public object DeleteAllRestriction()
+        {
+            StaticData.Conditions.Clear();
+            return new
+            {
+                Status = Status.Success.GetName()
+            };
+        }
+        [HttpGet]
+        public object DeleteRestriction([FromQuery]NameParameterWithRestriction restrictionName)
+        {
+            Status status = Status.Success;
+            List<string> Message = new List<string>();
+
+            if (HelperEnum.IsDefault(restrictionName))
+            {
+                Message.Add("Параметр указано некорректно");
+                status = Status.Error;
+            }
+
+            if (!StaticData.Conditions.ContainsKey(restrictionName))
+            {
+                Message.Add("Ограничение для данного параметра не найдено");
+                status = Status.Error;
+            }
+
+            if (status == Status.Error)
+            {
+                return new
+                {
+                    Status = status.GetName(),
+                    Message = Message
+                };
+            }
+
+            StaticData.Conditions.Remove(restrictionName);
+            return new
+            {
+                Status = Status.Success.GetName()
+            };
+        }
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(string parameter = null, string condition = null, string value = null)
         //{

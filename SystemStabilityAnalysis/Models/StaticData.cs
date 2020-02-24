@@ -18,7 +18,7 @@ namespace SystemStabilityAnalysis.Models
             return systemForAnalys;
         }
 
-        public static Dictionary<NameParameterWithRestriction, List<Condition>> Conditions { get; set; } = new Dictionary<NameParameterWithRestriction, List<Condition>>();
+        public static Dictionary<NameParameterWithRestriction, Condition> Conditions { get; set; } = new Dictionary<NameParameterWithRestriction, Condition>();
 
     }
 }
