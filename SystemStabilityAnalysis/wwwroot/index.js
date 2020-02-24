@@ -32,7 +32,7 @@ $(".ui.icon.button.plus").click(function(eventData, handler) {
 });
 $(".ui.icon.button.minus").click(deleteFilter);
 $(".ui.button.next").click(nextPage);
-$(".ui.button.delete-all").click(()=>{$(".ui.celled.table").remove()});
+$(".ui.button.delete-all").click(deleteAll);
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
 $(".ui.button.save-system").click(saveSystem);
@@ -79,8 +79,9 @@ function addFilter(){
         </tbody>
         </table>`)
       }
+      console.log(msg)
       $(".ui.celled.table tbody").after(`<tr>
-      <td data-label="description">${msg.description}</td>
+      <td data-label="description" data-value=${msg.restrictionName}>${msg.description}</td>
       <td data-label="name">${msg.name}</td>
       <td data-label="unit">${msg.unit}</td>
       <td data-label="condition">${msg.condition}</td>
@@ -102,18 +103,23 @@ function addFilter(){
 }
 
 function deleteFilter(){
-  console.log($( this ).parent().parent().find("[data-label='name']"))
+  $.ajax({
+    method: "GET",
+    url: `Restrictions/DeleteRestriction?restrictionName=${$( this ).parent().parent().find("[data-label='description']").attr("data-value")}`,
+  })
   $( this ).parent().parent().remove();
   if ($(".ui.celled.table tr").length == 1) {
     $(".ui.celled.table").remove();
   }
+}
+
+
+function deleteAll(){
   $.ajax({
     method: "GET",
-    url: "Restrictions/DeleteRestriction?restrictionName=DeltaT",
-  }).done(function(msg){
-
-  });
-
+    url: `Restrictions/DeleteAllRestriction`,
+  })
+  $(".ui.celled.table").remove()
 }
 
 function getNames(){
