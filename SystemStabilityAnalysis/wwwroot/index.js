@@ -6,6 +6,10 @@ $('.ui.dropdown')
  .dropdown()
 ;
 
+$('.message .close').on('click', function() {
+  $(this).closest('.message').transition('fade');
+});
+
 $(".ui.icon.button.plus").click(addFilter)
 $(".ui.icon.button.minus").click(deleteFilter)
 $(".ui.button.next").click(nextPage)
@@ -29,38 +33,17 @@ function nextPage(){
 }
 
 function addFilter(){
-  if ($(".ui.celled.table").length > 0) {
-    $(".ui.celled.table tr:last").after(`<tr>
-    <td data-label="Name">Elyse</td>
-    <td data-label="Age">24</td>
-    <td data-label="Job">Designer</td>
-    <td data-label="Age">24</td>
-    <td data-label="Job">Engineer</td>
-    <td data-label="Job" class="center aligned" >
-      <button class="ui icon button minus">
-        <i class="minus icon"></i>
-      </button>
-    </td>
-    </tr>`)
-    
-  }
-  else {
-    $('.ui.form').append(`<table class="ui celled blue table center aligned">
-    <thead>
-      <tr>
-        <th>Наименование показателя</th>
-        <th>Обозначение</th>
-        <th>Единица измерения</th>
-        <th>Условие</th>
-        <th>Значение</th>
-        <th class="minus one wide center aligned"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-label="Name">James</td>
+  let notificationMessage = ""
+  $.ajax({
+    method: "GET",
+    url: "Restrictions/AddRestirction",
+  }).done(function(msg){
+    if (msg.Status == "Success") {
+      if ($(".ui.celled.table").length > 0) {
+        $(".ui.celled.table tr:last").after(`<tr>
+        <td data-label="Name">Elyse</td>
         <td data-label="Age">24</td>
-        <td data-label="Job">Engineer</td>
+        <td data-label="Job">Designer</td>
         <td data-label="Age">24</td>
         <td data-label="Job">Engineer</td>
         <td data-label="Job" class="center aligned" >
@@ -68,12 +51,42 @@ function addFilter(){
             <i class="minus icon"></i>
           </button>
         </td>
-      </tr>
-    </tbody>
-    </table>`)
-  }
-  $(".ui.icon.button.minus").unbind();
-  $(".ui.icon.button.minus").click(deleteFilter);
+        </tr>`)
+        
+      }
+      else {
+        $('.ui.form').append(`<table class="ui celled blue table center aligned">
+        <thead>
+          <tr>
+            <th>Наименование показателя</th>
+            <th>Обозначение</th>
+            <th>Единица измерения</th>
+            <th>Условие</th>
+            <th>Значение</th>
+            <th class="minus one wide center aligned"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Name">James</td>
+            <td data-label="Age">24</td>
+            <td data-label="Job">Engineer</td>
+            <td data-label="Age">24</td>
+            <td data-label="Job">Engineer</td>
+            <td data-label="Job" class="center aligned" >
+              <button class="ui icon button minus">
+                <i class="minus icon"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        </table>`)
+      }
+      $(".ui.icon.button.minus").unbind();
+      $(".ui.icon.button.minus").click(deleteFilter);
+    }
+    notification(msg.Status,msg.Message,"first");
+  });
 }
 
 function deleteFilter(){
@@ -133,4 +146,34 @@ function getConditions(){
       }
     });
   }
+}
+
+function notification(type, message, tabNum){
+  information = type == "Success" ? ["positive","Успешно!"] : ["negative", "Ошибка!"];
+  messageElement =
+  `
+    <div class="ui ${information[0]} message row">
+      <i class="close icon"></i>
+      <div class="header">
+        ${information[1]}
+      </div>
+      <p>${message}
+    </p></div>
+  `
+  $(`.ui.tab.segment[data-tab='${tabNum}']`).prepend(messageElement);
+  $('.message .close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
+  if (type == "Success") {
+    console.log(3)
+    setTimeout(() => {
+      $(".message .close").trigger("click");
+    }, 5000);
+  }
+  
 }
