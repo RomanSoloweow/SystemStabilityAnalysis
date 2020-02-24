@@ -46,22 +46,24 @@ namespace SystemStabilityAnalysis.Controllers
         {
             Status status = Status.Success;
             List<string> Message = new List<string>();
-            NameParameterWithEnter parameterValue = NameParameterWithEnter.NoCorrect;
             ConditionType conditionValue = ConditionType.NoCorrect;
             int Value = 0 ;
 
-            if (parameter == null)
+            if (value == null)
             {
-                Message.Add("Параметр для ограничения не указан");
+                Message.Add("Значение ограничения не указано");
                 status = Status.Error;
             }
             else
             {
-                HelperEnum.TryGetValue<NameParameterWithEnter>(parameter, out parameterValue);
-
-                if (HelperEnum.IsDefault(parameterValue))
+                if (!int.TryParse(value, out Value))
                 {
-                    Message.Add(String.Format("Параметр с именем \"{0}\" не найден", parameter));
+                    Message.Add(String.Format("Указанное значение \"{0}\" не является числом", value));
+                    status = Status.Error;
+                }
+                else if (!(Value > 0))
+                {
+                    Message.Add("Значение ограничения должно быть > 0");
                     status = Status.Error;
                 }
             }
@@ -82,46 +84,52 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
-            if (value == null)
+            if (parameter == null)
             {
-                Message.Add("Значение ограничения не указано");
+                Message.Add("Параметр для ограничения не указан");
                 status = Status.Error;
             }
-            else
+            else 
             {
-                if (!int.TryParse(value, out Value))
+
+                if (Enum.TryParse(parameter, out NameParameterWithEnter parameterWithEnter))
                 {
-                    Message.Add(String.Format("Указанное значение {0} не является числом", value));
+                    if (status != Status.Error)
+                    {
+                        parameterWithEnter.AddToRestrictions(conditionValue, Value);
+                        return parameterWithEnter.ToRestriction(conditionValue, Value);
+                    }
+                }
+                else if (Enum.TryParse(parameter, out NameParameterWithCalculation parameterWithCalculation))
+                {
+                    if (status != Status.Error)
+                    {
+                        parameterWithCalculation.AddToRestrictions(conditionValue, Value);
+                        return parameterWithCalculation.ToRestriction(conditionValue, Value);
+                    }
+                }
+                else if (Enum.TryParse(parameter, out NameParameterForAnalysis parameterForAnalysis))
+                {
+                    if (status != Status.Error)
+                    {
+                        parameterForAnalysis.AddToRestrictions(conditionValue, Value);
+                        return parameterForAnalysis.ToRestriction(conditionValue, Value);
+                    }
+                }
+                else
+                {
+                    Message.Add(String.Format("Параметр с именем \"{0}\" не найден", parameter));
                     status = Status.Error;
                 }
-                else if (!(Value > 0))
-                {
-                    Message.Add("Значение ограничения должно быть > 0");
-                    status = Status.Error;
-                }
+               
             }
-
-            if (status == Status.Error)
-            {
-                return new
-                {
-                    Status = status.GetName(),
-                    Message = Message
-                };
-            }
-
-            StaticData.ConditionsForParameterWithEnter.Add(parameterValue, new Condition(conditionValue, Value));
 
             return new
             {
                 Status = status.GetName(),
-                Name = parameterValue.GetDesignation(),
-                Description = parameterValue.GetDescription(),
-                Unit = parameterValue.GetUnit().GetDescription(),
-                Condition = conditionValue.GetDesignation(),
-                Value = value,
-                RestrictionName = parameterValue.GetName()
+                Message = Message
             };
+
         }
 
         [HttpGet]
@@ -129,7 +137,6 @@ namespace SystemStabilityAnalysis.Controllers
         {
             Status status = Status.Success;
             List<string> Message = new List<string>();
-            NameParameterWithEnter parameterValue = NameParameterWithEnter.NoCorrect;
             if (restrictionName == null)
             {
                 Message.Add("Ограничение не указано");
@@ -137,18 +144,31 @@ namespace SystemStabilityAnalysis.Controllers
             }
             else
             {
-                HelperEnum.TryGetValue<NameParameterWithEnter>(restrictionName, out parameterValue);
-
-                if (HelperEnum.IsDefault(parameterValue))
+                bool contains = true;
+                if (Enum.TryParse(restrictionName, out NameParameterWithEnter parameterWithEnter))
+                {
+                    contains = parameterWithEnter.DeleteFromRestrictions();
+                }
+                else if (Enum.TryParse(restrictionName, out NameParameterWithCalculation parameterWithCalculation))
+                {
+                    contains = parameterWithCalculation.DeleteFromRestrictions();
+                }
+                else if (Enum.TryParse(restrictionName, out NameParameterForAnalysis parameterForAnalysis))
+                {
+                    contains = parameterForAnalysis.DeleteFromRestrictions();
+                }
+                else
                 {
                     Message.Add(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
                     status = Status.Error;
                 }
-                else if(!StaticData.ConditionsForParameterWithEnter.ContainsKey(parameterValue))
+
+                if(!contains)
                 {
                     Message.Add("Ограничение для данного параметра не найдено");
                     status = Status.Error;
                 }
+               
             }
             
             if (status == Status.Error)
@@ -159,9 +179,6 @@ namespace SystemStabilityAnalysis.Controllers
                     Message = Message
                 };
             }
-
-            StaticData.ConditionsForParameterWithEnter.Remove(parameterValue);
-
             return new
             {
                 Status = Status.Success.GetName()
@@ -181,12 +198,11 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
-        public object LoadRestrictionsFromFile(IFormFile file)
+        public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
-
-
             return new
             {
+                Message = "Вы достучались до функции загрузки файла . " + file==null?"Но файл пуст":"Похоже у вас получилось что-то загрузить т.к. файл не пуст",
                 Status = Status.Success.GetName(),
             };
         }

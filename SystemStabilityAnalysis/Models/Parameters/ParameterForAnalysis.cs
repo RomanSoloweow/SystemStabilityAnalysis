@@ -104,13 +104,33 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterForAnalysis.Add(parameter, new Condition(conditionType, value));
         }
-        public static void DeleteFromRestrictions(this NameParameterForAnalysis parameter)
+        public static bool DeleteFromRestrictions(this NameParameterForAnalysis parameter)
         {
+
+            if (!StaticData.ConditionsForParameterForAnalysis.ContainsKey(parameter))
+                return false;
+
             StaticData.ConditionsForParameterForAnalysis.Remove(parameter);
+
+            return true;
         }
         public static void DeleteAllRestrictions(this NameParameterForAnalysis parameter)
         {
             StaticData.ConditionsForParameterForAnalysis.Clear();
+        }
+
+        public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Condition = conditionType.GetDesignation(),
+                Value = value,
+                RestrictionName = parameter.GetName()
+            };
         }
     }
 

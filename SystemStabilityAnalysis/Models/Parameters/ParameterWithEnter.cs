@@ -162,13 +162,32 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterWithEnter.Add(parameter, new Condition(conditionType, value));
         }
-        public static void DeleteFromRestrictions(this NameParameterWithEnter parameter)
+        public static bool DeleteFromRestrictions(this NameParameterWithEnter parameter)
         {
+            if (!StaticData.ConditionsForParameterWithEnter.ContainsKey(parameter))
+                return false;
+
             StaticData.ConditionsForParameterWithEnter.Remove(parameter);
+
+            return true;
         }
         public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)
         {
             StaticData.ConditionsForParameterWithEnter.Clear();
+        }
+
+        public static object ToRestriction(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Condition = conditionType.GetDesignation(),
+                Value = value,
+                RestrictionName = parameter.GetName()
+            };
         }
     }
 

@@ -191,9 +191,14 @@ namespace SystemStabilityAnalysis.Models.Parameters
             StaticData.ConditionsForParameterWithCalculation.Add(parameter, new Condition(conditionType, value));
         }
 
-        public static void DeleteFromRestrictions(this NameParameterWithCalculation parameter)
+        public static bool DeleteFromRestrictions(this NameParameterWithCalculation parameter)
         {
+            if (!StaticData.ConditionsForParameterWithCalculation.ContainsKey(parameter))
+                return false;
+
             StaticData.ConditionsForParameterWithCalculation.Remove(parameter);
+
+            return true;
         }
 
         public static void DeleteAllRestrictions(this NameParameterWithCalculation parameter)
@@ -201,7 +206,19 @@ namespace SystemStabilityAnalysis.Models.Parameters
             StaticData.ConditionsForParameterWithCalculation.Clear();
         }
 
-        //public static object 
+        public static object ToRestriction(this NameParameterWithCalculation parameter, ConditionType conditionType, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Condition = conditionType.GetDesignation(),
+                Value = value,
+                RestrictionName = parameter.GetName()
+            };
+        }
     }
 
     public class ParameterWithCalculation
