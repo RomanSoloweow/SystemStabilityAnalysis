@@ -39,6 +39,7 @@ $(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filena
 $(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
 $(".ui.button.validate").click(validateSystem);
+$(".ui.button.create-linear-chart").click(linearChart);
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -389,12 +390,16 @@ function validateSystem() {
   $.ajax({
     method: "GET",
     url: `Systems/Validate`,
-    data: {validateArr: JSON.stringify(validationArr)}
+    data: {validateArr: validationArr}
   }).done(function(msg){
     $.each(msg.something, function(index, value){
       
     })
   });
+}
+
+function linearChart() {
+
 }
 
 
