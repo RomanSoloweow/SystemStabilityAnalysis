@@ -6,30 +6,26 @@ $('.ui.dropdown')
  .dropdown()
 ;
 
-$('.ui.form')
-  .form({
-    fields: {
-      value: {
-        identifier  : 'value',
-        rules: [
-          {
-            type   : 'empty'
-          }
-        ]
-      }
-    }
-  })
-;
+// $('.ui.form')
+//   .form({
+//     fields: {
+//       value: {
+//         identifier  : 'value',
+//         rules: [
+//           {
+//             type   : 'empty'
+//           }
+//         ]
+//       }
+//     }
+//   })
+// ;
 
 $('.message .close').on('click', function() {
   $(this).closest('.message').transition('fade');
 });
 
-$(".ui.icon.button.plus").click(function(eventData, handler) {
-  $( ".ui.form" ).submit();
-  if ($(".ui.form.success").length === 1)
-    addFilter();
-});
+$(".ui.icon.button.plus").click(addFilter);
 $(".ui.icon.button.minus").click(deleteFilter);
 $(".ui.button.next").click(nextPage);
 $(".ui.button.delete-all").click(deleteAll);
@@ -53,11 +49,11 @@ function nextPage(event){
 }
 
 function addFilter(){
-  //let currentCombobox = $(".ui.dropdown.names");
-  let message = "Ограничение не добавлено.";
   let parameter = $(".ui.names").find(".item.active").attr("data-value");
   let condition = $(".ui.conditions ").find(".item.active").attr("data-value");
   let value = $(".input.value ").val();
+  if (parameter == undefined || condition == undefined || value == undefined)
+    return
   $.ajax({
     method: "GET",
     url: `Restrictions/AddRestriction?parameter=${parameter}&condition=${condition}&value=${value}`,
