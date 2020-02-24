@@ -197,7 +197,7 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        [HttpGet]
+        [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
             return new
