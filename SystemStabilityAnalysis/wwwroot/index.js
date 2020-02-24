@@ -57,7 +57,7 @@ function addFilter(){
   $.ajax({
     method: "GET",
     //добавить тернарный
-    url: `Restrictions/AddRestriction?parameter=${parameter }&condition=${condition}&value=${value}`,
+    url: `Restrictions/AddRestriction?parameter=${parameter == undefined ? "" : parameter}&condition=${condition == undefined ? "" : condition}&value=${value == undefined ? "" : value}`,
   }).done(function(msg){
     if (msg.status == "Success") {
       if ($(".ui.celled.table.restructions").length == 0 ) {
@@ -184,6 +184,7 @@ function notification(type, message, tabNum){
     </p></div>
   `
   $(`.ui.tab.segment[data-tab='${tabNum}']`).prepend(messageElement);
+  $('.message .close').unbind();
   $('.message .close')
     .on('click', function() {
       $(this)

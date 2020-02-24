@@ -20,7 +20,7 @@
     </dt>
     <dd>
       <input id="FileUpload_FormFile" type="file" 
-      name="file" multiple/>
+      name="file" accept=".csv" multiple/>
     </dd>
 </dl>
 
@@ -62,12 +62,9 @@ resultElement.value = 'Result: ' + response.status + ' ' +
     <div class="ui relaxed grid padded">
       <div class="row">
         <div class="column">
-          <button class="ui button save-system"><i class="save icon"></i></button>
-          <button class="ui button "><i class="download icon"></i></button>
-          <button class="ui right button  next">
-            Без ограничений
-          </button>
-          <button class="ui button next"><i class="arrow right icon"></i></button>
+          <button class="ui button save-system"><i class="save icon"></i>Сохранить</button>
+          <button class="ui button "><i class="download icon"></i>Загрузить</button>
+          <button class="ui button next">Дальше<i class="arrow right icon"></i></button>
         </div>
       </div>
       <div class="row">
@@ -104,9 +101,10 @@ resultElement.value = 'Result: ' + response.status + ' ' +
                 </button>
                 <button class="ui button delete-all">
                   Удалить все
+                  <i class="trash right icon"></i>
                 </button>
                 <input id="FileUpload_FormFile" type="file" 
-                name="FileUpload.FormFile" multiple hidden/>
+                name="FileUpload.FormFile"  multiple hidden/>
               </div>
             </div>
           </div>
@@ -134,11 +132,13 @@ resultElement.value = 'Result: ' + response.status + ' ' +
   </div>
   <div class="ui bottom attached tab segment" data-tab="third">
   <div class="ui top attached tabular menu">
-    <a class="item" data-tab="third/a">Графики</a>
-    <a class="item" data-tab="third/b">Диаграммы</a>
+    <a class="item" data-tab="third/a">Настройки</a>
+    <a class="item" data-tab="third/b">Графики</a>
+    <a class="item" data-tab="third/c">Диаграммы</a>
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/a">3A</div>
   <div class="ui bottom attached tab segment" data-tab="third/b">3B</div>
+  <div class="ui bottom attached tab segment" data-tab="third/c">3С</div>
   </div>
   </div>
   <script src="index.js"></script>
