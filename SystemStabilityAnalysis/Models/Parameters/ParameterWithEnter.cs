@@ -171,7 +171,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             return true;
         }
-        public static object ToParameter(this NameParameterWithEnter parameter, double value)
+        public static object ToParameter(this NameParameterWithEnter parameter, double value, bool correct)
         {
             return new
             {
@@ -179,7 +179,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value
+                Value = value,
+                Correct = correct
             };
         }
         public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)

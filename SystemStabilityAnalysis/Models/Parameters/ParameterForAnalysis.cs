@@ -118,7 +118,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterForAnalysis.Clear();
         }
-        public static object ToParameter(this NameParameterForAnalysis parameter, double value)
+        public static object ToParameter(this NameParameterForAnalysis parameter, double value, bool correct)
         {
             return new
             {
@@ -126,7 +126,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value
+                Value = value,
+                Correct = correct
             };
         }
         public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)

@@ -247,7 +247,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             };
         }
 
-        public static object ToParameter(this NameParameterWithCalculation parameter, double value)
+        public static object ToParameter(this NameParameterWithCalculation parameter, double value, bool correct)
         {
             return new
             {
@@ -255,7 +255,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value
+                Value = value,
+                Correct = correct
             };
         }
     }
