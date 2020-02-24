@@ -35,8 +35,10 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        [HttpGet("{parameter}/{condition}/{value}")]
-        public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
+        //[HttpGet("{parameter}/{condition}/{value}")]
+        //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
+        [HttpGet]
+        public object AddRestriction([FromQuery]NameParameterWithRestriction parameter, [FromQuery]ConditionType condition, [FromQuery]double value)
         {
             Status status = Status.Success;
 
@@ -70,7 +72,13 @@ namespace SystemStabilityAnalysis.Controllers
 
             return new
             {
-                Status = status.GetName()
+                Status = status.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Condition = condition.GetDesignation(),
+                Value = value,
+                RestrictionName = parameter.GetName()
             };
         }
 
