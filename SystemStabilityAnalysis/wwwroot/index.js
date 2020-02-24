@@ -227,3 +227,44 @@ function saveSystem(event){
     //сохранить
   }
 }
+
+$(".item[data-tab='second'").tab({'onVisible':function(){
+  if ($(".tab.segment[data-tab='second/a']").find('table').length == 0) {
+    $(".tab.segment[data-tab='second/a']").append(`
+      <table class="ui celled blue table center aligned">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  }
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParameters",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.properties, function( key, value ) {
+        $(".tab.segment[data-tab='second/a']").find('tbody').after(`<tr>
+          <td data-label="description" data-value=${value.value}>${value.description}</td>
+          <td data-label="name">${value.name}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="button" class="center aligned" >
+          <div class="ui input save-system">
+            <input type="text" placeholder="">
+          </div
+          </td>
+          </tr>`
+        )
+      });
+    }
+  });
+  
+  
+}});
