@@ -9,7 +9,7 @@ namespace SystemStabilityAnalysis.Models
 {
 
 
-    public enum NameParameterWithRestriction
+    public enum NameParameterWithEnter
     {
         NoCorrect = 0,
         DeltaT,
@@ -42,75 +42,75 @@ namespace SystemStabilityAnalysis.Models
 
     public static class ParameterWithRestrictionExtension
     {
-        public static Dictionary<NameParameterWithRestriction, string> Descriptions = new Dictionary<NameParameterWithRestriction, string>()
+        public static Dictionary<NameParameterWithEnter, string> Descriptions = new Dictionary<NameParameterWithEnter, string>()
         {
-            {NameParameterWithRestriction.DeltaT, "Период устойчивой эксплуатации системы в сутках"},
-            {NameParameterWithRestriction.S, "Количество персонала "},
-            {NameParameterWithRestriction.R, "Стоимость функционирования системы в период ∆T"},
-            {NameParameterWithRestriction.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
-            {NameParameterWithRestriction.N2, "Количество элементов выполняющих функции системы, 2 группа "},
-            {NameParameterWithRestriction.N3, "Количество др. элементов: подсистема обеспечения, резерв,  неисправных и др., 3 группа"},
-            {NameParameterWithRestriction.P1, "Количество элементов 1 группы, введенных (восстановленных) в эксплуатацию"},
-            {NameParameterWithRestriction.A1, "Количество элементов 1 группы не перешедших во 2 группу из-за недостатков ресурсов "},
-            {NameParameterWithRestriction.B1, "Количество элементов 1 группы, вышедших из строя  "},
-            {NameParameterWithRestriction.F1, "Количество элементов 1 группы перешедших во 2 группу "},
-            {NameParameterWithRestriction.Q2, "Количество элементов 2 группы  перешедших в 3 группу (неисправных, но еще подлежащих восстановлению или пригодных для использования)"},
-            {NameParameterWithRestriction.D2, "Количество не подлежащих восстановлению элементов 2 группы"},
-            {NameParameterWithRestriction.H3, "Количество элементов 3 группы перешедших в 1 группу  "},
-            {NameParameterWithRestriction.Lс, "Количество смен в сутках"},
-            {NameParameterWithRestriction.Tс, "Время 1 смены в часах"},
-            {NameParameterWithRestriction.R1, "Макс. расход ресурсов на 1 элемент 1 группы (Стоимость) в сутки"},
-            {NameParameterWithRestriction.Rv2, "Макс. расход ресурсов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
-            {NameParameterWithRestriction.R2, "Макс. расход ресурсов на  1 элемент 2 группы (Стоимость) в сутки"},
-            {NameParameterWithRestriction.R3, "Макс. расход ресурсов на  1 элемент 3 группы (Стоимость) в сутки"},
-            {NameParameterWithRestriction.W1, "Макс. расход человеко-часов на 1 элемент 1 группы в сутки"},
-            {NameParameterWithRestriction.Wv2, "Макс. расход человеко-часов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
-            {NameParameterWithRestriction.W2, "Макс. расход человеко-часов на  1 элемент 2 группы в сутки"},
-            {NameParameterWithRestriction.W3, "Макс. расход человеко-часов на  1 элемент 3 группы  в сутки"},
-            {NameParameterWithRestriction.Sn1, "Прогнозируемое кол-во потерь специалистов 1 группы за одну смену"},
-            {NameParameterWithRestriction.Sn2, "Прогнозируемое кол-во потерь специалистов 2 группы за одну смену"},
-            {NameParameterWithRestriction.Sn3, "Прогнозируемое кол-во потерь специалистов 3 группы за одну смену"},
+            {NameParameterWithEnter.DeltaT, "Период устойчивой эксплуатации системы в сутках"},
+            {NameParameterWithEnter.S, "Количество персонала "},
+            {NameParameterWithEnter.R, "Стоимость функционирования системы в период ∆T"},
+            {NameParameterWithEnter.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
+            {NameParameterWithEnter.N2, "Количество элементов выполняющих функции системы, 2 группа "},
+            {NameParameterWithEnter.N3, "Количество др. элементов: подсистема обеспечения, резерв,  неисправных и др., 3 группа"},
+            {NameParameterWithEnter.P1, "Количество элементов 1 группы, введенных (восстановленных) в эксплуатацию"},
+            {NameParameterWithEnter.A1, "Количество элементов 1 группы не перешедших во 2 группу из-за недостатков ресурсов "},
+            {NameParameterWithEnter.B1, "Количество элементов 1 группы, вышедших из строя  "},
+            {NameParameterWithEnter.F1, "Количество элементов 1 группы перешедших во 2 группу "},
+            {NameParameterWithEnter.Q2, "Количество элементов 2 группы  перешедших в 3 группу (неисправных, но еще подлежащих восстановлению или пригодных для использования)"},
+            {NameParameterWithEnter.D2, "Количество не подлежащих восстановлению элементов 2 группы"},
+            {NameParameterWithEnter.H3, "Количество элементов 3 группы перешедших в 1 группу  "},
+            {NameParameterWithEnter.Lс, "Количество смен в сутках"},
+            {NameParameterWithEnter.Tс, "Время 1 смены в часах"},
+            {NameParameterWithEnter.R1, "Макс. расход ресурсов на 1 элемент 1 группы (Стоимость) в сутки"},
+            {NameParameterWithEnter.Rv2, "Макс. расход ресурсов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
+            {NameParameterWithEnter.R2, "Макс. расход ресурсов на  1 элемент 2 группы (Стоимость) в сутки"},
+            {NameParameterWithEnter.R3, "Макс. расход ресурсов на  1 элемент 3 группы (Стоимость) в сутки"},
+            {NameParameterWithEnter.W1, "Макс. расход человеко-часов на 1 элемент 1 группы в сутки"},
+            {NameParameterWithEnter.Wv2, "Макс. расход человеко-часов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
+            {NameParameterWithEnter.W2, "Макс. расход человеко-часов на  1 элемент 2 группы в сутки"},
+            {NameParameterWithEnter.W3, "Макс. расход человеко-часов на  1 элемент 3 группы  в сутки"},
+            {NameParameterWithEnter.Sn1, "Прогнозируемое кол-во потерь специалистов 1 группы за одну смену"},
+            {NameParameterWithEnter.Sn2, "Прогнозируемое кол-во потерь специалистов 2 группы за одну смену"},
+            {NameParameterWithEnter.Sn3, "Прогнозируемое кол-во потерь специалистов 3 группы за одну смену"},
         };
 
-        public static Dictionary<NameParameterWithRestriction, string> Designations = new Dictionary<NameParameterWithRestriction, string>()
+        public static Dictionary<NameParameterWithEnter, string> Designations = new Dictionary<NameParameterWithEnter, string>()
         {
-            {NameParameterWithRestriction.DeltaT, "∆T"},
-            {NameParameterWithRestriction.Rv2, "Rв2"},
-            {NameParameterWithRestriction.Wv2, "Wв2"},
+            {NameParameterWithEnter.DeltaT, "∆T"},
+            {NameParameterWithEnter.Rv2, "Rв2"},
+            {NameParameterWithEnter.Wv2, "Wв2"},
 
         };
 
-        public static Dictionary<NameParameterWithRestriction, UnitType> Units = new Dictionary<NameParameterWithRestriction, UnitType>()
+        public static Dictionary<NameParameterWithEnter, UnitType> Units = new Dictionary<NameParameterWithEnter, UnitType>()
         {
-            { NameParameterWithRestriction.DeltaT, UnitType.Point},
-            { NameParameterWithRestriction.S, UnitType.Man},
-            { NameParameterWithRestriction.R, UnitType.ThousandRubles},
-            { NameParameterWithRestriction.N1, UnitType.Point},
-            { NameParameterWithRestriction.N2, UnitType.Point},
-            { NameParameterWithRestriction.N3, UnitType.Point},
-            { NameParameterWithRestriction.P1, UnitType.Point},
-            { NameParameterWithRestriction.A1, UnitType.Point},
-            { NameParameterWithRestriction.B1, UnitType.Point},
-            { NameParameterWithRestriction.F1, UnitType.Point},
-            { NameParameterWithRestriction.Q2, UnitType.Point},
-            { NameParameterWithRestriction.D2, UnitType.Point},
-            { NameParameterWithRestriction.H3, UnitType.Point},
-            { NameParameterWithRestriction.Lс, UnitType.Day},
-            { NameParameterWithRestriction.Tс, UnitType.Hour},
-            { NameParameterWithRestriction.R1, UnitType.ThousandRubles},
-            { NameParameterWithRestriction.Rv2, UnitType.ThousandRubles},
-            { NameParameterWithRestriction.R2, UnitType.ThousandRubles},
-            { NameParameterWithRestriction.R3, UnitType.ThousandRubles},
-            { NameParameterWithRestriction.W1, UnitType.ManHour},
-            { NameParameterWithRestriction.Wv2, UnitType.ManHour},
-            { NameParameterWithRestriction.W2, UnitType.ManHour},
-            { NameParameterWithRestriction.W3, UnitType.ManHour},
-            { NameParameterWithRestriction.Sn1, UnitType.Man},
-            { NameParameterWithRestriction.Sn2, UnitType.Man},
-            { NameParameterWithRestriction.Sn3, UnitType.Man},
+            { NameParameterWithEnter.DeltaT, UnitType.Point},
+            { NameParameterWithEnter.S, UnitType.Man},
+            { NameParameterWithEnter.R, UnitType.ThousandRubles},
+            { NameParameterWithEnter.N1, UnitType.Point},
+            { NameParameterWithEnter.N2, UnitType.Point},
+            { NameParameterWithEnter.N3, UnitType.Point},
+            { NameParameterWithEnter.P1, UnitType.Point},
+            { NameParameterWithEnter.A1, UnitType.Point},
+            { NameParameterWithEnter.B1, UnitType.Point},
+            { NameParameterWithEnter.F1, UnitType.Point},
+            { NameParameterWithEnter.Q2, UnitType.Point},
+            { NameParameterWithEnter.D2, UnitType.Point},
+            { NameParameterWithEnter.H3, UnitType.Point},
+            { NameParameterWithEnter.Lс, UnitType.Day},
+            { NameParameterWithEnter.Tс, UnitType.Hour},
+            { NameParameterWithEnter.R1, UnitType.ThousandRubles},
+            { NameParameterWithEnter.Rv2, UnitType.ThousandRubles},
+            { NameParameterWithEnter.R2, UnitType.ThousandRubles},
+            { NameParameterWithEnter.R3, UnitType.ThousandRubles},
+            { NameParameterWithEnter.W1, UnitType.ManHour},
+            { NameParameterWithEnter.Wv2, UnitType.ManHour},
+            { NameParameterWithEnter.W2, UnitType.ManHour},
+            { NameParameterWithEnter.W3, UnitType.ManHour},
+            { NameParameterWithEnter.Sn1, UnitType.Man},
+            { NameParameterWithEnter.Sn2, UnitType.Man},
+            { NameParameterWithEnter.Sn3, UnitType.Man},
         };
 
-        public static string GetDescription(this NameParameterWithRestriction parameter)
+        public static string GetDescription(this NameParameterWithEnter parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
             {
@@ -122,7 +122,7 @@ namespace SystemStabilityAnalysis.Models
             }
         }
 
-        public static string GetDesignation(this NameParameterWithRestriction parameter)
+        public static string GetDesignation(this NameParameterWithEnter parameter)
         {
             if (Designations.TryGetValue(parameter, out string designation))
             {
@@ -134,7 +134,7 @@ namespace SystemStabilityAnalysis.Models
             }
         }
 
-        public static UnitType GetUnit(this NameParameterWithRestriction parameter)
+        public static UnitType GetUnit(this NameParameterWithEnter parameter)
         {
             if (Units.TryGetValue(parameter, out UnitType unitType))
             {
@@ -144,17 +144,17 @@ namespace SystemStabilityAnalysis.Models
             throw new ArgumentException(paramName: parameter.ToString(), message: String.Format("Тип для параметра {0} не найден", parameter.ToString()));
         }
 
-        public static double Calculate(this NameParameterWithRestriction parameter)
+        public static double Calculate(this NameParameterWithEnter parameter)
         {
             return 0;
         }
 
-        public static string GetName(this NameParameterWithRestriction parameter)
+        public static string GetName(this NameParameterWithEnter parameter)
         {
-            return Enum.GetName(typeof(NameParameterWithRestriction), parameter);
+            return Enum.GetName(typeof(NameParameterWithEnter), parameter);
         }
 
-        public static object ToJson(this NameParameterWithRestriction parameter)
+        public static object ToJson(this NameParameterWithEnter parameter)
         {
             return new
             {
@@ -423,10 +423,10 @@ namespace SystemStabilityAnalysis.Models
         public List<string> ErrorMessages;
     }
 
-    public class ParameterWithRestriction
+    public class ParameterWithEnter
     {
 
-        public string Name { get { return Enum.GetName(typeof(NameParameterWithRestriction), ParametersName); } }
+        public string Name { get { return Enum.GetName(typeof(NameParameterWithEnter), ParametersName); } }
 
         public string Description { get { return ParametersName.GetDescription(); } }
 
@@ -434,13 +434,13 @@ namespace SystemStabilityAnalysis.Models
 
         public Unit Unit { get; }
 
-        public NameParameterWithRestriction ParametersName { get; }
+        public NameParameterWithEnter ParametersName { get; }
 
         public double Value { get; set; }
 
         private Func<double, double> _calculate;
 
-        public ParameterWithRestriction(PropertiesSystem propertiesSystem, NameParameterWithRestriction parameter, Func<double, double> calculate = null)
+        public ParameterWithEnter(PropertiesSystem propertiesSystem, NameParameterWithEnter parameter, Func<double, double> calculate = null)
         {
             ParametersName = parameter;
             Unit = new Unit(ParametersName.GetUnit());

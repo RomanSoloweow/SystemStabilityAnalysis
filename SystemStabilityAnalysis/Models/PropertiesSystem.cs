@@ -10,62 +10,62 @@ namespace SystemStabilityAnalysis.Models
     {
         public PropertiesSystem()
         {
-            deltaT = new ParameterWithRestriction(this, NameParameterWithRestriction.DeltaT);
-            S = new ParameterWithRestriction(this, NameParameterWithRestriction.S);
-            R = new ParameterWithRestriction(this, NameParameterWithRestriction.R);
-            N1 = new ParameterWithRestriction(this, NameParameterWithRestriction.N1);
-            N2 = new ParameterWithRestriction(this, NameParameterWithRestriction.N2);
-            N3 = new ParameterWithRestriction(this, NameParameterWithRestriction.N3);
-            P1 = new ParameterWithRestriction(this, NameParameterWithRestriction.P1);
-            A1 = new ParameterWithRestriction(this, NameParameterWithRestriction.A1);
-            B1 = new ParameterWithRestriction(this, NameParameterWithRestriction.B1);
-            F1 = new ParameterWithRestriction(this, NameParameterWithRestriction.F1);
-            Q2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Q2);
-            D2 = new ParameterWithRestriction(this, NameParameterWithRestriction.D2);
-            H3 = new ParameterWithRestriction(this, NameParameterWithRestriction.H3);
-            Lс = new ParameterWithRestriction(this, NameParameterWithRestriction.Lс);
-            Tс = new ParameterWithRestriction(this, NameParameterWithRestriction.Tс);
-            R1 = new ParameterWithRestriction(this, NameParameterWithRestriction.R1);
-            Rv2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Rv2);
-            R2 = new ParameterWithRestriction(this, NameParameterWithRestriction.R2);
-            R3 = new ParameterWithRestriction(this, NameParameterWithRestriction.R3);
-            W1 = new ParameterWithRestriction(this, NameParameterWithRestriction.W1);
-            Wv2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Wv2);
-            W2 = new ParameterWithRestriction(this, NameParameterWithRestriction.W2);
-            W3 = new ParameterWithRestriction(this, NameParameterWithRestriction.W3);
-            Sn1 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn1);
-            Sn2 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn2);
-            Sn3 = new ParameterWithRestriction(this, NameParameterWithRestriction.Sn3);
+            deltaT = new ParameterWithEnter(this, NameParameterWithEnter.DeltaT);
+            S = new ParameterWithEnter(this, NameParameterWithEnter.S);
+            R = new ParameterWithEnter(this, NameParameterWithEnter.R);
+            N1 = new ParameterWithEnter(this, NameParameterWithEnter.N1);
+            N2 = new ParameterWithEnter(this, NameParameterWithEnter.N2);
+            N3 = new ParameterWithEnter(this, NameParameterWithEnter.N3);
+            P1 = new ParameterWithEnter(this, NameParameterWithEnter.P1);
+            A1 = new ParameterWithEnter(this, NameParameterWithEnter.A1);
+            B1 = new ParameterWithEnter(this, NameParameterWithEnter.B1);
+            F1 = new ParameterWithEnter(this, NameParameterWithEnter.F1);
+            Q2 = new ParameterWithEnter(this, NameParameterWithEnter.Q2);
+            D2 = new ParameterWithEnter(this, NameParameterWithEnter.D2);
+            H3 = new ParameterWithEnter(this, NameParameterWithEnter.H3);
+            Lс = new ParameterWithEnter(this, NameParameterWithEnter.Lс);
+            Tс = new ParameterWithEnter(this, NameParameterWithEnter.Tс);
+            R1 = new ParameterWithEnter(this, NameParameterWithEnter.R1);
+            Rv2 = new ParameterWithEnter(this, NameParameterWithEnter.Rv2);
+            R2 = new ParameterWithEnter(this, NameParameterWithEnter.R2);
+            R3 = new ParameterWithEnter(this, NameParameterWithEnter.R3);
+            W1 = new ParameterWithEnter(this, NameParameterWithEnter.W1);
+            Wv2 = new ParameterWithEnter(this, NameParameterWithEnter.Wv2);
+            W2 = new ParameterWithEnter(this, NameParameterWithEnter.W2);
+            W3 = new ParameterWithEnter(this, NameParameterWithEnter.W3);
+            Sn1 = new ParameterWithEnter(this, NameParameterWithEnter.Sn1);
+            Sn2 = new ParameterWithEnter(this, NameParameterWithEnter.Sn2);
+            Sn3 = new ParameterWithEnter(this, NameParameterWithEnter.Sn3);
        
         }
-        public Dictionary<string, ParameterWithRestriction> Properties { get; protected set; } = new Dictionary<string, ParameterWithRestriction>();
+        public Dictionary<string, ParameterWithEnter> Properties { get; protected set; } = new Dictionary<string, ParameterWithEnter>();
 
-        public ParameterWithRestriction deltaT { get; set; }
-        public ParameterWithRestriction R { get; set; }
-        public ParameterWithRestriction S { get; set; }
-        public ParameterWithRestriction N1 { get; set; }
-        public ParameterWithRestriction N2 { get; set; }
-        public ParameterWithRestriction N3 { get; set; }
-        public ParameterWithRestriction P1 { get; set; }
-        public ParameterWithRestriction A1 { get; set; }
-        public ParameterWithRestriction B1 { get; set; }
-        public ParameterWithRestriction F1 { get; set; }
-        public ParameterWithRestriction Q2 { get; set; }
-        public ParameterWithRestriction D2 { get; set; }
-        public ParameterWithRestriction H3 { get; set; }
-        public ParameterWithRestriction Lс { get; set; }
-        public ParameterWithRestriction Tс { get; set; }
-        public ParameterWithRestriction R1 { get; set; }
-        public ParameterWithRestriction R2 { get; set; }
-        public ParameterWithRestriction Rv2 { get; set; }
-        public ParameterWithRestriction R3 { get; set; }
-        public ParameterWithRestriction W1 { get; set; }
-        public ParameterWithRestriction Wv2 { get; set; }
-        public ParameterWithRestriction W2 { get; set; }
-        public ParameterWithRestriction W3 { get; set; }
-        public ParameterWithRestriction Sn1 { get; set; }
-        public ParameterWithRestriction Sn2 { get; set; }
-        public ParameterWithRestriction Sn3 { get; set; }
+        public ParameterWithEnter deltaT { get; set; }
+        public ParameterWithEnter R { get; set; }
+        public ParameterWithEnter S { get; set; }
+        public ParameterWithEnter N1 { get; set; }
+        public ParameterWithEnter N2 { get; set; }
+        public ParameterWithEnter N3 { get; set; }
+        public ParameterWithEnter P1 { get; set; }
+        public ParameterWithEnter A1 { get; set; }
+        public ParameterWithEnter B1 { get; set; }
+        public ParameterWithEnter F1 { get; set; }
+        public ParameterWithEnter Q2 { get; set; }
+        public ParameterWithEnter D2 { get; set; }
+        public ParameterWithEnter H3 { get; set; }
+        public ParameterWithEnter Lс { get; set; }
+        public ParameterWithEnter Tс { get; set; }
+        public ParameterWithEnter R1 { get; set; }
+        public ParameterWithEnter R2 { get; set; }
+        public ParameterWithEnter Rv2 { get; set; }
+        public ParameterWithEnter R3 { get; set; }
+        public ParameterWithEnter W1 { get; set; }
+        public ParameterWithEnter Wv2 { get; set; }
+        public ParameterWithEnter W2 { get; set; }
+        public ParameterWithEnter W3 { get; set; }
+        public ParameterWithEnter Sn1 { get; set; }
+        public ParameterWithEnter Sn2 { get; set; }
+        public ParameterWithEnter Sn3 { get; set; }
 
     }
     //public class PropertiesSystem
