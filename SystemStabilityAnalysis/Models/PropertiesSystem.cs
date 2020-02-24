@@ -11,8 +11,6 @@ namespace SystemStabilityAnalysis.Models
         public PropertiesSystem()
         {
             deltaT = new ParameterWithEnter(this, NameParameterWithEnter.DeltaT);
-            S = new ParameterWithEnter(this, NameParameterWithEnter.S);
-            R = new ParameterWithEnter(this, NameParameterWithEnter.R);
             N1 = new ParameterWithEnter(this, NameParameterWithEnter.N1);
             N2 = new ParameterWithEnter(this, NameParameterWithEnter.N2);
             N3 = new ParameterWithEnter(this, NameParameterWithEnter.N3);
@@ -41,8 +39,6 @@ namespace SystemStabilityAnalysis.Models
         public Dictionary<string, ParameterWithEnter> Properties { get; protected set; } = new Dictionary<string, ParameterWithEnter>();
 
         public ParameterWithEnter deltaT { get; set; }
-        public ParameterWithEnter R { get; set; }
-        public ParameterWithEnter S { get; set; }
         public ParameterWithEnter N1 { get; set; }
         public ParameterWithEnter N2 { get; set; }
         public ParameterWithEnter N3 { get; set; }

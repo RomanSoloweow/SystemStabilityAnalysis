@@ -13,8 +13,6 @@ namespace SystemStabilityAnalysis.Models
     {
         NoCorrect = 0,
         DeltaT,
-        S,
-        R,
         N1,
         N2,
         N3,
@@ -45,8 +43,6 @@ namespace SystemStabilityAnalysis.Models
         public static Dictionary<NameParameterWithEnter, string> Descriptions = new Dictionary<NameParameterWithEnter, string>()
         {
             {NameParameterWithEnter.DeltaT, "Период устойчивой эксплуатации системы в сутках"},
-            {NameParameterWithEnter.S, "Количество персонала "},
-            {NameParameterWithEnter.R, "Стоимость функционирования системы в период ∆T"},
             {NameParameterWithEnter.N1, "Количество элементов вводимых в эксплуатацию, 1 группа "},
             {NameParameterWithEnter.N2, "Количество элементов выполняющих функции системы, 2 группа "},
             {NameParameterWithEnter.N3, "Количество др. элементов: подсистема обеспечения, резерв,  неисправных и др., 3 группа"},
@@ -83,8 +79,6 @@ namespace SystemStabilityAnalysis.Models
         public static Dictionary<NameParameterWithEnter, UnitType> Units = new Dictionary<NameParameterWithEnter, UnitType>()
         {
             { NameParameterWithEnter.DeltaT, UnitType.Point},
-            { NameParameterWithEnter.S, UnitType.Man},
-            { NameParameterWithEnter.R, UnitType.ThousandRubles},
             { NameParameterWithEnter.N1, UnitType.Point},
             { NameParameterWithEnter.N2, UnitType.Point},
             { NameParameterWithEnter.N3, UnitType.Point},

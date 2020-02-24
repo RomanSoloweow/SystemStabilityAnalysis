@@ -118,54 +118,6 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        //[HttpGet("{parameter}/{condition}/{value}")]
-        //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
-        //[HttpGet]
-        //public object AddRestriction([FromQuery]NameParameterWithEnter parameter, [FromQuery]ConditionType condition, [FromQuery]double value)
-        //{
-        //    Status status = Status.Success;
-
-        //    List<string> Message = new List<string>();
-
-        //    if (HelperEnum.IsDefault(parameter))
-        //    {
-        //        Message.Add("Параметр указано некорректно");
-        //        status = Status.Error;
-        //    }
-
-        //    if (HelperEnum.IsDefault(condition))
-        //    {
-        //        Message.Add("Условие указано некорректно");
-        //        status = Status.Error;
-        //    }
-        //    if (!(value > 0))
-        //    {
-        //        Message.Add("Значение параметра должно быть > 0");
-        //        status = Status.Error;
-        //    }
-
-        //    if (status == Status.Error)
-        //    {
-        //        return new
-        //        {
-        //            Status = status.GetName(),
-        //            Message = Message
-        //        };
-        //    }
-        //    StaticData.Conditions.Add(parameter, new Condition(condition, value));
-
-        //    return new
-        //    {
-        //        Status = status.GetName(),
-        //        Name = parameter.GetDesignation(),
-        //        Description = parameter.GetDescription(),
-        //        Unit = parameter.GetUnit().GetDescription(),
-        //        Condition = condition.GetDesignation(),
-        //        Value = value,
-        //        RestrictionName = parameter.GetName()
-        //    };
-        //}
-
         [HttpGet]
         public object DeleteRestriction([FromQuery]string restrictionName = null)
         {
@@ -220,6 +172,54 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
+ 
 
+        //[HttpGet("{parameter}/{condition}/{value}")]
+        //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
+        //[HttpGet]
+        //public object AddRestriction([FromQuery]NameParameterWithEnter parameter, [FromQuery]ConditionType condition, [FromQuery]double value)
+        //{
+        //    Status status = Status.Success;
+
+        //    List<string> Message = new List<string>();
+
+        //    if (HelperEnum.IsDefault(parameter))
+        //    {
+        //        Message.Add("Параметр указано некорректно");
+        //        status = Status.Error;
+        //    }
+
+        //    if (HelperEnum.IsDefault(condition))
+        //    {
+        //        Message.Add("Условие указано некорректно");
+        //        status = Status.Error;
+        //    }
+        //    if (!(value > 0))
+        //    {
+        //        Message.Add("Значение параметра должно быть > 0");
+        //        status = Status.Error;
+        //    }
+
+        //    if (status == Status.Error)
+        //    {
+        //        return new
+        //        {
+        //            Status = status.GetName(),
+        //            Message = Message
+        //        };
+        //    }
+        //    StaticData.Conditions.Add(parameter, new Condition(condition, value));
+
+        //    return new
+        //    {
+        //        Status = status.GetName(),
+        //        Name = parameter.GetDesignation(),
+        //        Description = parameter.GetDescription(),
+        //        Unit = parameter.GetUnit().GetDescription(),
+        //        Condition = condition.GetDesignation(),
+        //        Value = value,
+        //        RestrictionName = parameter.GetName()
+        //    };
+        //}
     }
 }
