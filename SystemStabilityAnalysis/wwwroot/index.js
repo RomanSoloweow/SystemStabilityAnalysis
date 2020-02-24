@@ -33,13 +33,20 @@ function nextPage(){
 }
 
 function addFilter(){
+  let currentCombobox = $(".ui.dropdown.names");
+  currentCombobox.dropdown('clear')
   let notificationMessage = ""
   $.ajax({
     method: "POST",
     url: "Restrictions/AddRestriction",
+    data: {
+      'parameter': '',
+      'condition': '',
+      'value': ''
+    }
   }).done(function(msg){
     console.log(msg)
-    if (msg.Status == "Success") {
+    if (msg.status == "Success") {
       if ($(".ui.celled.table").length > 0) {
         $(".ui.celled.table tr:last").after(`<tr>
         <td data-label="Name">Elyse</td>
@@ -86,7 +93,10 @@ function addFilter(){
       $(".ui.icon.button.minus").unbind();
       $(".ui.icon.button.minus").click(deleteFilter);
     }
-    notification(msg.Status,msg.Message,"first");
+    notification(msg.status,msg.Message,"first");
+    $(".ui.dropdown.names").remove();
+    $(".ui.dropdown.names").dropdown('clear');
+    getNames();
   });
 }
 
@@ -107,7 +117,7 @@ function getNames(){
       
       if (msg.status == "Success") {
         currentCombobox.find(".menu").empty();
-        currentCombobox.dropdown('refresh')
+        currentCombobox.dropdown('clear')
         $.each( msg.properties, function( key, value ) {
           currentCombobox.find(".menu").append(`<div class="item" 
             data-value="${value.value}"
@@ -126,7 +136,6 @@ function getNames(){
 
 function getConditions(){
   let currentCombobox = $(".ui.dropdown.conditions");
-  console.log(currentCombobox)
   if (currentCombobox.find(".menu").children().length == 1 ) {
     $.ajax({
       method: "GET",
@@ -171,10 +180,17 @@ function notification(type, message, tabNum){
     })
   ;
   if (type == "Success") {
-    console.log(3)
     setTimeout(() => {
       $(".message .close").trigger("click");
     }, 5000);
   }
   
+}
+
+function clearFilters(){
+  $(".ui.dropdown.names").dropdown('clear');
+  $(".ui.dropdown.conditions").dropdown('clear');
+  $('.disField').find(".name").val('');
+  $('.disField').find(".unit").val('');
+  $('.disField').find(".value").val('');
 }
