@@ -75,7 +75,6 @@ function addFilter(){
         </tbody>
         </table>`)
       }
-      console.log(msg)
       $(".ui.celled.table.restructions tbody").after(`<tr>
       <td data-label="description" data-value=${msg.restrictionName}>${msg.description}</td>
       <td data-label="name">${msg.name}</td>
@@ -116,6 +115,7 @@ function deleteAll(){
     method: "GET",
     url: `Restrictions/DeleteAllRestriction`,
   })
+  $(".ui.dropdown.names").find(".menu").empty();
   $(".ui.celled.table").remove()
 }
 
