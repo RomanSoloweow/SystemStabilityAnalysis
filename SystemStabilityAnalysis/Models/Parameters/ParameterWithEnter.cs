@@ -171,6 +171,17 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             return true;
         }
+        public static object ToParameter(this NameParameterWithEnter parameter, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Value = value
+            };
+        }
         public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)
         {
             StaticData.ConditionsForParameterWithEnter.Clear();

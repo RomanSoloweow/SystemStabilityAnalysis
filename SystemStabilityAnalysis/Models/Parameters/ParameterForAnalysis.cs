@@ -118,7 +118,17 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterForAnalysis.Clear();
         }
-
+        public static object ToParameter(this NameParameterForAnalysis parameter, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Value = value
+            };
+        }
         public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
         {
             return new
@@ -146,12 +156,12 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterForAnalysis TypeParameter { get; }
 
-        public double Value { get; set; }
+        public double Value { get { return Calculate.Invoke(); } }
 
 
-        public Func<double, double> Calculate;
+        public Func<double> Calculate;
 
-        public ParameterForAnalysis(PropertiesSystem propertiesSystem, NameParameterForAnalysis parameter, Func<double, double> calculate)
+        public ParameterForAnalysis(PropertiesSystem propertiesSystem, NameParameterForAnalysis parameter, Func<double> calculate)
         {
             TypeParameter = parameter;
             Unit = new Unit(TypeParameter.GetUnit());

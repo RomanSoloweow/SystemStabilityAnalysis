@@ -16,12 +16,24 @@ namespace SystemStabilityAnalysis.Controllers
     public class Systems : ControllerBase
     {
         [HttpGet] 
-        public object GetParameters()
+        public object GetParametersWithEnter()
         {
             return new
             {
                 Status = Status.Success.GetName(),
-                Properties = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Select(x => x.ToJson())
+                ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Select(x => x.ToJson())
+            };
+        }
+        [HttpGet]
+        public object GetParametersWithCalculate()
+        {
+            var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Select(x => x.ToParameter(0.123));
+            var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Select(x => x.ToParameter(0.123));
+
+            return new
+            {
+                Status = Status.Success.GetName(),
+                ParametersWithCalculate = ParametersWithEnter.Union(ParametersWithCalculation)
             };
         }
     }

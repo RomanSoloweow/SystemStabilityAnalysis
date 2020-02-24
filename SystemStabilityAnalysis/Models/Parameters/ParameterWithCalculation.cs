@@ -246,13 +246,22 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 RestrictionName = parameter.GetName()
             };
         }
+
+        public static object ToParameter(this NameParameterWithCalculation parameter, double value)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Value = value
+            };
+        }
     }
 
     public class ParameterWithCalculation
     {
-        //public TypeRound RoundType { get; }
-
-        public string Name { get { return TypeParameter.GetName(); } }
 
         public string Description { get { return TypeParameter.GetDescription(); } }
 
@@ -264,28 +273,12 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         private double? _value = null;
 
-        public string Value 
-        {   get
-            {
-                return (_value==null)?_value.ToString():"_";
-            }
-            set
-            {
-                if(double.TryParse(value, out double newValue))
-                {
-                    _value = TypeParameter.Round(newValue);
-                }
-                else
-                {
-                    _value = null;
-                }
-            }
 
-        }
+        public double Value{ get {  return Calculate.Invoke(); }}
 
-        public Func<double, double> Calculate;
+        public Func<double> Calculate;
 
-        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func<double, double> calculate)
+        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func< double> calculate)
         {
             TypeParameter = parameter;
             Unit = new Unit(TypeParameter.GetUnit());
@@ -300,17 +293,12 @@ namespace SystemStabilityAnalysis.Models.Parameters
             ResultVerification result = new ResultVerification() { IsCorrect = true };
             if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
             {
-                if (double.TryParse(Value, out double valueForVerification))
-                {
-                    result.IsCorrect = condition.InvokeComparison(valueForVerification);
+                    result.IsCorrect = condition.InvokeComparison(Value);
                     if (!result.IsCorrect)
                     {
                         result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
                     }
-                }
-
             }
-
             return result;
         }
     }
