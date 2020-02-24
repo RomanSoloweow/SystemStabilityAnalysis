@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SystemStabilityAnalysis.Models;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -14,9 +15,13 @@ namespace SystemStabilityAnalysis.Controllers
     {
         
         [HttpGet]
-        public string Get()
+        public object GetSystems()
         {
-            return "Здесь будет анализ систем";
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Systems = new List<string>() { "Система1", "Система2" }
+            };
         }
 
         [HttpGet("{name}")]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using SystemStabilityAnalysis.Models.Parameters;
@@ -15,13 +16,14 @@ namespace SystemStabilityAnalysis.Controllers
     [Produces("application/json")]
     public class Systems : ControllerBase
     {
-        [HttpGet] 
+        [HttpGet]
         public object GetParametersWithEnter()
         {
             return new
             {
                 Status = Status.Success.GetName(),
-                ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Select(x => x.ToJson())
+                ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(),
+                Message = new List<string> { "Blabla1", "Blabla2" }
             };
         }
         [HttpGet]
@@ -33,8 +35,14 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                ParametersWithCalculate = ParametersWithEnter.Union(ParametersWithCalculation)
+                ParametersWithCalculate = ParametersWithEnter.Union(ParametersWithCalculation),
+                Message = new List<string> { "Blabla1", "Blabla2" }
             };
+            //return new
+            //{
+            //    Status = Status.Success.GetName(),
+            //    ParametersWithCalculate = StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message)
+            //};
         }
         [HttpGet]
         public object GetParametersForAnalysis()
@@ -46,8 +54,28 @@ namespace SystemStabilityAnalysis.Controllers
                 Status = Status.Success.GetName(),
                 U = 0,
                 Result = "Cистема «Блаблабла» находится на пределе своей устойчивости в течении периода «56» при заданных условиях и ограничениях.",
-                ParametersForAnalysis = ParametersForAnalysis
+                ParametersForAnalysis = ParametersForAnalysis,
+                Message = new List<string> { "Blabla1", "Blabla2" }
             };
+        }
+        [HttpGet]
+        public object Validate([FromQuery]string validateArr)
+        {
+            //string json = JsonSerializer.Serialize<Param>(new Param());
+            //List <Param> t = JsonSerializer.Deserialize<List<Param>>(()validateArr);
+            return "qq";
+
+       
+        }
+
+        public class Param
+        {
+            public Param()
+            {
+
+            }
+            public string parameterName { get; set; }
+            public string value { get; set; }
         }
     }
 }

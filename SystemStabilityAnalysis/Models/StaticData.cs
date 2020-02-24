@@ -12,7 +12,7 @@ namespace SystemStabilityAnalysis.Models
 
         public static Dictionary<string, SystemForAnalys> Systems { get; private set; } = new Dictionary<string, SystemForAnalys>();
 
-        public static SystemForAnalys CurrentSystems { get; set; }
+        public static SystemForAnalys CurrentSystems { get; set; } = new SystemForAnalys("Test");
 
         public static SystemForAnalys AddSystem(SystemForAnalys systemForAnalys)
         {
