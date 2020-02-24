@@ -382,7 +382,7 @@ function validateSystem() {
   $.ajax({
     method: "GET",
     url: `Systems/Validate`,
-    data: JSON.stringify(validationArr)
+    data: {validateArr: JSON.stringify(validationArr)}
   }).done(function(msg){
     $.each(msg.something, function(index, value){
       
