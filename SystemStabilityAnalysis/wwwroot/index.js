@@ -102,10 +102,10 @@ function addFilter(){
       </tr>`)
       $(".ui.icon.button.minus").unbind();
       $(".ui.icon.button.minus").click(deleteFilter);
+      clearFilters();
     }
     else
       notification(msg.status,msg.message,"first");
-    clearFilters();
     getNames();
   });
 }
