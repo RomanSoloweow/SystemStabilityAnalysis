@@ -213,10 +213,12 @@ function clearFilters(){
 }
 
 function saveSystem(event){
-  if ($(".ui.input.save-system").length == 0) {
-    $(event.target).parent().append(`
+  console.log(8)
+  if ($(event.target).parent().find(".ui.input.save-system").length == 0) {
+    console.log($(event.target).parent())
+    $(event.target).before(`
       <div class="ui input save-system">
-        <input type="text" placeholder="Имя системы">
+        <input type="text" placeholder="Имя">
       </div>
     `);
     $(".ui.button.save-system").text("Сохранить");
