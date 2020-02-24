@@ -64,7 +64,7 @@ function addFilter(){
   }).done(function(msg){
     if (msg.status == "Success") {
       if ($(".ui.celled.table").length == 0 ) {
-        $('.ui.form').append(`<table class="ui celled blue table center aligned">
+        $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
         <thead>
           <tr>
             <th>Наименование показателя</th>
@@ -80,7 +80,7 @@ function addFilter(){
         </table>`)
       }
       console.log(msg)
-      $(".ui.celled.table tbody").after(`<tr>
+      $(".ui.celled.table.restructions tbody").after(`<tr>
       <td data-label="description" data-value=${msg.restrictionName}>${msg.description}</td>
       <td data-label="name">${msg.name}</td>
       <td data-label="unit">${msg.unit}</td>
@@ -231,7 +231,7 @@ function saveSystem(event){
 $(".item[data-tab='second'").tab({'onVisible':function(){
   if ($(".tab.segment[data-tab='second/a']").find('table').length == 0) {
     $(".tab.segment[data-tab='second/a']").append(`
-      <table class="ui celled blue table center aligned">
+      <table class="ui celled blue table center aligned analys">
             <thead>
               <tr>
                 <th>Наименование показателя</th>
