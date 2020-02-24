@@ -31,6 +31,7 @@ $('.message .close').on('click', function() {
 $(".ui.icon.button.plus").click(addFilter);
 $(".ui.icon.button.minus").click(deleteFilter);
 $(".ui.button.next").click(nextPage);
+$(".ui.button.next-tab").click(nextTab);
 $(".ui.button.delete-all").click(deleteAll);
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
@@ -51,7 +52,12 @@ function nextPage(event){
   currentTab = $(event.target).closest('.segment').parent().find(".item.active");
   currentTab = currentTab.removeClass('active');
   nextTab = currentTab.next()
-  currentTab = currentTab.next().tab('change tab', nextTab.attr('data-tab'))
+  currentTab.next().tab('change tab', nextTab.attr('data-tab'))
+}
+
+function nextTab(event){
+  $(".item[data-tab='second']").removeClass('active');
+  $(".item[data-tab='second']").next().tab('change tab', 'third')
 }
 
 function addFilter(){
@@ -351,7 +357,7 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
   }).done(function(msg){
     if (msg.status == "Success") {
       if ($(".tab.segment[data-tab='second/c']").find(".header").length == 0)
-        $(".tab.segment[data-tab='second/c']").prepend(`<div class='ui large message'>
+        $(".tab.segment[data-tab='second/c']").find("table").before(`<div class='ui large message'>
           <div class="header">
             U = ${msg.u}
           </div>
