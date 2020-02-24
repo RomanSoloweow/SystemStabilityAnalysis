@@ -126,6 +126,23 @@ namespace SystemStabilityAnalysis.Models.Parameters
             { NameParameterWithCalculation.SN3, UnitType.Man}
         };
 
+        public static Dictionary<NameParameterWithCalculation, TypeRound> Rounds = new Dictionary<NameParameterWithCalculation, TypeRound>()
+        {
+            { NameParameterWithCalculation.Smin1, TypeRound.Ceiling},
+            { NameParameterWithCalculation.Smin2, TypeRound.Ceiling},
+            { NameParameterWithCalculation.Smin3, TypeRound.Ceiling},
+            { NameParameterWithCalculation.SminC, TypeRound.Ceiling},
+            { NameParameterWithCalculation.Smin, TypeRound.Ceiling},
+            { NameParameterWithCalculation.S1, TypeRound.Ceiling},
+            { NameParameterWithCalculation.S2, TypeRound.Ceiling},
+            { NameParameterWithCalculation.S3, TypeRound.Ceiling},
+            { NameParameterWithCalculation.Sс, TypeRound.Ceiling},
+            { NameParameterWithCalculation.S, TypeRound.Ceiling},
+            { NameParameterWithCalculation.SN1, TypeRound.Ceiling},
+            { NameParameterWithCalculation.SN2, TypeRound.Ceiling},
+            { NameParameterWithCalculation.SN3, TypeRound.Ceiling}
+        };
+
         public static string GetDescription(this NameParameterWithCalculation parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
@@ -181,6 +198,16 @@ namespace SystemStabilityAnalysis.Models.Parameters
             };
         }
 
+        public static double Round (this NameParameterWithCalculation parameter, double value)
+        {
+            if (Rounds.TryGetValue(parameter, out TypeRound round))
+            {
+                return round.Round(value);
+            }
+
+            return value;
+
+        }
         public static IEnumerable<object> GetForRestrictions(this NameParameterWithCalculation parameter)
         {
             return null;
@@ -223,7 +250,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ParameterWithCalculation
     {
-        public TypeRound RoundType { get; }
+        //public TypeRound RoundType { get; }
 
         public string Name { get { return TypeParameter.GetName(); } }
 
@@ -246,7 +273,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {
                 if(double.TryParse(value, out double newValue))
                 {
-                    _value = RoundType.Round(newValue);
+                    _value = TypeParameter.Round(newValue);
                 }
                 else
                 {
@@ -258,10 +285,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public Func<double, double> Calculate;
 
-        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func<double, double> calculate, TypeRound typeRound = TypeRound.NoRound)
+        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func<double, double> calculate)
         {
             TypeParameter = parameter;
-            RoundType = typeRound;
             Unit = new Unit(TypeParameter.GetUnit());
 
             propertiesSystem.ParametersWithCalculation.Add(TypeParameter, this);

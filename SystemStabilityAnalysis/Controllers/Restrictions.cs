@@ -208,7 +208,6 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
-  
            if((file==null)||(string.IsNullOrEmpty(file.FileName)))
             {
                 return new
@@ -217,7 +216,7 @@ namespace SystemStabilityAnalysis.Controllers
                     Status = Status.Error.GetName(),
                 };
             }
-           
+
             //using (var reader = new StreamReader(file.OpenReadStream()))
             //{
             //    while (!sr.EndOfStream)
@@ -227,12 +226,15 @@ namespace SystemStabilityAnalysis.Controllers
             //    var t = record.First();
             //}
 
-        
 
+            var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
+            var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
+            var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
             return new
             {
              
                 Status = Status.Success.GetName(),
+                Restrictions = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
             };
         }
 
