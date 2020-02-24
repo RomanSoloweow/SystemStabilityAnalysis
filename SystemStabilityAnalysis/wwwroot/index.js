@@ -6,6 +6,37 @@ $('.ui.dropdown')
  .dropdown()
 ;
 
+$('.ui.form')
+  .form({
+    fields: {
+      value: {
+        identifier  : 'value',
+        rules: [
+          {
+            type   : 'empty'
+          }
+        ]
+      },
+      skills: {
+        identifier  : 'skills',
+        rules: [
+          {
+            type   : 'empty'
+          }
+        ]
+      },
+      conditions: {
+        identifier  : 'conditions',
+        rules: [
+          {
+            type   : 'empty'
+          }
+        ]
+      }
+    }
+  })
+;
+
 $('.message .close').on('click', function() {
   $(this).closest('.message').transition('fade');
 });
