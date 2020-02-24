@@ -467,5 +467,59 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             return result;
         }
+
+
+        public static double operator +(ParameterWithEnter c1, double c2)
+        {
+            return c1.Value+ c2;
+        }
+        public static double operator +(double  c1, ParameterWithEnter c2)
+        {
+            return c1 + c2.Value;
+        }
+
+        public static double operator *(ParameterWithEnter c1, double c2)
+        {
+            return c1.Value * c2;
+        }
+        public static double operator *(double c1, ParameterWithEnter c2)
+        {
+            return c1 * c2.Value;
+        }
+
+        public static double operator -(ParameterWithEnter c1, double c2)
+        {
+            return c1.Value - c2;
+        }
+        public static double operator -(double c1, ParameterWithEnter c2)
+        {
+            return c1 - c2.Value;
+        }
+
+        public static double operator /(ParameterWithEnter c1, double c2)
+        {
+            return c1.Value / c2;
+        }
+        public static double operator /(double c1, ParameterWithEnter c2)
+        {
+            return c1 / c2.Value;
+        }
+
+        public static double operator *(ParameterWithEnter c1, ParameterWithEnter c2)
+        {
+            return c1.Value * c2.Value;
+        }
+        public static double operator /(ParameterWithEnter c1, ParameterWithEnter c2)
+        {
+            return c1.Value / c2.Value;
+        }
+        public static double operator +(ParameterWithEnter c1, ParameterWithEnter c2)
+        {
+            return c1.Value + c2.Value;
+        }
+        public static double operator -(ParameterWithEnter c1, ParameterWithEnter c2)
+        {
+            return c1.Value - c2.Value;
+        }
     }
 }

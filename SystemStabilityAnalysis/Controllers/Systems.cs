@@ -15,7 +15,7 @@ namespace SystemStabilityAnalysis.Controllers
     [Produces("application/json")]
     public class Systems : ControllerBase
     {
-        [HttpGet]
+        [HttpGet] 
         public object GetParameters()
         {
             return new

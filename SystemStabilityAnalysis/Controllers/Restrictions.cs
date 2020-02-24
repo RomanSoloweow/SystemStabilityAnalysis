@@ -9,6 +9,7 @@ using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using System.Text.Json;
 using SystemStabilityAnalysis.Models.Parameters;
+using Microsoft.AspNetCore.Http;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -20,10 +21,13 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParameters()
         {
+            var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson());
+            var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToJson());
+            var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToJson());
             return new
             {
                 Status = Status.Success.GetName(),
-                Properties = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x=> !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson())
+                Properties = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
             };
         }
 
@@ -168,13 +172,26 @@ namespace SystemStabilityAnalysis.Controllers
         public object DeleteAllRestriction()
         {
             StaticData.ConditionsForParameterWithCalculation.Clear();
+            StaticData.ConditionsForParameterForAnalysis.Clear();
+            StaticData.ConditionsForParameterWithEnter.Clear();
             return new
             {
                 Status = Status.Success.GetName()
             };
         }
 
- 
+        [HttpGet]
+        public object LoadRestrictionsFromFile(IFormFile file)
+        {
+
+
+            return new
+            {
+                Status = Status.Success.GetName(),
+            };
+        }
+
+
 
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)

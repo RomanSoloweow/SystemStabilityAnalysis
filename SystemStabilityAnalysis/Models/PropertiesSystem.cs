@@ -17,26 +17,13 @@ namespace SystemStabilityAnalysis.Models
         }
 
 
-        
+
         #region ParametersWithCalculation
         public void InitialParametersWithCalculation()
         {
-
-        }
-
-        public Dictionary<NameParameterWithCalculation, ParameterWithCalculation> ParametersWithCalculation { get; protected set; } = new Dictionary<NameParameterWithCalculation, ParameterWithCalculation>();
-
-
-
-        #endregion ParametersWithCalculation
-
-        #region ParametersForAnalysis
-
-        public void InitialParametersForAnalysis()
-        {
-            Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, (Rcyt1) => { return Rcyt1 * Rcyt1; });
+            Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, (Rcyt1) => { return 1.0; });
             Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, (Rf1) => { return Rf1 * Rf1; });
-            Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, (Rcyt2) => { return Rcyt2 * Rcyt2; });
+            Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, (Rcyt2) => { return (N2 * R2) * Lc; });
             Rf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf2, (Rf2) => { return Rf2 * Rf2; });
             Rcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt3, (Rcyt3) => { return Rcyt3 * Rcyt3; });
             Rf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf3, (Rf3) => { return Rf3 * Rf3; });
@@ -65,8 +52,10 @@ namespace SystemStabilityAnalysis.Models
             SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, (SN2) => { return SN2 * SN2; });
             SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, (SN3) => { return SN3 * SN3; });
         }
-        public Dictionary<NameParameterForAnalysis, ParameterForAnalysis> ParametersForAnalysis { get; protected set; } = new Dictionary<NameParameterForAnalysis, ParameterForAnalysis>();
-        
+
+        public Dictionary<NameParameterWithCalculation, ParameterWithCalculation> ParametersWithCalculation { get; protected set; } = new Dictionary<NameParameterWithCalculation, ParameterWithCalculation>();
+
+
         public ParameterWithCalculation Rcyt1 { get; set; }
         public ParameterWithCalculation Rf1 { get; set; }
         public ParameterWithCalculation Rcyt2 { get; set; }
@@ -96,6 +85,17 @@ namespace SystemStabilityAnalysis.Models
         public ParameterWithCalculation SN1 { get; set; }
         public ParameterWithCalculation SN2 { get; set; }
         public ParameterWithCalculation SN3 { get; set; }
+        #endregion ParametersWithCalculation
+
+        #region ParametersForAnalysis
+
+        public void InitialParametersForAnalysis()
+        {
+
+        }
+        public Dictionary<NameParameterForAnalysis, ParameterForAnalysis> ParametersForAnalysis { get; protected set; } = new Dictionary<NameParameterForAnalysis, ParameterForAnalysis>();
+
+
 
         #endregion ParametersForAnalysis
 
@@ -114,7 +114,7 @@ namespace SystemStabilityAnalysis.Models
             Q2 = new ParameterWithEnter(this, NameParameterWithEnter.Q2);
             D2 = new ParameterWithEnter(this, NameParameterWithEnter.D2);
             H3 = new ParameterWithEnter(this, NameParameterWithEnter.H3);
-            Lс = new ParameterWithEnter(this, NameParameterWithEnter.Lс);
+            Lc = new ParameterWithEnter(this, NameParameterWithEnter.Lс);
             Tс = new ParameterWithEnter(this, NameParameterWithEnter.Tс);
             R1 = new ParameterWithEnter(this, NameParameterWithEnter.R1);
             Rv2 = new ParameterWithEnter(this, NameParameterWithEnter.Rv2);
@@ -142,7 +142,7 @@ namespace SystemStabilityAnalysis.Models
         public ParameterWithEnter Q2 { get; set; }
         public ParameterWithEnter D2 { get; set; }
         public ParameterWithEnter H3 { get; set; }
-        public ParameterWithEnter Lс { get; set; }
+        public ParameterWithEnter Lc { get; set; }
         public ParameterWithEnter Tс { get; set; }
         public ParameterWithEnter R1 { get; set; }
         public ParameterWithEnter R2 { get; set; }
@@ -157,70 +157,5 @@ namespace SystemStabilityAnalysis.Models
         public ParameterWithEnter Sn3 { get; set; }
 
         #endregion ParametersWithEnter
-
-
     }
-    //public class PropertiesSystem
-    //{
-    //    public PropertiesSystem()
-    //    {
-    //        deltaT = new ParameterWithRestriction(this, ParameterWithRestriction.DeltaT);
-    //        N1 = new ParameterWithRestriction(this, ParameterWithRestriction.N1);
-    //        N2 = new ParameterWithRestriction(this, ParameterWithRestriction.N2);
-    //        N3 = new ParameterWithRestriction(this, ParameterWithRestriction.N3);
-    //        P1 = new ParameterWithRestriction(this, ParameterWithRestriction.P1);
-    //        A1 = new ParameterWithRestriction(this, ParameterWithRestriction.A1);
-    //        B1 = new ParameterWithRestriction(this, ParameterWithRestriction.B1);
-    //        F1 = new ParameterWithRestriction(this, ParameterWithRestriction.F1);
-    //        Q2 = new ParameterWithRestriction(this, ParameterWithRestriction.Q2);
-    //        D2 = new ParameterWithRestriction(this, ParameterWithRestriction.D2);
-    //        H3 = new ParameterWithRestriction(this, ParameterWithRestriction.H3);
-    //        Lс = new ParameterWithRestriction(this, ParameterWithRestriction.Lс);
-    //        Tс = new ParameterWithRestriction(this, ParameterWithRestriction.Tс);
-    //        R1 = new ParameterWithRestriction(this, ParameterWithRestriction.R1);
-    //        Rv2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rv2);
-    //        Rcyt1 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt1);
-    //        Rf1 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf1);
-    //        R2 = new ParameterWithRestriction(this, ParameterWithRestriction.R2);
-    //        Rcyt2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt2);
-    //        Rf2 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf2);
-    //        R3 = new ParameterWithRestriction(this, ParameterWithRestriction.R3);
-    //        Rcyt3 = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt3);
-    //        Rf3 = new ParameterWithRestriction(this, ParameterWithRestriction.Rf3);
-    //        Rcyt = new ParameterWithRestriction(this, ParameterWithRestriction.Rcyt);
-    //        R = new ParameterWithRestriction(this, ParameterWithRestriction.R);
-    //        W1 = new ParameterWithRestriction(this, ParameterWithRestriction.W1);
-    //        Wv2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wv2);
-    //        Wсyt1 = new ParameterWithRestriction(this, ParameterWithRestriction.Wсyt1);
-    //        Wf1 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf1);
-    //        W2 = new ParameterWithRestriction(this, ParameterWithRestriction.W2);
-    //        Wcyt2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt2);
-    //        Wf2 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf2);
-    //        W3 = new ParameterWithRestriction(this, ParameterWithRestriction.W3);
-    //        Wcyt3 = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt3);
-    //        Wf3 = new ParameterWithRestriction(this, ParameterWithRestriction.Wf3);
-    //        Wcyt = new ParameterWithRestriction(this, ParameterWithRestriction.Wcyt);
-    //        W = new ParameterWithRestriction(this, ParameterWithRestriction.W);
-    //        Smin1 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin1);
-    //        Smin2 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin2);
-    //        Smin3 = new ParameterWithRestriction(this, ParameterWithRestriction.Smin3);
-    //        SminC = new ParameterWithRestriction(this, ParameterWithRestriction.SminC);
-    //        Smin = new ParameterWithRestriction(this, ParameterWithRestriction.Smin);
-    //        Sn1 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn1);
-    //        Sn2 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn2);
-    //        Sn3 = new ParameterWithRestriction(this, ParameterWithRestriction.Sn3);
-    //        S1 = new ParameterWithRestriction(this, ParameterWithRestriction.S1);
-    //        S2 = new ParameterWithRestriction(this, ParameterWithRestriction.S2);
-    //        S3 = new ParameterWithRestriction(this, ParameterWithRestriction.S3);
-    //        Sс = new ParameterWithRestriction(this, ParameterWithRestriction.Sс);
-    //        S = new ParameterWithRestriction(this, ParameterWithRestriction.S);
-    //        SN1 = new ParameterWithRestriction(this, ParameterWithRestriction.SN1);
-    //        SN2 = new ParameterWithRestriction(this, ParameterWithRestriction.SN2);
-    //        SN3 = new ParameterWithRestriction(this, ParameterWithRestriction.SN3);
-    //    }
-    //    public Dictionary<string, ParameterWithRestriction> Properties { get; protected set; } = new Dictionary<string, ParameterWithRestriction>();
-
-
-
-    //}
 }
