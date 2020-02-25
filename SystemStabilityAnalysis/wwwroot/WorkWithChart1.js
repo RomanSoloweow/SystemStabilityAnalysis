@@ -52,12 +52,42 @@ let config =
 
 };
 
+let config1 =
+{
+    type: 'bar',
+    datasets: [{
+        barPercentage: 0.5,
+        barThickness: 6,
+        maxBarThickness: 8,
+        minBarLength: 2,
+        data: [10, 20, 30, 40, 50, 60, 70]
+    }],
+
+    options: {
+        maintainAspectRatio: false,
+
+        pan:
+        {
+            enabled: true,
+            mode: 'x',
+            speed: 1
+        },
+        zoom: {
+            enabled: true,
+            drag: false,
+            mode: 'x',
+            speed: 0.01
+        }
+    }
+
+};
+
 window.onload = function ()
 {
     var ctx = document.getElementById("chart");
     window.myLine = new Chart(ctx, config);
     var ctx1 = document.getElementById("diagram");
-    window.myLine1 = new Chart(ctx1, config);
+    window.myLine1 = new Chart(ctx1, config1);
     // canvas.width = parent.offsetWidth;
     // canvas.height = parent.offsetHeight;
     // var result = this.GetObjFromStorage();
