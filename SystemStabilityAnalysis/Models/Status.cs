@@ -25,4 +25,37 @@ namespace SystemStabilityAnalysis.Models
             parameter = (parameter == Status.Success) ? Status.Error : Status.Success;
         }
     }
+
+    public class ResponceResult
+    {
+        public Status Status { get; set; } = Status.Success;
+
+        public void SetNotCorrect()
+        {
+            Status = Status.Error;
+        }
+        public void SetCorrect()
+        {
+            Status = Status.Success;
+        }
+        public void AddError(string error)
+        {
+            SetNotCorrect();
+            ErrorMessages.Add(error);
+        }
+
+        public bool IsCorrect { get { return Status == Status.Success; } }
+
+        public object ToResult()
+        {
+            return new
+            {
+                Status = Status.GetName(),
+                Message = ErrorMessages
+            };
+        }
+
+        public List<string> ErrorMessages = new List<string>();
+    }
+
 }

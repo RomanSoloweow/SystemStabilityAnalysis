@@ -48,32 +48,51 @@ namespace SystemStabilityAnalysis.Controllers
         public object GetCalculationForChart([FromQuery]string queryString)
         {
             ParameterForCalculationChart parameterForCalculationChart = JsonConvert.DeserializeObject<ParameterForCalculationChart>(queryString);
-            Status status = Status.Success;
+            ResponceResult responceResult = new ResponceResult(); 
 
-            List<string> message = new List<string>();
-
-            if(parameterForCalculationChart.namesSystems.Count<1)
+            if (parameterForCalculationChart.namesSystems.Count < 1)
             {
-                message.Add("Для построения графика необходимо выбрать одну или несколько систем");
-                //return new
-                //{
-                //    Status = Status.Success.GetName(),
-                //    Message = 
-                //};
+                responceResult.AddError("Для построения графика необходимо выбрать одну или несколько систем");
+            }
+            if (string.IsNullOrWhiteSpace(parameterForCalculationChart.parameterName))
+            {
+                responceResult.AddError("Для построения графика необходимо выбрать параметр");
+            }
+            if (!parameterForCalculationChart.From.HasValue)
+            {
+                responceResult.AddError("Для построения графика необходимо указать начальное значение параметра");
             }
 
+            if (!parameterForCalculationChart.To.HasValue)
+            {
+                responceResult.AddError("Для построения графика необходимо указать конечное значение параметра");
+            }
 
+            if (!parameterForCalculationChart.CountDote.HasValue)
+            {
+                responceResult.AddError("Для построения графика необходимо указать количество точек");
+            }
+            
+            if(!responceResult.IsCorrect)
+            {
+                return responceResult.ToResult();
+            }
+            
 
             List<object> calculations = new List<object>();
             Random random = new Random();
-            List<double> values = new List<double>();
+            List<object> values = new List<object>();
             int count = 100;
             foreach (var t in parameterForCalculationChart.namesSystems)
             {
                 values.Clear();
                 for(int i = 0; i<count;i++)
                 {
-                    values.Add(random.NextDouble());
+                    values.Add(new
+                    {
+                        x = random.NextDouble(),
+                        y = random.NextDouble()
+                    });
                 }
                 calculations.Add(new
                 {
@@ -86,7 +105,8 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                ParameterName = "БлаБлаБла сюда верну имя параметра",
+                ParameterNameX = "БлаБлаБла",
+                ParameterNameY = "U",
                 Calculations = calculations
             };
     
@@ -97,6 +117,23 @@ namespace SystemStabilityAnalysis.Controllers
         public object GetCalculationForDiagram([FromQuery]string queryString)
         {
             ParameterForCalculationDiagram parameterForCalculationDiagram = JsonConvert.DeserializeObject<ParameterForCalculationDiagram>(queryString);
+
+            ResponceResult responceResult = new ResponceResult();
+
+            if (parameterForCalculationDiagram.namesSystems.Count < 1)
+            {
+                responceResult.AddError("Для построения графика необходимо выбрать одну или несколько систем");
+            }
+            if (string.IsNullOrWhiteSpace(parameterForCalculationDiagram.parameterName))
+            {
+                responceResult.AddError("Для построения графика необходимо выбрать параметр");
+            }
+
+            if (!responceResult.IsCorrect)
+            {
+                return responceResult.ToResult();
+            }
+
             List<object> calculations = new List<object>();
             Random random = new Random();
             foreach (var t in parameterForCalculationDiagram.namesSystems)

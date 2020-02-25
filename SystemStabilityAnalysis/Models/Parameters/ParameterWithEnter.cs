@@ -470,25 +470,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
     //    }
     //}
 
-    public class ResultVerification
-    {
-        public void SetNotCorrect()
-        {
-            IsCorrect = false;
-        }
-        public void SetCorrect()
-        {
-            IsCorrect = true;
-        }
-        public void AddError(string error)
-        {
-            IsCorrect = false;
-            ErrorMessages.Add(error);
-        }
-        public bool IsCorrect;
 
-        public List<string> ErrorMessages = new List<string>(); 
-    }
 
     public class ParameterWithEnter
     {
@@ -514,9 +496,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
             propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
-        public ResultVerification Verification(double? value)
+        public ResponceResult Verification(double? value)
         {
-            ResultVerification result = new ResultVerification() { IsCorrect = true };
+            ResponceResult result = new ResponceResult();
             Value = value;
             if (!value.HasValue)
             {
@@ -531,8 +513,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 }
                 else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
                 {
-                    result.IsCorrect = condition.InvokeComparison(value.Value);
-                    if (!result.IsCorrect)
+                    if (!condition.InvokeComparison(value.Value))
                     {
                         result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
                     }

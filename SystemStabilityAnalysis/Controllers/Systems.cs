@@ -74,7 +74,7 @@ namespace SystemStabilityAnalysis.Controllers
 
             List<object> parametersCorrect = new List<object>();
             List<string> message = new List<string>();
-            ResultVerification resultVerification;
+            ResponceResult resultVerification;
             foreach(var parameter in Parameters)
             {
                 if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))

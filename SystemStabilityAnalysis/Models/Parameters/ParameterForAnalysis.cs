@@ -206,9 +206,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
             Calculate = calculate;
         }
 
-        public ResultVerification Verification()
+        public ResponceResult Verification()
         {
-            ResultVerification result = new ResultVerification() { IsCorrect = true };
+            ResponceResult result = new ResponceResult();
             var t = Value;
            string postfix =  string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             if (!Value.HasValue)
@@ -223,8 +223,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 }
                 else if (StaticData.ConditionsForParameterForAnalysis.TryGetValue(this.TypeParameter, out Condition condition))
                 {
-                    result.IsCorrect = condition.InvokeComparison(Value.Value);
-                    if (!result.IsCorrect)
+                    if (!condition.InvokeComparison(Value.Value))
                     {
                         result.ErrorMessages.Add(Designation + " " + condition.ErrorMessage+". "+ postfix);
                     }
