@@ -41,6 +41,9 @@ $(".ui.button.upload-csv").click(uploadCsv);
 $(".ui.button.validate").click(validateSystem);
 $(".ui.button.create-linear-chart").click(createLinearChart);
 $(".ui.button.create-diagram").click(createDiagram);
+$(".ui.button.new-system").click(newSystem);
+$(".ui.button.download-system-1").click(downloadSystem1);
+
 
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
@@ -64,6 +67,14 @@ function nextPage(event){
 function nextTab(event){
   $(".item[data-tab='second']").removeClass('active');
   $(".item[data-tab='second']").next().tab('change tab', 'third')
+}
+
+function newSystem(event){
+  $(".item[data-tab='third']").removeClass('active');
+  $(".item[data-tab='second']").tab('change tab', 'second')
+  $(".item[data-tab='second/a']").addClass('active');
+  $(".item[data-tab='second/b']").removeClass('active');
+  $(".item[data-tab='second/c']").removeClass('active');
 }
 
 function addFilter(){
@@ -243,16 +254,16 @@ function saveFile(event){
   else {
     filename = $(".ui.input.save-system").find("input").val();
     if (filename.length > 0) {
-        const url = `Restrictions/${event.url}?filename=${filename}`;
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        // the filename you want
-        a.download = 'filename.csv';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }
+      const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      // the filename you want
+      a.download = `${filename}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 }
 
@@ -421,7 +432,6 @@ function validateSystem() {
   $.each(description, function( index, value ) {
     validationArr.push({parameterName: $(value).attr("data-value"), value: $(td_value[index]).val()})
   });
-  console.log(validationArr)
   $.ajax({
     method: "GET",
     url: `Systems/Validate`,
@@ -464,7 +474,7 @@ function getSystems(){
 function getParamDiagram(){
   let currentCombobox = $(".ui.dropdown.param-diag");
   currentCombobox.find(".menu").empty();
-  currentCombobox.dropdown('clear');
+  //currentCombobox.dropdown('clear');
   $.ajax({
     method: "GET",
     url: "Analysis/GetParametersForDiagram",
@@ -487,7 +497,7 @@ function getParamDiagram(){
 function getParamChart(){
   let currentCombobox = $(".ui.dropdown.param-chart");
   currentCombobox.find(".menu").empty();
-  currentCombobox.dropdown('clear');
+  //currentCombobox.dropdown('clear');
   $.ajax({
     method: "GET",
     url: "Analysis/GetParametersForChart",
@@ -661,7 +671,6 @@ function showChart4(Result)
     // labels.push(element.nameSystem);
     // diagData.push(element.value);
     let color = `rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`
-    console.log(element)
     let dataset = {
       label: element.nameSystem,
       data: element.values,
@@ -686,4 +695,8 @@ function showChart4(Result)
 
 
 
+};
+
+function downloadSystem1(){
+//
 };
