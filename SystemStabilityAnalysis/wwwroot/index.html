@@ -40,9 +40,9 @@
     <div class="ui relaxed grid padded">
       <div class="row">
         <div class="column">
-          <button class="ui button save-system"><i class="save icon"></i>Сохранить</button>
-          <button class="ui button upload-csv"><i class="download icon"></i>Загрузить</button>
-          <button class="ui button next">Дальше<i class="arrow right icon"></i></button>
+          <button class="ui button primary save-system"><i class="save icon"></i>Сохранить</button>
+          <button class="ui button primary upload-csv"><i class="download icon"></i>Загрузить</button>
+          <button class="ui button primary next">Дальше<i class="arrow right icon"></i></button>
         </div>
       </div>
       <div class="row">
@@ -95,61 +95,50 @@
       <a class="item" data-tab="second/c">Устойчивость системы</a>
     </div>
     <div class="ui bottom attached tab active segment" data-tab="second/a">
-      <button class="ui  button next">
+      <button class="ui  primary button next">
         Загрузить данные другой системы
       </button>
-     <button class="ui  button validate">
+     <button class="ui  primary button validate">
         Проверить
       </button> 
     </div>
     <div class="ui bottom attached tab segment" data-tab="second/b"></div>
     <div class="ui bottom attached tab segment " data-tab="second/c">
-      <button class="ui button save-system"><i class="save icon"></i>Cохранить</button>
-      <button class="ui  button">
+      <button class="ui primary button save-system"><i class="save icon"></i>Cохранить</button>
+      <button class="ui  primary button">
         Сформировать отчет
       </button> 
-      <button class="ui button next-tab">Дальше<i class="arrow right icon"></i></button>
+      <button class="ui primary button next-tab">Дальше<i class="arrow right icon"></i></button>
     </div>
   
   </div>
   <div class="ui bottom attached tab segment" data-tab="third">
   <div class="ui top attached tabular menu">
-    <a class="item" data-tab="third/a">Настройки</a>
+    <a class="item active" data-tab="third/a">Настройки</a>
     <a class="item" data-tab="third/b">Диаграммы</a>
     <a class="item" data-tab="third/c">Графики</a>
   </div>
-  <div class="ui bottom attached tab segment" data-tab="third/a">
-    
-    
+  <div class="ui bottom attached tab segment active" data-tab="third/a">
     <div class="ui internally celled grid">
       <div class="row">
         <div class="eight wide column">
-          <div class="ui big celled selection list">
-            <div class="item">
-              <div class="content">
-                <div class="header">Snickerdoodle</div>
-                An excellent companion
-              </div>
-            </div>
-            <div class="item">
-              <div class="content">
-                <div class="header">Poodle</div>
-                A poodle, its pretty basic
-              </div>
-            </div>
-            <div class="item">
-              <div class="content">
-                <div class="header">Paulo</div>
-                He's also a dog
-              </div>
-            </div>
+          <div class="ui vertical buttons system-list">
+            
           </div>
         </div>
         <div class="eight wide column">
-          <button class="ui button upload-csv"><i class="download icon"></i>Загрузить</button>
-          <button class="ui  button">
-            Добавить новую систему
-          </button> 
+          <div class="ui grid relaxed inline-grid">
+            <div class="column">
+              <div class="row">
+                <button class="ui primary button upload-csv"><i class="download icon"></i>Загрузить</button><br><br>
+              </div>
+              <div class="row">
+                <button class="ui primary button">
+                  Добавить новую систему
+                </button> 
+              </div>
+            </div>
+          </div>
         </div>
         
       </div>
@@ -157,23 +146,21 @@
     
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/b">
-    <div class="ui four column grid relaxed padded">
-      <div class="column">
-        <label>Наименование показателя</label>
-        <select name="skills" multiple="" class="ui fluid dropdown">
-          <option value="">Skills</option>
-          <option value="angular">Angular</option>
+    <div class="ui six column grid relaxed padded">
+      <div class="six wide column">
+        <label>Системы</label>
+        <select multiple="" class="ui fluid dropdown systems-cb">
         </select>
       </div>
-      <div class="column">
-        <label>Наименование показателя</label>
-        <select name="skills" class="ui fluid search dropdown " >
+      <div class=" four wide column">
+        <label>Параметр</label>
+        <select class="ui fluid search dropdown param-diag" >
         </select>
       </div>
 
       <div class="two wide ui input field column">
         <label>&ensp;<br></label>
-        <button class="ui  button">
+        <button class="ui primary button">
           Построить
         </button> 
       </div>
@@ -182,15 +169,13 @@
   <div class="ui bottom attached tab segment" data-tab="third/c">
     <div class="ui twelve column grid relaxed padded">
       <div class="four wide column">
-        <label>Наименование показателя</label>
-        <select name="skills" multiple="" class="ui fluid dropdown">
-          <option value="">Skills</option>
-          <option value="angular">Angular</option>
+        <label>Системы</label>
+        <select name="skills" multiple="" class="ui fluid dropdown systems-cb">
         </select>
       </div>
       <div class="four wide column">
-        <label>Наименование показателя</label>
-        <select name="skills" class="ui fluid search dropdown" >
+        <label>Параметр</label>
+        <select class="ui fluid search dropdown param-chart" >
         </select>
       </div>
       <div class="ui input column">
@@ -207,7 +192,7 @@
       </div>
       <div class="two wide ui input  column">
         <label>&ensp;<br></label>
-        <button class="ui  button create-linear-chart">
+        <button class="ui primary button create-linear-chart">
           Построить
         </button> 
       </div>

@@ -39,7 +39,7 @@ $(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filena
 $(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
 $(".ui.button.validate").click(validateSystem);
-$(".ui.button.create-linear-chart").click(linearChart);
+//$(".ui.button.create-linear-chart").click(linearChart);
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -64,12 +64,8 @@ function nextTab(event){
 function addFilter(){
   let parameter = $(".ui.names").find(".item.active").attr("data-value");
   let condition = $(".ui.conditions ").find(".item.active").attr("data-value");
-  let value = $(".input.value ").val();
-  // if (parameter == undefined || condition == undefined || value == undefined)
-  // return
   $.ajax({
     method: "GET",
-    //добавить тернарный
     url: `Restrictions/AddRestriction?parameter=${parameter == undefined ? "" : parameter}&condition=${condition == undefined ? "" : condition}&value=${value == undefined ? "" : value}`,
   }).done(function(msg){
     if (msg.status == "Success") {
@@ -289,7 +285,7 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
           <td data-label="name">${value.name}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="button" class="center aligned" >
-          <div class="ui input">
+          <div class="ui input validate-div">
             <input type="number" placeholder="" class="system-validate">
           </div>
           </td>
@@ -320,6 +316,7 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
     method: "GET",
     url: "Systems/GetParametersWithCalculate",
   }).done(function(msg){
+    console.log(msg)
     if (msg.status == "Success") {
       $.each( msg.parametersWithCalculate, function( key, value ) {
         $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
@@ -378,11 +375,38 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
   });  
 }});
 
+$(".item[data-tab='third/b']").tab({'onVisible':function(){
+  getSystems();
+  getParamDiagram(); 
+}});
+
+$(".item[data-tab='third/c']").tab({'onVisible':function(){
+  getSystems();
+  getParamChart(); 
+}});
+
+$(".item[data-tab='third']").tab({'onVisible':function(){
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetSystems",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      let list = $(".tab.segment[data-tab='third/a']").find(".system-list");
+      list.empty();
+      $.each( msg.systems, function( key, value ) {
+        list.append(`
+          <button class="ui button system-item">${value}</button>
+        `
+        )
+      });
+    }
+  });  
+}});
 
 function validateSystem() {
   let description = $(".tab.segment[data-tab='second/a']").find('tr [data-label="description"]');
   let td_value = $(".tab.segment[data-tab='second/a']").find('.system-validate');
-
+  let blocked = 0
   validationArr = []
   $.each(description, function( index, value ) {
     validationArr.push({parameterName: $(value).attr("data-value"), value: $(td_value[index]).val()})
@@ -392,13 +416,82 @@ function validateSystem() {
     url: `Systems/Validate`,
     data: {validateArr: JSON.stringify(validationArr)}
   }).done(function(msg){
-    $.each(msg.something, function(index, value){
-      
-    })
+    $.each(msg.parametersCorrect, function(index, value){
+      if (value.correct == true)
+        blocked = 1;
+      $("[data-tab='second/a']").find("table").find(`td[data-value='${value.parameterName}']`).parent().find(".validate-div").addClass(`${value.correct == true ? "" : "error"}`)
+    });
+    notification("Error",msg.message,"second/a")
+
   });
 }
 
-function linearChart() {
+function getSystems(){
+  let currentCombobox = $(".ui.dropdown.systems-cb");
+  currentCombobox.find(".menu").empty();
+  currentCombobox.dropdown('clear');
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetSystems",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.systems, function( key, value ) {
+        currentCombobox.find(".menu").append(`<div class="item" 
+          data-text="${value}"
+          > 
+          ${value} </div>
+        `)
+      });
+      currentCombobox.dropdown('refresh')
+    }
+  });
+  
+}
+
+function getParamDiagram(){
+  let currentCombobox = $(".ui.dropdown.param-diag");
+  currentCombobox.find(".menu").empty();
+  currentCombobox.dropdown('clear');
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetParametersForDiagram",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.parametersForDiagram, function( key, value ) {
+        currentCombobox.find(".menu").append(`<div class="item" 
+          data-name="${value.name}"
+          data-description="${value.description}"
+          data-value="${value.value}"
+          > 
+          ${value.description} </div>
+        `)
+      });
+      currentCombobox.dropdown('refresh')
+    }
+  });
+}
+
+function getParamChart(){
+  let currentCombobox = $(".ui.dropdown.param-chart");
+  currentCombobox.find(".menu").empty();
+  currentCombobox.dropdown('clear');
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetParametersForChart",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.parametersForChart, function( key, value ) {
+        currentCombobox.find(".menu").append(`<div class="item" 
+          data-name="${value.name}"
+          data-description="${value.description}"
+          data-value="${value.value}"
+          > 
+          ${value.description} </div>
+        `)
+      });
+      currentCombobox.dropdown('refresh')
+    }
+  });
   
 }
 

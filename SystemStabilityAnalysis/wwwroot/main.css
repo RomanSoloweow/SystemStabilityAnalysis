@@ -1,3 +1,7 @@
 .disField ::placeholder {
     color : black !important;
 }
+
+.inlive-grid {
+    display: inline-block;
+}
