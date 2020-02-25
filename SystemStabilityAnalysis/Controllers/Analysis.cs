@@ -48,16 +48,7 @@ namespace SystemStabilityAnalysis.Controllers
         public object GetCalculationForChart([FromQuery]string queryString)
         {
             ParameterForCalculationChart parameterForCalculationChart = JsonConvert.DeserializeObject<ParameterForCalculationChart>(queryString);
-            if(parameterForCalculationChart.namesSystems.Count<1)
-            {
-                return new
-                {
-                    Status = Status.Error.GetName(),
-                    Message ="Для построения графика выберите системы"
-                };
-            }
             
-
             List<object> calculations = new List<object>();
             Random random = new Random();
             List<double> values = new List<double>();
@@ -80,7 +71,6 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                ParameterName = parameterForCalculationChart.parameterName,
                 Calculations = calculations
             };
     
@@ -106,9 +96,8 @@ namespace SystemStabilityAnalysis.Controllers
               
 
             return new
-            {             
+            {
                 Status = Status.Success.GetName(),
-                ParameterName = parameterForCalculationDiagram.parameterName,
                 Calculations = calculations
             };
         }
