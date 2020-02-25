@@ -390,7 +390,7 @@ function validateSystem() {
   $.ajax({
     method: "GET",
     url: `Systems/Validate`,
-    data: {validateArr: validationArr}
+    data: {validateArr: JSON.stringify(validationArr)}
   }).done(function(msg){
     $.each(msg.something, function(index, value){
       
@@ -399,7 +399,7 @@ function validateSystem() {
 }
 
 function linearChart() {
-
+  
 }
 
 
