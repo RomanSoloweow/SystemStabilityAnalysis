@@ -7,12 +7,12 @@ namespace SystemStabilityAnalysis.Models
 {
     public class SystemForAnalys: PropertiesSystem
     {
-        public SystemForAnalys(string name)
+        public SystemForAnalys(string name):base(name)
         {
-            Name = name;
+           
         }
 
-        public string Name { get; private set; }
+    
 
         public List<object> GetParametersWithEnter(out List<string> message)
         {
@@ -21,7 +21,7 @@ namespace SystemStabilityAnalysis.Models
             ResponceResult resultVerification;
             foreach (var parameter in ParametersWithEnter.Values)
             {
-                resultVerification = parameter.Verification(parameter.Value);
+                resultVerification = parameter.Verification();
                 parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
                 if (!resultVerification.IsCorrect)
                     message.AddRange(resultVerification.ErrorMessages);
@@ -68,6 +68,7 @@ namespace SystemStabilityAnalysis.Models
             parameters.AddRange(this.ParametersForAnalysis.Values.Select(x => x.TypeParameter.ToPair()));
             return parameters;
         }
+
         public List<object> GetParametersForDiagram()
         {
             List<object> parameters = new List<object>();

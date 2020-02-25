@@ -566,7 +566,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterWithCalculation TypeParameter { get; }
 
-        public double? Value{ get {  return Calculate.Invoke(); }}
+        public double? Value{ get {  return VerificationDependences()?Calculate.Invoke():null; }}
 
         public Func<double?> Calculate;
 
@@ -585,6 +585,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             ResponceResult result = new ResponceResult();
             string postfix = string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
+            var t = Value;
             if (!Value.HasValue)
             {
                 result.AddError(String.Format("Не удалось расчитать значение параметра {0}. {1}", Designation, postfix));
@@ -604,6 +605,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 }
             }
             return result;
+        }
+
+        public bool VerificationDependences()
+        {
+            return propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependences());
         }
     }
 }

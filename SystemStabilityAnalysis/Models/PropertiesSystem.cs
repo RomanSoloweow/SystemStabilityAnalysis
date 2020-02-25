@@ -9,24 +9,19 @@ namespace SystemStabilityAnalysis.Models
 {
     public class PropertiesSystem
     {
-        public PropertiesSystem()
+        public PropertiesSystem(string name)
         {
+            Name = name;
+
             InitialParametersWithEnter();
             InitialParametersForAnalysis();
             InitialParametersWithCalculation();
+            U = new ParameterU(this, () => { return (ρ * f * (h.Pow(3.0))) / ((a * (q.Pow(3.0))) * (q + d)) - ((b + f) * (h.Pow(4.0))) / (a * (q.Pow(4.0)));});
         }
 
-        public double? U { 
-            get
-            {
-            
-                return deltaT.Pow(2.0);
-                //return ρ * f * h;
+        public string Name { get; private set; }
 
-                //U = (ρ×f×h〖^3〗)/ (a×q〖^3〗×(q + d))-((b + f)×h〖^4〗)/ (a×q〖^4〗)
-
-            } }
-
+        public ParameterU U { get; set; }
 
         #region ParametersWithCalculation
         public void InitialParametersWithCalculation()
@@ -219,9 +214,98 @@ namespace SystemStabilityAnalysis.Models
 
         #endregion ParametersWithEnter
 
-        //public bool Verification()
-        //{
+        public bool VerificationParametersForAnalysis(List<NameParameterForAnalysis> parametersForAnalysis)
+        {
+            bool result = true;
 
+            foreach (var parameterForAnalysis in parametersForAnalysis)
+            {
+                result = result & ParametersForAnalysis[parameterForAnalysis].VerificationDependences();
+            }
+
+            return result;
+        }
+
+        public bool VerificationParametersWithEnter(List<NameParameterWithEnter> parametersWithEnter)
+        {
+            bool result = true;
+
+            foreach (var parameterWithEnter in parametersWithEnter)
+            {
+                result = result & ParametersWithEnter[parameterWithEnter].EazyVerification();
+            }
+
+            return result;
+        }
+        //public bool VerificationParametersWithCalculation(List<NameParameterWithCalculation> parametersWithCalculation)
+        //{
+        //    bool result = true;
+
+        //    foreach (var parameterWithCalculation in parametersWithCalculation)
+        //    {
+        //        result = result & ParametersWithCalculation[parameterWithCalculation].Verification().IsCorrect;
+        //    }
+
+        //    return true;
         //}
+
+        
+    }
+
+
+    public class ParameterU
+    {
+        public PropertiesSystem propertiesSystem;
+        public Func<double?> Calculate;
+
+        public ParameterU(PropertiesSystem _propertiesSystem, Func<double?> calculate)
+        {
+            Calculate = calculate;
+            propertiesSystem = _propertiesSystem;
+        }
+        public double? Value
+        {
+            get
+            {
+                return VerificationDependences() ? Calculate.Invoke() : null;
+                //return ρ * f * h;
+
+                //U = (ρ×f×h〖^3〗)/ (a×q〖^3〗×(q + d))-((b + f)×h〖^4〗)/ (a×q〖^4〗)
+
+            }
+        }
+        public string GetResult()
+        {
+            if(Value.HasValue)
+            {
+                if(Value.Value>0)
+                {
+                    return String.Format("Cистема \"{0}\" устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                }
+                else if (Value.Value < 0)
+                {
+                    return String.Format("Cистема \"{0}\" находится на пределе своей устойчивости в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                }
+                else
+                {
+                    return String.Format("Cистема \"{0}\" не устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                }
+            }
+            else
+            {
+                return String.Format("Невозможно сделать вывод об устойчивости системы \"{0}\" т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей", propertiesSystem.Name);
+            }
+        }
+        public List<NameParameterForAnalysis> GetDependences()
+        {
+            return HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>();
+        }
+        public bool VerificationDependences()
+        {
+            return propertiesSystem.VerificationParametersForAnalysis(GetDependences());
+        }
+
+
+
     }
 }

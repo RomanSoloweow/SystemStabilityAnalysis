@@ -187,7 +187,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ParameterForAnalysis
     {
-        public PropertiesSystem propertiesSystem;
+        public PropertiesSystem propertiesSystem { get; set; }
 
         public string Name { get { return TypeParameter.GetName(); } }
 
@@ -199,7 +199,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterForAnalysis TypeParameter { get; }
 
-        public double? Value { get { return Calculate.Invoke(); } }
+        public double? Value { get { return VerificationDependences() ? Calculate.Invoke() : null; } }
 
 
         public Func<double?> Calculate;
@@ -240,15 +240,10 @@ namespace SystemStabilityAnalysis.Models.Parameters
             return result;
         }
 
-        //public bool VerificationDependences()
-        //{
-        //    bool result = true;
-
-        //    foreach(var dependenc  in TypeParameter.GetDependences())
-        //    {
-        //        result= result& dependenc.
-        //    }
-        //}
+        public bool VerificationDependences()
+        {
+            return propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependences());
+        }
 
         public double? Pow(double y)
         {
@@ -259,57 +254,46 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return c1.Value + c2;
         }
-
         public static double? operator +(double? c1, ParameterForAnalysis c2)
         {
             return c1 + c2.Value;
         }
-
         public static double? operator *(ParameterForAnalysis c1, double? c2)
         {
             return c1.Value * c2;
         }
-
         public static double? operator *(double? c1, ParameterForAnalysis c2)
         {
             return c1 * c2.Value;
         }
-
         public static double? operator -(ParameterForAnalysis c1, double? c2)
         {
             return c1.Value - c2;
         }
-
         public static double? operator -(double? c1, ParameterForAnalysis c2)
         {
             return c1 - c2.Value;
         }
-
         public static double? operator /(ParameterForAnalysis c1, double? c2)
         {
             return c1.Value / c2;
         }
-
         public static double? operator /(double? c1, ParameterForAnalysis c2)
         {
             return c1 / c2.Value;
         }
-
         public static double? operator *(ParameterForAnalysis c1, ParameterForAnalysis c2)
         {
             return c1.Value * c2.Value;
         }
-
         public static double? operator /(ParameterForAnalysis c1, ParameterForAnalysis c2)
         {
             return c1.Value / c2.Value;
         }
-
         public static double? operator +(ParameterForAnalysis c1, ParameterForAnalysis c2)
         {
             return c1.Value + c2.Value;
         }
-
         public static double? operator -(ParameterForAnalysis c1, ParameterForAnalysis c2)
         {
             return c1.Value - c2.Value;

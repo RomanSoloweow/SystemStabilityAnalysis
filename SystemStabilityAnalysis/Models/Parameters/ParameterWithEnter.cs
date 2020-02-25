@@ -499,24 +499,23 @@ namespace SystemStabilityAnalysis.Models.Parameters
             _propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
-        public ResponceResult Verification(double? value)
+        public ResponceResult Verification()
         {
             ResponceResult result = new ResponceResult();
-            Value = value;
-            if (!value.HasValue)
+            if (!Value.HasValue)
             {
                 result.AddError(String.Format("Значение параметра {0} не указано", Designation));
                 
             }
             else
             {
-                if(value.Value<0)
+                if(Value.Value<0)
                 {
                     result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
                 }
                 else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
                 {
-                    if (!condition.InvokeComparison(value.Value))
+                    if (!condition.InvokeComparison(Value.Value))
                     {
                         result.AddError(String.Format("Значение параметра {0} должно быть {1}.", Designation, condition.ErrorMessage));
                     }
@@ -524,11 +523,34 @@ namespace SystemStabilityAnalysis.Models.Parameters
             }
             return result;
         }
+
+        public bool EazyVerification()
+        {
+            if (!Value.HasValue)
+            {
+                return false;
+            }
+            else
+            {
+                if (Value.Value < 0)
+                {
+                    return false;
+                }
+                else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
+                {
+                    if (!condition.InvokeComparison(Value.Value))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public double? Pow(double y)
         {
             return Value.HasValue ? (double?)Math.Pow(Value.Value, y) : null;
         }
-
         public static double? operator +(ParameterWithEnter c1, double? c2)
         {
             return c1.Value+ c2;

@@ -56,12 +56,11 @@ namespace SystemStabilityAnalysis.Controllers
         {
             //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Select(x => x.ToParameter(0.123, false));
 
-
             return new
             {
                 Status = Status.Success.GetName(),
-                U = StaticData.CurrentSystems.U,
-                Result = "Cистема «Блаблабла» находится на пределе своей устойчивости в течении периода «56» при заданных условиях и ограничениях.",
+                U = StaticData.CurrentSystems.U.Value.HasValue? StaticData.CurrentSystems.U.Value.Value.ToString():"_",
+                Result = StaticData.CurrentSystems.U.GetResult(),
                 ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message),
                 Message = message
             };
@@ -79,7 +78,8 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))
                 {
-                    resultVerification = parameterWithEnter.Verification(parameter.value);
+                    parameterWithEnter.Value = parameter.value;
+                    resultVerification = parameterWithEnter.Verification();
 
                     if (!resultVerification.IsCorrect)
                         message.AddRange(resultVerification.ErrorMessages);
