@@ -611,7 +611,6 @@ async function AJAXSubmit (oFormElement) {
       colors.push(`rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`)
     });
     color = "27,110,194"
-    console.log(diagData)
     config1.data = {
         labels: labels,
         datasets: [{
@@ -625,7 +624,11 @@ async function AJAXSubmit (oFormElement) {
 
         }]
     }
-    console.log(config)
+    let legends = window.myLine1.legend.legendItems;
+    legends.forEach(function (e, i) {
+      e.fillStyle = 'rgba(255,99,132,1)'
+      e.strokeStyle = 'rgba(255, 159, 64, 1)'
+    });
     // config.options.scales.yAxes[0].scaleLabel.labelString = "P";
     // config.options.scales.xAxes[0].scaleLabel.labelString = Result.ParameterSelect;
     window.myLine1.update();

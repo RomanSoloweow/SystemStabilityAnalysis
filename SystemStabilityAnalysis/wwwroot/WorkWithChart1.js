@@ -108,7 +108,7 @@ let config1 =
         }]
       },
       legend: {
-        display: false
+        display: true
       },  
       pan:
       {
