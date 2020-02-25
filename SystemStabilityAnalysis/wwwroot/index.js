@@ -265,6 +265,7 @@ function uploadCsv(){
 }
 
 $(".item[data-tab='second'").tab({'onVisible':function(){
+
   $(".tab.segment[data-tab='second/a']").find('table').remove()
   $(".tab.segment[data-tab='second/a']").append(`
       <table class="ui celled blue table center aligned analys">
@@ -287,12 +288,12 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
     if (msg.status == "Success") {
       $.each( msg.parametersWithEnter, function( key, value ) {
         $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
-          <td data-label="description" data-value=${value.value}>${value.description}</td>
-          <td data-label="name">${value.name}</td>
+          <td data-label="description" data-value=${value.name}>${value.description}</td>
+          <td data-label="name">${value.designation}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="button" class="center aligned" >
           <div class="ui input validate-div">
-            <input type="number" placeholder="" class="system-validate">
+            <input type="number" placeholder="" class="system-validate" value="${value.value}">
           </div>
           </td>
           </tr>`
@@ -326,7 +327,7 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
       $.each( msg.parametersWithCalculate, function( key, value ) {
         $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
           <td data-label="description">${value.description}</td>
-          <td data-label="name">${value.name}</td>
+          <td data-label="name">${value.designation}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="value">${value.value}</td>
           </tr>`
@@ -372,7 +373,7 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
       $.each( msg.parametersForAnalysis, function( key, value ) {
         $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
           <td data-label="description">${value.description}</td>
-          <td data-label="name">${value.name}</td>
+          <td data-label="name">${value.designation}</td>
           <td data-label="unit">${value.unit}</td>
           <td data-label="value">${value.value}</td>
           </tr>`
@@ -506,7 +507,6 @@ function getParamChart(){
   
 }
 
-
 function createLinearChart(){
   let params = {}
   params.namesSystems = $(".ui.systems-cb.system-chart").find(".item.active").attr("data-text");
@@ -520,9 +520,12 @@ function createLinearChart(){
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
     if (msg.status == "Success") {
-      console.log("Здесь будет график")
+      
     }
   });
+  Result = JSON.parse("{\u0022ParameterSelect\u0022:\u0022Tn\u0022,\u0022Tn\u0022:[20.0,20.11111111111111,20.22222222222222,20.333333333333332,20.444444444444443,20.555555555555554,20.666666666666664,20.777777777777775,20.888888888888886],\u0022P\u0022:[2.434181973074066E-07,2.1785025870934773E-07,1.9496790177364581E-07,1.744890408809124E-07,1.5616121992637724E-07,1.3975849976991407E-07,1.2507867355899056E-07,1.11940773583199E-07,1.0018284036333434E-07]}")
+      console.log(Result)
+      showChart2(Result);
 }
 
 function createDiagram(){

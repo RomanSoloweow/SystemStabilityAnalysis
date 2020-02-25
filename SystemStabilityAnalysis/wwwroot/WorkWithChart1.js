@@ -11,6 +11,7 @@ let config =
     }],
 
     options: {
+        maintainAspectRatio: false,
         legend: {
             display: false,
             position: 'top',
@@ -53,15 +54,16 @@ let config =
 
 window.onload = function ()
 {
-    var ctx = document.getElementById("canvas");
+    var ctx = document.getElementById("chart");
     window.myLine = new Chart(ctx, config);
+    canvas.width = parent.offsetWidth;
+    canvas.height = parent.offsetHeight;
+    // var result = this.GetObjFromStorage();
+    // if (result == null)
+    //     return;
 
-    var result = this.GetObjFromStorage();
-    if (result == null)
-        return;
-
-    result = this.ObjFromJson(result);
-    showChart2(result);
+    // result = this.ObjFromJson(result);
+    //showChart2(result);
 };
 //Функция показать график
 function showChart2(Result)
@@ -73,11 +75,11 @@ function showChart2(Result)
         datasets: [{
             data: Result.P,
             borderColor: "rgb( " + color + ")",
-            backgroundColor: "rgb( " + color + ",0.5)",
+            backgroundColor: "transparent",
             pointBorderColor: "rgb( " + color + ")",
             pointBackgroundColor: "rgb( " + color + ")",
             pointBorderWidth: 1,
-            fill: true
+
         }]
     }
     config.options.scales.yAxes[0].scaleLabel.labelString = "P";
