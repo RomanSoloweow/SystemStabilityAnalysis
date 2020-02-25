@@ -39,11 +39,12 @@ $(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filena
 $(".ui.button.save-system1").click({url: "GetParametersWithEnter", param: "filename"},saveFile1);
 $(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
+$(".ui.button.generate-report").click(generateReport);
 $(".ui.button.validate").click(validateSystem);
 $(".ui.button.create-linear-chart").click(createLinearChart);
 $(".ui.button.create-diagram").click(createDiagram);
 $(".ui.button.new-system").click(newSystem);
-$(".ui.button.download-system-1").click(downloadSystem1);
+$(".ui.button.delete1").click(deleteSystem);
 
 
 $('.ui.dropdown.names').change(function(){
@@ -271,19 +272,19 @@ function saveFile(event){
 
 
 function saveFile1(event){
-  if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
+  if ($(event.target).parent().parent().find(".ui.input.save-system1").length == 0) {
     element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
     element.before(`
-      <div class="ui input save-system">
+      <div class="ui input save-system1">
         <input type="text" placeholder="Имя">
       </div>
     `);
 
   }
   else {
-    filename = $(".ui.input.save-system").find("input").val();
+    filename = $(".ui.input.save-system1").find("input").val();
     if (filename.length > 0) {
-      const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+      const url = `Systems/SaveSystemToFile?filename=${filename}`;
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
@@ -731,6 +732,8 @@ function showChart4(Result)
 
 };
 
+
+
 function downloadSystem1(){
   $('#FileUpload_FormFile1').click();
 };
@@ -797,3 +800,35 @@ async function AJAXSubmit1 (oFormElement) {
     console.error('Error:', error);
   }
   }
+
+
+function generateReport(){
+  if ($(event.target).parent().parent().find(".ui.input.save-system2").length == 0) {
+    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+    element.before(`
+      <div class="ui input save-system2">
+        <input type="text" placeholder="Имя">
+      </div>
+    `);
+
+  }
+  else {
+    filename = $(".ui.input.save-system2").find("input").val();
+    if (filename.length > 0) {
+      const url = `Systems/GenerateReport?filename=${filename}`;
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      // the filename you want
+      a.download = `${filename}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      
+      window.URL.revokeObjectURL(url);
+    }
+  }
+}
+
+function deleteSystem(){
+  
+}
