@@ -118,18 +118,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterForAnalysis.Clear();
         }
-        public static object ToParameter(this NameParameterForAnalysis parameter, double value, bool correct)
-        {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Name = parameter.GetDesignation(),
-                Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription(),
-                Value = value,
-                Correct = correct
-            };
-        }
+
         public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
         {
             return new
@@ -141,6 +130,18 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Condition = conditionType.GetDesignation(),
                 Value = value,
                 RestrictionName = parameter.GetName()
+            };
+        }
+        public static object ToParameter(this NameParameterForAnalysis parameter, double value, bool correct)
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Unit = parameter.GetUnit().GetDescription(),
+                Value = double.IsNaN(value) ? "NaN" : value.ToString(),
+                Correct = correct
             };
         }
     }
@@ -175,6 +176,13 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
+
+            if (!(Value > 0))
+            {
+                result.IsCorrect = false;
+                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
+            }
+
             if (StaticData.ConditionsForParameterForAnalysis.TryGetValue(this.TypeParameter, out Condition condition))
             {
                 result.IsCorrect = condition.InvokeComparison(Value);

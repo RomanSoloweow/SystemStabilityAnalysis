@@ -208,6 +208,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             return value;
 
         }
+
         public static IEnumerable<object> GetForRestrictions(this NameParameterWithCalculation parameter)
         {
             return null;
@@ -255,7 +256,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value,
+                Value =  double.IsNaN(value)?"NaN":value.ToString(),
                 Correct = correct
             };
         }
@@ -264,6 +265,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
     public class ParameterWithCalculation
     {
 
+        public string Name { get { return TypeParameter.GetName(); } }
+
         public string Description { get { return TypeParameter.GetDescription(); } }
 
         public string Designation { get { return TypeParameter.GetDesignation(); } }
@@ -271,9 +274,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public Unit Unit { get; }
 
         public NameParameterWithCalculation TypeParameter { get; }
-
-        private double? _value = null;
-
 
         public double Value{ get {  return Calculate.Invoke(); }}
 
@@ -291,7 +291,16 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public ResultVerification Verification()
         {
+
+
             ResultVerification result = new ResultVerification() { IsCorrect = true };
+
+            if (!(Value > 0))
+            {
+                result.IsCorrect = false;
+                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
+            }
+
             if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
             {
                     result.IsCorrect = condition.InvokeComparison(Value);

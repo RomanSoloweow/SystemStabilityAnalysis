@@ -38,37 +38,71 @@ namespace SystemStabilityAnalysis.Controllers
             //    ParametersWithCalculate = ParametersWithEnter.Union(ParametersWithCalculation),
             //    Message = new List<string> { "Blabla1", "Blabla2" }
             //};
-            var t = new
+
+            return new
             {
                 Status = Status.Success.GetName(),
                 ParametersWithCalculate = StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message),
                 Message = message
-            };
-
-            string json = JsonConvert.SerializeObject(t, new JsonSerializerSettings {FloatFormatHandling = FloatFormatHandling.Symbol});
-
-            return json;
+            }; ;
         }
         [HttpGet]
         public object GetParametersForAnalysis()
         {
-            var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Select(x => x.ToParameter(0.123, false));
+            //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Select(x => x.ToParameter(0.123, false));
+
 
             return new
             {
                 Status = Status.Success.GetName(),
                 U = 0,
                 Result = "Cистема «Блаблабла» находится на пределе своей устойчивости в течении периода «56» при заданных условиях и ограничениях.",
-                ParametersForAnalysis = ParametersForAnalysis,
-                Message = new List<string> { "Blabla1", "Blabla2" }
+                ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message),
+                Message = message
             };
         }
         [HttpGet]
         public object Validate([FromQuery]string validateArr)
         {
+            var Parameters = JsonConvert.DeserializeObject<List<Param>>(validateArr);
+
+            List<object> parametersCorrect = new List<object>();
+            List<string> message = new List<string>();
+            ResultVerification resultVerification;
+            foreach(var parameter in Parameters)
+            {
+                if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))
+                {
+                    if(parameter.value!=null)
+                    {
+                        parameterWithEnter.Value = parameter.value.Value;
+                    }
+                    resultVerification = parameterWithEnter.Verification();
+
+                    if (!resultVerification.IsCorrect)
+                        message.AddRange(resultVerification.ErrorMessages);
+
+                    parametersCorrect.Add(new
+                    {
+                        parameterName = parameter.parameterName.GetName(),
+                        Correct = resultVerification.IsCorrect
+                    });
+
+
+                }
+            }
+           
+
+
             //string json = JsonSerializer.Serialize<Param>(new Param());
             //List <Param> t = JsonSerializer.Deserialize<List<Param>>(()validateArr);
-            return "qq";
+            return new
+            {
+                Status = Status.Success.ToString(),
+                parametersCorrect = parametersCorrect,
+                Message = message
+
+            };
 
        
         }
@@ -79,8 +113,8 @@ namespace SystemStabilityAnalysis.Controllers
             {
 
             }
-            public string parameterName { get; set; }
-            public string value { get; set; }
+            public NameParameterWithEnter parameterName { get; set; }
+            public double? value { get; set; }
         }
     }
 }
