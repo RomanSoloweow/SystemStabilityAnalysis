@@ -171,7 +171,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             return true;
         }
-        public static object ToParameter(this NameParameterWithEnter parameter, double value, bool correct)
+        public static object ToParameter(this NameParameterWithEnter parameter, double? value, bool correct)
         {
             return new
             {
@@ -179,7 +179,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value,
+                Value = value.HasValue ? value.Value.ToString() : "_",
                 Correct = correct
             };
         }
@@ -465,6 +465,19 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ResultVerification
     {
+        public void SetNotCorrect()
+        {
+            IsCorrect = false;
+        }
+        public void SetCorrect()
+        {
+            IsCorrect = true;
+        }
+        public void AddError(string error)
+        {
+            IsCorrect = false;
+            ErrorMessages.Add(error);
+        }
         public bool IsCorrect;
 
         public List<string> ErrorMessages = new List<string>(); 
@@ -483,7 +496,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterWithEnter TypeParameter { get; }
 
-        public double Value { get; set; }
+        public double? Value { get; set; }
 
         public ParameterWithEnter(PropertiesSystem propertiesSystem, NameParameterWithEnter parameter)
         {
@@ -494,76 +507,83 @@ namespace SystemStabilityAnalysis.Models.Parameters
             propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
-        public ResultVerification Verification()
+        public ResultVerification Verification(double? value)
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-
-            if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
+            Value = value;
+            if (!value.HasValue)
             {
-                result.IsCorrect = condition.InvokeComparison(Value);
-                if (!result.IsCorrect)
-                {
-                    result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
-                }
+                result.AddError(String.Format("Значение параметра {0} не указано", Designation));
+                
             }
-            if ((result.IsCorrect) && (!(Value > 0)))
+            else
             {
-                result.IsCorrect = false;
-                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
+                if(value.Value<0)
+                {
+                    result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
+                }
+                else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
+                {
+                    result.IsCorrect = condition.InvokeComparison(value.Value);
+                    if (!result.IsCorrect)
+                    {
+                        result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
+                    }
+                }
             }
             return result;
         }
 
 
-        public static double operator +(ParameterWithEnter c1, double c2)
+        public static double? operator +(ParameterWithEnter c1, double? c2)
         {
             return c1.Value+ c2;
         }
-        public static double operator +(double  c1, ParameterWithEnter c2)
+        public static double? operator +(double? c1, ParameterWithEnter c2)
         {
             return c1 + c2.Value;
         }
 
-        public static double operator *(ParameterWithEnter c1, double c2)
+        public static double? operator *(ParameterWithEnter c1, double? c2)
         {
             return c1.Value * c2;
         }
-        public static double operator *(double c1, ParameterWithEnter c2)
+        public static double? operator *(double? c1, ParameterWithEnter c2)
         {
             return c1 * c2.Value;
         }
 
-        public static double operator -(ParameterWithEnter c1, double c2)
+        public static double? operator -(ParameterWithEnter c1, double? c2)
         {
             return c1.Value - c2;
         }
-        public static double operator -(double c1, ParameterWithEnter c2)
+        public static double? operator -(double? c1, ParameterWithEnter c2)
         {
             return c1 - c2.Value;
         }
 
-        public static double operator /(ParameterWithEnter c1, double c2)
+        public static double? operator /(ParameterWithEnter c1, double? c2)
         {
             return c1.Value / c2;
         }
-        public static double operator /(double c1, ParameterWithEnter c2)
+        public static double? operator /(double? c1, ParameterWithEnter c2)
         {
             return c1 / c2.Value;
         }
 
-        public static double operator *(ParameterWithEnter c1, ParameterWithEnter c2)
+        public static double? operator *(ParameterWithEnter c1, ParameterWithEnter c2)
         {
             return c1.Value * c2.Value;
         }
-        public static double operator /(ParameterWithEnter c1, ParameterWithEnter c2)
+        public static double? operator /(ParameterWithEnter c1, ParameterWithEnter c2)
         {
             return c1.Value / c2.Value;
         }
-        public static double operator +(ParameterWithEnter c1, ParameterWithEnter c2)
+        public static double? operator +(ParameterWithEnter c1, ParameterWithEnter c2)
         {
             return c1.Value + c2.Value;
         }
-        public static double operator -(ParameterWithEnter c1, ParameterWithEnter c2)
+        public static double? operator -(ParameterWithEnter c1, ParameterWithEnter c2)
         {
             return c1.Value - c2.Value;
         }

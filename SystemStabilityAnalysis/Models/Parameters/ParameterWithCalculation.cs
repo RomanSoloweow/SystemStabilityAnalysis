@@ -248,7 +248,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             };
         }
 
-        public static object ToParameter(this NameParameterWithCalculation parameter, double value, bool correct)
+        public static object ToParameter(this NameParameterWithCalculation parameter, double? value, bool correct)
         {
             return new
             {
@@ -256,7 +256,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value =  double.IsNaN(value)?"NaN":value.ToString(),
+                Value = value.HasValue ? value.Value.ToString() : "_",
                 Correct = correct
             };
         }
@@ -285,11 +285,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterWithCalculation TypeParameter { get; }
 
-        public double Value{ get {  return Calculate.Invoke(); }}
+        public double? Value{ get {  return Calculate.Invoke(); }}
 
-        public Func<double> Calculate;
+        public Func<double?> Calculate;
 
-        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func< double> calculate)
+        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func<double?> calculate)
         {
             TypeParameter = parameter;
             Unit = new Unit(TypeParameter.GetUnit());
@@ -301,25 +301,26 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public ResultVerification Verification()
         {
-
-
             ResultVerification result = new ResultVerification() { IsCorrect = true };
-
-            if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
+            if (!Value.HasValue)
             {
-                    result.IsCorrect = condition.InvokeComparison(Value);
+                result.AddError(String.Format("Значение параметра {0} не указано", Designation));
+            }
+            else
+            {
+                if (Value.Value < 0)
+                {
+                    result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
+                }
+                else if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
+                {
+                    result.IsCorrect = condition.InvokeComparison(Value.Value);
                     if (!result.IsCorrect)
                     {
                         result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
                     }
+                }
             }
-
-            if((result.IsCorrect)&&(!(Value > 0)))
-            {
-                result.IsCorrect = false;
-                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
-            }
-
             return result;
         }
     }

@@ -79,11 +79,7 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))
                 {
-                    if(parameter.value!=null)
-                    {
-                        parameterWithEnter.Value = parameter.value.Value;
-                    }
-                    resultVerification = parameterWithEnter.Verification();
+                    resultVerification = parameterWithEnter.Verification(parameter.value);
 
                     if (!resultVerification.IsCorrect)
                         message.AddRange(resultVerification.ErrorMessages);

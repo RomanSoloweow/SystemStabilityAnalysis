@@ -46,14 +46,14 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
-            return null;
+            return queryString;
         }
 
 
         [HttpGet]
         public object GetCalculationForDiagram([FromQuery]string queryString)
         {
-            return null;
+            return queryString;
         }
 
         public class ParameterForCalculationChart

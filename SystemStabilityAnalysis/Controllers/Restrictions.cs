@@ -49,7 +49,7 @@ namespace SystemStabilityAnalysis.Controllers
             Status status = Status.Success;
             List<string> Message = new List<string>();
             ConditionType conditionValue = ConditionType.NoCorrect;
-            int Value = 0 ;
+            double Value = 0 ;
 
             if (value == null)
             {
@@ -58,7 +58,7 @@ namespace SystemStabilityAnalysis.Controllers
             }
             else
             {
-                if (!int.TryParse(value, out Value))
+                if (!double.TryParse(value, out Value))
                 {
                     Message.Add(String.Format("Указанное значение \"{0}\" не является числом", value));
                     status = Status.Error;
@@ -70,7 +70,7 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
-            if (parameter == null)
+            if (condition == null)
             {
                 Message.Add("Условие для ограничения не указано");
                 status = Status.Error;
@@ -253,13 +253,6 @@ namespace SystemStabilityAnalysis.Controllers
            
             memory.Position = 0;
             return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
-        }
-
-
-        public class Foo
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
         }
 
         //[HttpGet("{parameter}/{condition}/{value}")]
