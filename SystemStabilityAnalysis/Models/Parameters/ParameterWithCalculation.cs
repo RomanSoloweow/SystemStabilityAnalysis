@@ -554,6 +554,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ParameterWithCalculation
     {
+        public PropertiesSystem propertiesSystem;
 
         public string Name { get { return TypeParameter.GetName(); } }
 
@@ -569,12 +570,13 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public Func<double?> Calculate;
 
-        public ParameterWithCalculation(PropertiesSystem propertiesSystem, NameParameterWithCalculation parameter, Func<double?> calculate)
+        public ParameterWithCalculation(PropertiesSystem _propertiesSystem, NameParameterWithCalculation parameter, Func<double?> calculate)
         {
             TypeParameter = parameter;
             Unit = new Unit(TypeParameter.GetUnit());
 
-            propertiesSystem.ParametersWithCalculation.Add(TypeParameter, this);
+            propertiesSystem = _propertiesSystem;
+            _propertiesSystem.ParametersWithCalculation.Add(TypeParameter, this);
 
             Calculate = calculate;
         }
@@ -582,7 +584,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public ResponceResult Verification()
         {
             ResponceResult result = new ResponceResult();
-            var t = Value;
             string postfix = string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             if (!Value.HasValue)
             {
@@ -598,7 +599,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 {
                     if (!condition.InvokeComparison(Value.Value))
                     {
-                        result.ErrorMessages.Add(Designation + " " + condition.ErrorMessage + ". " + postfix);
+                        result.AddError(String.Format("Значение параметра {0} должно быть {1}. {2}", Designation, condition.ErrorMessage, postfix));
                     }
                 }
             }

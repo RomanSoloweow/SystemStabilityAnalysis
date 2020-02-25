@@ -43,7 +43,11 @@ namespace SystemStabilityAnalysis.Models
             SetNotCorrect();
             ErrorMessages.Add(error);
         }
-
+        public void AddRangeError(List<string> errors)
+        {
+            SetNotCorrect();
+            ErrorMessages.AddRange(errors);
+        }
         public bool IsCorrect { get { return Status == Status.Success; } }
 
         public object ToResult()
@@ -55,7 +59,7 @@ namespace SystemStabilityAnalysis.Models
             };
         }
 
-        public List<string> ErrorMessages = new List<string>();
+        public List<string> ErrorMessages { get; } = new List<string>();
     }
 
 }

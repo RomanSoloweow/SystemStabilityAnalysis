@@ -474,6 +474,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ParameterWithEnter
     {
+        public PropertiesSystem propertiesSystem;
 
         public string Name { get { return  TypeParameter.GetName(); } }
 
@@ -487,13 +488,15 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public double? Value { get; set; }
 
-        public ParameterWithEnter(PropertiesSystem propertiesSystem, NameParameterWithEnter parameter)
+        public ParameterWithEnter(PropertiesSystem _propertiesSystem, NameParameterWithEnter parameter)
         {
             TypeParameter = parameter;
-
+        
             Unit = new Unit(TypeParameter.GetUnit());
 
-            propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
+            propertiesSystem = _propertiesSystem;
+
+            _propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
         public ResponceResult Verification(double? value)
@@ -515,13 +518,16 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 {
                     if (!condition.InvokeComparison(value.Value))
                     {
-                        result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
+                        result.AddError(String.Format("Значение параметра {0} должно быть {1}.", Designation, condition.ErrorMessage));
                     }
                 }
             }
             return result;
         }
-
+        public double? Pow(double y)
+        {
+            return Value.HasValue ? (double?)Math.Pow(Value.Value, y) : null;
+        }
 
         public static double? operator +(ParameterWithEnter c1, double? c2)
         {
@@ -531,7 +537,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return c1 + c2.Value;
         }
-
         public static double? operator *(ParameterWithEnter c1, double? c2)
         {
             return c1.Value * c2;
@@ -540,7 +545,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return c1 * c2.Value;
         }
-
         public static double? operator -(ParameterWithEnter c1, double? c2)
         {
             return c1.Value - c2;
@@ -549,7 +553,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return c1 - c2.Value;
         }
-
         public static double? operator /(ParameterWithEnter c1, double? c2)
         {
             return c1.Value / c2;
@@ -558,7 +561,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return c1 / c2.Value;
         }
-
         public static double? operator *(ParameterWithEnter c1, ParameterWithEnter c2)
         {
             return c1.Value * c2.Value;

@@ -60,7 +60,7 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                U = 0,
+                U = StaticData.CurrentSystems.U,
                 Result = "Cистема «Блаблабла» находится на пределе своей устойчивости в течении периода «56» при заданных условиях и ограничениях.",
                 ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message),
                 Message = message
@@ -110,9 +110,9 @@ namespace SystemStabilityAnalysis.Controllers
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
             ResponceResult responceResult = new ResponceResult();
-            responceResult.AddError("Тестовая ошибка");
+            //responceResult.AddError("Тестовая ошибка");
 
-            return responceResult.ToResult();
+            //return responceResult.ToResult();
 
 
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
@@ -182,6 +182,14 @@ namespace SystemStabilityAnalysis.Controllers
 
             memory.Position = 0;
             return File(memory, "text/csv", Path.ChangeExtension("отчет", ".docx"));
+        }
+
+        [HttpGet]
+        public object ValidateSystemBeforeSave()
+        {
+            ResponceResult responceResult = new ResponceResult();
+            responceResult.AddError("Какая-то ошибка");
+           return responceResult.ToResult();
         }
 
         public class ParameterForValidate

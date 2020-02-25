@@ -28,6 +28,7 @@ namespace SystemStabilityAnalysis.Models
             }
             return parameters;
         }
+
         public List<object>  GetParametersWithCalculate(out List<string> message)
         {
          

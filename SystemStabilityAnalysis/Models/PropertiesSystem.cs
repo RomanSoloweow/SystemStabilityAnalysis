@@ -16,6 +16,16 @@ namespace SystemStabilityAnalysis.Models
             InitialParametersWithCalculation();
         }
 
+        public double? U { 
+            get
+            {
+            
+                return deltaT.Pow(2.0);
+                //return ρ * f * h;
+
+                //U = (ρ×f×h〖^3〗)/ (a×q〖^3〗×(q + d))-((b + f)×h〖^4〗)/ (a×q〖^4〗)
+
+            } }
 
 
         #region ParametersWithCalculation
@@ -129,7 +139,7 @@ namespace SystemStabilityAnalysis.Models
             f = new ParameterForAnalysis(this, NameParameterForAnalysis.f, () => { return F1 / N1; });
             q = new ParameterForAnalysis(this, NameParameterForAnalysis.q, () => { return Q2 / N2; });
             d = new ParameterForAnalysis(this, NameParameterForAnalysis.d, () => { return D2 / N2; });
-
+            h = new ParameterForAnalysis(this, NameParameterForAnalysis.h, () => { return H3 / N3; });
             //ρ = new ParameterForAnalysis(this, NameParameterForAnalysis.ρ, (ρ) => { return P1 / N1; });
             //a = new ParameterForAnalysis(this, NameParameterForAnalysis.a, (a) => { return A1 / N1; });
             //b = new ParameterForAnalysis(this, NameParameterForAnalysis.b, (b) => { return B1 / N1; });
@@ -147,7 +157,7 @@ namespace SystemStabilityAnalysis.Models
         public ParameterForAnalysis f { get; set; }
         public ParameterForAnalysis q { get; set; }
         public ParameterForAnalysis d { get; set; }
-
+        public ParameterForAnalysis h { get; set; }
         #endregion ParametersForAnalysis
 
         #region ParametersWithEnter
@@ -208,5 +218,10 @@ namespace SystemStabilityAnalysis.Models
         public ParameterWithEnter Sn3 { get; set; }
 
         #endregion ParametersWithEnter
+
+        //public bool Verification()
+        //{
+
+        //}
     }
 }
