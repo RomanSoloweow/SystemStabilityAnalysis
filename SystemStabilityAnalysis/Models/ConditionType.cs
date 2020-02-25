@@ -113,7 +113,7 @@ namespace SystemStabilityAnalysis.Helpers
 
         public bool InvokeComparison(double rightValue)
         {
-            return ConditionType.InvokeComparison(Value, rightValue);
+            return ConditionType.InvokeComparison(rightValue, Value);
         }
     }
 }

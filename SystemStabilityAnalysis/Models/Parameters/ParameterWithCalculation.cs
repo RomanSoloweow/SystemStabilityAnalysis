@@ -143,6 +143,273 @@ namespace SystemStabilityAnalysis.Models.Parameters
             { NameParameterWithCalculation.SN3, TypeRound.Ceiling}
         };
 
+        public static Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>> Dependences = new Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>>()
+        {
+            { NameParameterWithCalculation.Rcyt1, new List<NameParameterWithEnter>()
+            {   
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.R1,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Rv2,
+                NameParameterWithEnter.Lc
+                }},
+            { NameParameterWithCalculation.Rf1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.R1,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Rv2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Rcyt2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.R2,
+                NameParameterWithEnter.Lc
+            }},
+            { NameParameterWithCalculation.Rf2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.R2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Rcyt3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.R3,
+                NameParameterWithEnter.Lc
+            }},
+            { NameParameterWithCalculation.Rf3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.R3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Rcyt, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.R1,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Rv2,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.R2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.R3,
+                NameParameterWithEnter.Lc
+                }},
+            { NameParameterWithCalculation.R, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.R1,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Rv2,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.R2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.R3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Wсyt1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1
+            }},
+            { NameParameterWithCalculation.Wf1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Wcyt2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2
+            }},
+            { NameParameterWithCalculation.Wf2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Wcyt3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3
+            }},
+            { NameParameterWithCalculation.Wf3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Wcyt, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3
+            }},
+            { NameParameterWithCalculation.W, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.Smin1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс
+            }},
+            { NameParameterWithCalculation.Smin2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс
+            }},
+            { NameParameterWithCalculation.Smin3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс
+            }},
+            { NameParameterWithCalculation.SminC, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс
+            }},
+            { NameParameterWithCalculation.Smin, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.Tс
+            }},
+            { NameParameterWithCalculation.S1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2
+            }},
+            { NameParameterWithCalculation.S2, new List<NameParameterWithEnter>()
+            { 
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2
+            }},
+            { NameParameterWithCalculation.S3, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn3
+            }},
+            { NameParameterWithCalculation.Sс, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2,
+                NameParameterWithEnter.Sn3}},
+            { NameParameterWithCalculation.S, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.DeltaT,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2,
+                NameParameterWithEnter.Sn3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.SN1, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N1,
+                NameParameterWithEnter.W1,
+                NameParameterWithEnter.Wv2,
+                NameParameterWithEnter.P1,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.SN2, new List<NameParameterWithEnter>()
+            {
+                NameParameterWithEnter.N2,
+                NameParameterWithEnter.W2,
+                NameParameterWithEnter.DeltaT,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn2,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }},
+            { NameParameterWithCalculation.SN3, new List<NameParameterWithEnter>(){
+                NameParameterWithEnter.N3,
+                NameParameterWithEnter.W3,
+                NameParameterWithEnter.DeltaT,
+                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn3,
+                NameParameterWithEnter.Lc,
+                NameParameterWithEnter.DeltaT
+            }}
+        };
+
         public static string GetDescription(this NameParameterWithCalculation parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
@@ -152,6 +419,19 @@ namespace SystemStabilityAnalysis.Models.Parameters
             else
             {
                 return parameter.ToString();
+            }
+        }
+
+        public static List<NameParameterWithEnter> GetDependences(this NameParameterWithCalculation parameter)
+        {
+            List<NameParameterWithEnter> dependences = new List<NameParameterWithEnter>();
+            if (Dependences.TryGetValue(parameter, out dependences))
+            {
+                return dependences;
+            }
+            else
+            {
+                return dependences;
             }
         }
 
@@ -252,8 +532,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return new
             {
-                Status = Status.Success.GetName(),
-                Name = parameter.GetDesignation(),
+                Name = parameter.GetName(),
+                Designation = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
                 Value = value.HasValue ? value.Value.ToString() : "_",
@@ -302,22 +582,24 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
+            var t = Value;
+            string postfix = string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             if (!Value.HasValue)
             {
-                result.AddError(String.Format("Значение параметра {0} не указано", Designation));
+                result.AddError(String.Format("Не удалось расчитать значение параметра {0}. {1}", Designation, postfix));
             }
             else
             {
                 if (Value.Value < 0)
                 {
-                    result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
+                    result.AddError(String.Format("Значение параметра {0} должно быть > 0. {1}", Designation, postfix));
                 }
                 else if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
                 {
                     result.IsCorrect = condition.InvokeComparison(Value.Value);
                     if (!result.IsCorrect)
                     {
-                        result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
+                        result.ErrorMessages.Add(Designation + " " + condition.ErrorMessage + ". " + postfix);
                     }
                 }
             }

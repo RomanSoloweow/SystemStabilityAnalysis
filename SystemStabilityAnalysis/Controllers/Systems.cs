@@ -25,8 +25,8 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(),
-                Message = new List<string> { "Blabla1", "Blabla2" }
+                ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message),
+                Message = message
             };
         }
 
@@ -132,12 +132,13 @@ namespace SystemStabilityAnalysis.Controllers
             //}
 
 
-            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter();
+            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
             return new
             {
 
                 Status = Status.Success.GetName(),
-                Parameters = ParametersWithEnter
+                Parameters = ParametersWithEnter,
+                Message = message
             };
         }
 

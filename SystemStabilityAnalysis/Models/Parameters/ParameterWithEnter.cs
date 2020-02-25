@@ -22,7 +22,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         Q2,
         D2,
         H3,
-        Lс,
+        Lc,
         Tс,
         R1,
         Rv2,
@@ -52,7 +52,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterWithEnter.Q2, "Количество элементов 2 группы  перешедших в 3 группу (неисправных, но еще подлежащих восстановлению или пригодных для использования)"},
             {NameParameterWithEnter.D2, "Количество не подлежащих восстановлению элементов 2 группы"},
             {NameParameterWithEnter.H3, "Количество элементов 3 группы перешедших в 1 группу  "},
-            {NameParameterWithEnter.Lс, "Количество смен в сутках"},
+            {NameParameterWithEnter.Lc, "Количество смен в сутках"},
             {NameParameterWithEnter.Tс, "Время 1 смены в часах"},
             {NameParameterWithEnter.R1, "Макс. расход ресурсов на 1 элемент 1 группы (Стоимость) в сутки"},
             {NameParameterWithEnter.Rv2, "Макс. расход ресурсов на  восстановление (ремонт) элемента 2 группы (Стоимость) в сутки"},
@@ -88,7 +88,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             { NameParameterWithEnter.Q2, UnitType.Point},
             { NameParameterWithEnter.D2, UnitType.Point},
             { NameParameterWithEnter.H3, UnitType.Point},
-            { NameParameterWithEnter.Lс, UnitType.Day},
+            { NameParameterWithEnter.Lc, UnitType.Day},
             { NameParameterWithEnter.Tс, UnitType.Hour},
             { NameParameterWithEnter.R1, UnitType.ThousandRubles},
             { NameParameterWithEnter.Rv2, UnitType.ThousandRubles},
@@ -157,7 +157,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Unit = parameter.GetUnit().GetDescription()
             };
         }
-
+        
         public static void AddToRestrictions(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
         {
             StaticData.ConditionsForParameterWithEnter.Add(parameter, new Condition(conditionType, value));
@@ -175,13 +175,14 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return new
             {
-                Status = Status.Success.GetName(),
-                Name = parameter.GetDesignation(),
+                Name = parameter.GetName(),
+                Designation = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value.HasValue ? value.Value.ToString() : "_",
+                Value = value.HasValue?value.Value.ToString():"",
                 Correct = correct
             };
+    
         }
         public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)
         {
@@ -201,6 +202,12 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 RestrictionName = parameter.GetName()
             };
         }
+
+        /// <summary>
+        /// Для вкладки анализа
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public static object ToPair(this NameParameterWithEnter parameter)
         {
             return new

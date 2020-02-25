@@ -165,7 +165,7 @@ namespace SystemStabilityAnalysis.Models
             Q2 = new ParameterWithEnter(this, NameParameterWithEnter.Q2);
             D2 = new ParameterWithEnter(this, NameParameterWithEnter.D2);
             H3 = new ParameterWithEnter(this, NameParameterWithEnter.H3);
-            Lc = new ParameterWithEnter(this, NameParameterWithEnter.Lс);
+            Lc = new ParameterWithEnter(this, NameParameterWithEnter.Lc);
             Tc = new ParameterWithEnter(this, NameParameterWithEnter.Tс);
             R1 = new ParameterWithEnter(this, NameParameterWithEnter.R1);
             Rv2 = new ParameterWithEnter(this, NameParameterWithEnter.Rv2);

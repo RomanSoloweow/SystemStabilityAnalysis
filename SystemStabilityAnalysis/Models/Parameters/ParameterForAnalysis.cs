@@ -44,7 +44,15 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterForAnalysis.q, UnitType.NoType},
             {NameParameterForAnalysis.d, UnitType.NoType},
         };
-
+        public static Dictionary<NameParameterForAnalysis, List<NameParameterWithEnter>> Dependences = new Dictionary<NameParameterForAnalysis, List<NameParameterWithEnter>>()
+        {
+            {NameParameterForAnalysis.ρ, new List<NameParameterWithEnter>(){ NameParameterWithEnter.P1, NameParameterWithEnter.N1 }},
+            {NameParameterForAnalysis.a, new List<NameParameterWithEnter>(){ NameParameterWithEnter.A1, NameParameterWithEnter.N1 }},
+            {NameParameterForAnalysis.b, new List<NameParameterWithEnter>(){ NameParameterWithEnter.B1, NameParameterWithEnter.N1 }},
+            {NameParameterForAnalysis.f,new List<NameParameterWithEnter>(){ NameParameterWithEnter.F1, NameParameterWithEnter.N1 }},
+            {NameParameterForAnalysis.q, new List<NameParameterWithEnter>(){ NameParameterWithEnter.Q2, NameParameterWithEnter.N2 }},
+            {NameParameterForAnalysis.d, new List<NameParameterWithEnter>(){ NameParameterWithEnter.D2, NameParameterWithEnter.N2 }}
+        };
         public static string GetDescription(this NameParameterForAnalysis parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
@@ -66,6 +74,19 @@ namespace SystemStabilityAnalysis.Models.Parameters
             else
             {
                 return parameter.ToString();
+            }
+        }
+
+        public static List<NameParameterWithEnter> GetDependences(this NameParameterForAnalysis parameter)
+        {
+            List<NameParameterWithEnter> dependences = new List<NameParameterWithEnter>();
+            if (Dependences.TryGetValue(parameter, out dependences))
+            {
+                return dependences;
+            }
+            else
+            {
+                return dependences;
             }
         }
 
@@ -132,16 +153,18 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 RestrictionName = parameter.GetName()
             };
         }
+
         public static object ToParameter(this NameParameterForAnalysis parameter, double? value, bool correct)
         {
             return new
             {
-                Status = Status.Success.GetName(),
-                Name = parameter.GetDesignation(),
+                Name = parameter.GetName(),
+                Designation = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
-                Value = value.HasValue? value.Value.ToString():"_",
+                Value = value.HasValue ? value.Value.ToString() : "_",
                 Correct = correct
+
             };
         }
         public static object ToPair(this NameParameterForAnalysis parameter)
@@ -187,22 +210,23 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
             var t = Value;
+           string postfix =  string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             if (!Value.HasValue)
             {
-                result.AddError(String.Format("Значение параметра {0} не указано", Designation));
+                result.AddError(String.Format("Не удалось расчитать значение параметра {0}. {1}", Designation, postfix));
             }
             else
             {
                 if (Value.Value < 0)
                 {
-                    result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
+                    result.AddError(String.Format("Значение параметра {0} должно быть > 0. {1}", Designation, postfix));
                 }
                 else if (StaticData.ConditionsForParameterForAnalysis.TryGetValue(this.TypeParameter, out Condition condition))
                 {
                     result.IsCorrect = condition.InvokeComparison(Value.Value);
                     if (!result.IsCorrect)
                     {
-                        result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
+                        result.ErrorMessages.Add(Designation + " " + condition.ErrorMessage+". "+ postfix);
                     }
                 }
             }

@@ -14,11 +14,20 @@ namespace SystemStabilityAnalysis.Models
 
         public string Name { get; private set; }
 
-        public IEnumerable<object> GetParametersWithEnter()
+        public List<object> GetParametersWithEnter(out List<string> message)
         {
-            return ParametersWithEnter.Select(x => x.Key.ToJson());
+            List<object> parameters = new List<object>();
+            message = new List<string>();
+            ResultVerification resultVerification;
+            foreach (var parameter in ParametersWithEnter.Values)
+            {
+                resultVerification = parameter.Verification(parameter.Value);
+                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
+                if (!resultVerification.IsCorrect)
+                    message.AddRange(resultVerification.ErrorMessages);
+            }
+            return parameters;
         }
-
         public List<object>  GetParametersWithCalculate(out List<string> message)
         {
          
