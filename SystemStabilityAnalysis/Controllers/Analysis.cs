@@ -20,14 +20,30 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                Systems = new List<string>() { "Система1", "Система2" }
+                Systems = new List<string>() { "Система1", "Система2", "Система3", "Система4", "Система5", "Система6", "Система7" }
+            };
+        }
+        [HttpGet]
+        public object GetParametersForChart()
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                ParametersForChart = StaticData.CurrentSystems.GetParametersForChart()
             };
         }
 
-        [HttpGet("{name}")]
-        public string Get(string name)
+        [HttpGet]
+        public object GetParametersForDiagram()
         {
-            return name;
+            return new
+            {
+                Status = Status.Success.GetName(),
+                ParametersForDiagram = StaticData.CurrentSystems.GetParametersForDiagram()
+            };
         }
+
+        
+
     }
 }

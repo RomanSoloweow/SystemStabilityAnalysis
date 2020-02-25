@@ -51,6 +51,21 @@ namespace SystemStabilityAnalysis.Models
             return parameters;
         }
 
+        public List<object> GetParametersForChart()
+        {
+            List<object> parameters = new List<object>();
+            parameters.AddRange(this.ParametersWithCalculation.Values.Select(x => x.TypeParameter.ToPair()));
+            parameters.AddRange(this.ParametersForAnalysis.Values.Select(x => x.TypeParameter.ToPair()));
+            return parameters;
+        }
+        public List<object> GetParametersForDiagram()
+        {
+            List<object> parameters = new List<object>();
+            parameters.AddRange(this.ParametersWithCalculation.Values.Select(x=>x.TypeParameter.ToPair()));
+            parameters.AddRange(this.ParametersForAnalysis.Values.Select(x => x.TypeParameter.ToPair()));
+            return parameters;
+        }
+
 
     }
 }

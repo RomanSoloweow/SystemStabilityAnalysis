@@ -260,6 +260,16 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Correct = correct
             };
         }
+
+        public static object ToPair(this NameParameterWithCalculation parameter)
+        {
+            return new
+            {
+                Name = parameter.GetDesignation(),
+                Description = parameter.GetDescription(),
+                Value = parameter.GetName()
+            };
+        }
     }
 
     public class ParameterWithCalculation
@@ -295,12 +305,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             ResultVerification result = new ResultVerification() { IsCorrect = true };
 
-            if (!(Value > 0))
-            {
-                result.IsCorrect = false;
-                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
-            }
-
             if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(this.TypeParameter, out Condition condition))
             {
                     result.IsCorrect = condition.InvokeComparison(Value);
@@ -309,6 +313,13 @@ namespace SystemStabilityAnalysis.Models.Parameters
                         result.ErrorMessages.Add(Description + " " + condition.ErrorMessage);
                     }
             }
+
+            if((result.IsCorrect)&&(!(Value > 0)))
+            {
+                result.IsCorrect = false;
+                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0", Name));
+            }
+
             return result;
         }
     }
