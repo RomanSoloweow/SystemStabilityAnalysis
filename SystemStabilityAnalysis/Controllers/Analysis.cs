@@ -47,8 +47,33 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
+            ParameterForCalculationChart parameterForCalculationChart = JsonConvert.DeserializeObject<ParameterForCalculationChart>(queryString);
+            
+            List<object> calculations = new List<object>();
+            Random random = new Random();
+            List<double> values = new List<double>();
+            int count = 100;
+            foreach (var t in parameterForCalculationChart.namesSystems)
+            {
+                values.Clear();
+                for(int i = 0; i<count;i++)
+                {
+                    values.Add(random.NextDouble());
+                }
+                calculations.Add(new
+                {
+                    NameSystem = t,
+                    Values = values
+                });
 
-            return queryString;
+            }
+
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Calculations = calculations
+            };
+    
         }
 
 
@@ -62,8 +87,8 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 calculations.Add(new 
                 {
-                    nameSystem = t,
-                    value = random.NextDouble()
+                    NameSystem = t,
+                    Value = random.NextDouble()
                 });
 
             }
@@ -73,7 +98,7 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                calculations = calculations
+                Calculations = calculations
             };
         }
 
