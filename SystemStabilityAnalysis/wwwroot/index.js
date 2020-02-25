@@ -50,9 +50,12 @@ $('.ui.dropdown.names').change(function(){
 
 
 function nextPage(event){
-  currentTab = $(event.target).closest('.segment').parent().find(".item.active");
+  let currentSegment = $(event.target).closest('.segment')
+  let attr = $(event.target).closest('.segment').attr("data-tab");
+  let currentTab = $(event.target).closest('.segment').parent().find(".menu").find(`[data-tab='${attr}']`)
   currentTab = currentTab.removeClass('active');
-  nextTab = currentTab.next()
+  let nextTab = $(currentTab.next()[0])
+  
   currentTab.next().tab('change tab', nextTab.attr('data-tab'))
 }
 
