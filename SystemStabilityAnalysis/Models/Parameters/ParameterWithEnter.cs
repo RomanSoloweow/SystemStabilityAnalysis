@@ -193,7 +193,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return new
             {
-                Status = Status.Success.GetName(),
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
                 Unit = parameter.GetUnit().GetDescription(),
