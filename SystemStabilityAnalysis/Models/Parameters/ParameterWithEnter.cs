@@ -454,10 +454,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
     //    }
     //}
 
-    public struct ResultVerification
+    public class ResultVerification
     {
         public bool IsCorrect;
-        public List<string> ErrorMessages;
+
+        public List<string> ErrorMessages = new List<string>(); 
     }
 
     public class ParameterWithEnter
@@ -487,6 +488,13 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public ResultVerification Verification()
         {
             ResultVerification result = new ResultVerification() { IsCorrect = true };
+
+            if(!(Value>0))
+            {
+                result.IsCorrect = false;
+                result.ErrorMessages.Add(String.Format("Значение параметра {0} должно быть > 0",Name));
+            }
+
             if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
             {
                 result.IsCorrect = condition.InvokeComparison(Value);

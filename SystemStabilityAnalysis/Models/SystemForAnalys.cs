@@ -21,8 +21,7 @@ namespace SystemStabilityAnalysis.Models
 
         public List<object>  GetParametersWithCalculate(out List<string> message)
         {
-
-            
+         
             List<object> parameters = new List<object>();
             message = new List<string>();
             ResultVerification resultVerification;
@@ -30,10 +29,28 @@ namespace SystemStabilityAnalysis.Models
             {
                 resultVerification = parameter.Verification();
                 parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
-                //message.AddRange(resultVerification.ErrorMessages);
+                if(!resultVerification.IsCorrect)
+                 message.AddRange(resultVerification.ErrorMessages);
             }
             return parameters;
         }
-        
+
+        public List<object> GetParametersForAnalysis(out List<string> message)
+        {
+
+            List<object> parameters = new List<object>();
+            message = new List<string>();
+            ResultVerification resultVerification;
+            foreach (var parameter in ParametersForAnalysis.Values)
+            {
+                resultVerification = parameter.Verification();
+                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
+                if (!resultVerification.IsCorrect)
+                    message.AddRange(resultVerification.ErrorMessages);
+            }
+            return parameters;
+        }
+
+
     }
 }
