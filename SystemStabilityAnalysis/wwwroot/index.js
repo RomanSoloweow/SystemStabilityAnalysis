@@ -615,6 +615,7 @@ async function AJAXSubmit (oFormElement) {
     config1.data = {
         labels: labels,
         datasets: [{
+            label: ['График'],
             data: diagData,
             borderColor: color,
             backgroundColor:  colors,
