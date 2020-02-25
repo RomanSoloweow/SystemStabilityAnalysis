@@ -302,5 +302,16 @@ namespace SystemStabilityAnalysis.Controllers
         //        RestrictionName = parameter.GetName()
         //    };
         //}
+
+        [HttpGet]
+        public IActionResult GetBlobDownload()
+        {
+            var net = new System.Net.WebClient();
+            var data = net.DownloadData("test");
+            var content = new System.IO.MemoryStream(data);
+            var contentType = "APPLICATION/octet-stream";
+            var fileName = "something.bin";
+            return File(content, contentType, fileName);
+        }
     }
 }

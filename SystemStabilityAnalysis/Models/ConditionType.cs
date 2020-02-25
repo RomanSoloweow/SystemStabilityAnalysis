@@ -103,7 +103,7 @@ namespace SystemStabilityAnalysis.Helpers
         public string Description { get { return ConditionType.GetDesignation();} }
 
         [JsonIgnore]
-        public string ErrorMessage{ get { return "Должен быть " + Description + " " + Value.ToString();} }
+        public string ErrorMessage{ get { return string.Format("{0} {1}", Description, Value.ToString());} }
 
         public Condition(ConditionType conditionType, double value)
         {

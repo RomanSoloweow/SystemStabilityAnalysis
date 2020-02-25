@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SystemStabilityAnalysis.Models;
 
 namespace SystemStabilityAnalysis.Controllers
@@ -46,6 +47,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
+
             return queryString;
         }
 
@@ -53,7 +55,26 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetCalculationForDiagram([FromQuery]string queryString)
         {
-            return queryString;
+            ParameterForCalculationDiagram parameterForCalculationDiagram = JsonConvert.DeserializeObject<ParameterForCalculationDiagram>(queryString);
+            List<object> calculations = new List<object>();
+            Random random = new Random();
+            foreach (var t in parameterForCalculationDiagram.namesSystems)
+            {
+                calculations.Add(new 
+                {
+                    nameSystem = t,
+                    value = random.NextDouble()
+                });
+
+            }
+
+              
+
+            return new
+            {
+                Status = Status.Success.GetName(),
+                calculations = calculations
+            };
         }
 
         public class ParameterForCalculationChart
