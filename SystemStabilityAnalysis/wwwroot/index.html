@@ -152,12 +152,12 @@
   <div class="ui bottom attached tab segment" data-tab="third/b">
     <div class="ui six column grid relaxed padded">
       <div class=" center aligned  six wide column">
-        <label>Системы</label>
+        <label><b>Системы</b></label>
         <select multiple="" class="ui fluid dropdown systems-cb system-diagram">
         </select>
       </div>
       <div class="center aligned four wide column">
-        <label>Параметр</label>
+        <label><b>Параметр</b></label>
         <select class="ui fluid search dropdown param-diag" >
         </select>
       </div>
@@ -169,30 +169,33 @@
         </button> 
       </div>
     </div>
+    <div id="canvas-container" style="position: relative; height:70vh; width:95vw">
+      <canvas id="diagram"></canvas>
+    </div>
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/c">
     <div class="ui twelve column grid relaxed padded">
       <div class=" center aligned four wide column">
-        <label>Системы</label>
+        <label><b>Системы</b></label>
         <select name="skills" multiple="" class="ui fluid dropdown systems-cb system-chart">
         </select>
       </div>
       <div class=" center aligned four wide column">
-        <label>Параметр</label>
+        <label><b>Параметр</b></label>
         <select class="ui fluid search dropdown param-chart" >
         </select>
       </div>
       <div class=" center aligned ui input column">
-        <label>От</label>
-        <input class="linear-chart-from" type="text" placeholder="">
+        <label><b>От</b></label>
+        <input class="linear-chart-from" type="number" placeholder="">
       </div>
       <div class=" center aligned ui input column">
-        <label>До</label>
-        <input class="linear-chart-to" type="text" placeholder="">
+        <label><b>До</b></label>
+        <input class="linear-chart-to" type="number" placeholder="">
       </div>
       <div class=" center aligned two wide ui input column">
-        <label>Количество точек</label>
-        <input class="linear-chart-dots-count" type="text" placeholder="">
+        <label><b>Количество точек</b></label>
+        <input class="linear-chart-dots-count" type="number" placeholder="">
       </div>
       <div class=" center aligned two wide ui input  column">
         <label>&ensp;<br></label>
@@ -211,6 +214,7 @@
   </div>
   </div>
   <script src="index.js"></script>
+
 
 <script src="https://npmcdn.com/chart.js@latest/dist/Chart.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>

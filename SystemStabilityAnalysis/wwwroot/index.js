@@ -421,6 +421,7 @@ function validateSystem() {
   $.each(description, function( index, value ) {
     validationArr.push({parameterName: $(value).attr("data-value"), value: $(td_value[index]).val()})
   });
+  console.log(validationArr)
   $.ajax({
     method: "GET",
     url: `Systems/Validate`,
@@ -509,7 +510,10 @@ function getParamChart(){
 
 function createLinearChart(){
   let params = {}
-  params.namesSystems = $(".ui.systems-cb.system-chart").find(".item.active").attr("data-text");
+  params.namesSystems = []
+  $(".ui.systems-cb.system-chart").find(".item.active").each(function( index, element  ) {
+    params.namesSystems.push($(element).attr("data-text"))
+  });
   params.from = $(".linear-chart-from").val();
   params.to = $(".linear-chart-to").val();
   params.countDote = $(".linear-chart-dots-count").val();
@@ -530,7 +534,10 @@ function createLinearChart(){
 
 function createDiagram(){
   let params = {}
-  params.namesSystems = $(".ui.systems-cb.system-diagram").find(".item.active").attr("data-text");
+  params.namesSystems = []
+  $(".ui.systems-cb.system-diagram").find(".item.active").each(function( index, element  ) {
+    params.namesSystems.push($(element).attr("data-text"))
+  });
   params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
   $.ajax({
     method: "GET",
@@ -593,3 +600,5 @@ async function AJAXSubmit (oFormElement) {
     console.error('Error:', error);
   }
   }
+
+

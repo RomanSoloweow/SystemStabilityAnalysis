@@ -56,8 +56,10 @@ window.onload = function ()
 {
     var ctx = document.getElementById("chart");
     window.myLine = new Chart(ctx, config);
-    canvas.width = parent.offsetWidth;
-    canvas.height = parent.offsetHeight;
+    var ctx1 = document.getElementById("diagram");
+    window.myLine1 = new Chart(ctx1, config);
+    // canvas.width = parent.offsetWidth;
+    // canvas.height = parent.offsetHeight;
     // var result = this.GetObjFromStorage();
     // if (result == null)
     //     return;
