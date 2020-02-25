@@ -94,8 +94,6 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
            
-
-
             //string json = JsonSerializer.Serialize<Param>(new Param());
             //List <Param> t = JsonSerializer.Deserialize<List<Param>>(()validateArr);
             return new
@@ -103,7 +101,6 @@ namespace SystemStabilityAnalysis.Controllers
                 Status = Status.Success.ToString(),
                 parametersCorrect = parametersCorrect,
                 Message = message
-
             };
 
        
@@ -112,6 +109,12 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
+            ResponceResult responceResult = new ResponceResult();
+            responceResult.AddError("Тестовая ошибка");
+
+            return responceResult.ToResult();
+
+
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 return new
@@ -163,7 +166,7 @@ namespace SystemStabilityAnalysis.Controllers
             //FileExtensionContentTypeProvider.tr
             //GetMimeMapping
             memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".docx"));
+            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
         }
 
         [HttpGet]
@@ -178,7 +181,7 @@ namespace SystemStabilityAnalysis.Controllers
             }
 
             memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("отчет", ".csv"));
+            return File(memory, "text/csv", Path.ChangeExtension("отчет", ".docx"));
         }
 
         public class ParameterForValidate

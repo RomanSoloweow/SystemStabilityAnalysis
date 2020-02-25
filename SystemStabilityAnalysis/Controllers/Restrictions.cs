@@ -26,6 +26,7 @@ namespace SystemStabilityAnalysis.Controllers
             var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToJson());
+            
             return new
             {
                 Status = Status.Success.GetName(),
@@ -46,34 +47,30 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object AddRestriction(string parameter = null, string condition = null, string value = null)
         {
-            Status status = Status.Success;
-            List<string> Message = new List<string>();
+            ResponceResult responceResult = new ResponceResult();
+
             ConditionType conditionValue = ConditionType.NoCorrect;
             double Value = 0 ;
 
             if (value == null)
             {
-                Message.Add("Значение ограничения не указано");
-                status = Status.Error;
+                responceResult.AddError("Значение ограничения не указано");
             }
             else
             {
                 if (!double.TryParse(value, out Value))
                 {
-                    Message.Add(String.Format("Указанное значение \"{0}\" не является числом", value));
-                    status = Status.Error;
+                    responceResult.AddError(String.Format("Указанное значение \"{0}\" не является числом", value));
                 }
                 else if (!(Value > 0))
                 {
-                    Message.Add("Значение ограничения должно быть > 0");
-                    status = Status.Error;
+                    responceResult.AddError("Значение ограничения должно быть > 0");
                 }
             }
 
             if (condition == null)
             {
-                Message.Add("Условие для ограничения не указано");
-                status = Status.Error;
+                responceResult.AddError("Условие для ограничения не указано");
             }
             else
             {
@@ -81,22 +78,20 @@ namespace SystemStabilityAnalysis.Controllers
 
                 if (HelperEnum.IsDefault(conditionValue))
                 {
-                    Message.Add(String.Format("Условие типа \"{0}\" не найдено", condition));
-                    status = Status.Error;
+                    responceResult.AddError(String.Format("Условие типа \"{0}\" не найдено", condition));
                 }
             }
 
             if (parameter == null)
             {
-                Message.Add("Параметр для ограничения не указан");
-                status = Status.Error;
+                responceResult.AddError("Параметр для ограничения не указан");
             }
             else 
             {
 
                 if (Enum.TryParse(parameter, out NameParameterWithEnter parameterWithEnter))
                 {
-                    if (status != Status.Error)
+                    if (responceResult.IsCorrect)
                     {
                         parameterWithEnter.AddToRestrictions(conditionValue, Value);
                         return parameterWithEnter.ToRestriction(conditionValue, Value);
@@ -104,7 +99,7 @@ namespace SystemStabilityAnalysis.Controllers
                 }
                 else if (Enum.TryParse(parameter, out NameParameterWithCalculation parameterWithCalculation))
                 {
-                    if (status != Status.Error)
+                    if (responceResult.IsCorrect)
                     {
                         parameterWithCalculation.AddToRestrictions(conditionValue, Value);
                         return parameterWithCalculation.ToRestriction(conditionValue, Value);
@@ -112,7 +107,7 @@ namespace SystemStabilityAnalysis.Controllers
                 }
                 else if (Enum.TryParse(parameter, out NameParameterForAnalysis parameterForAnalysis))
                 {
-                    if (status != Status.Error)
+                    if (responceResult.IsCorrect)
                     {
                         parameterForAnalysis.AddToRestrictions(conditionValue, Value);
                         return parameterForAnalysis.ToRestriction(conditionValue, Value);
@@ -120,29 +115,23 @@ namespace SystemStabilityAnalysis.Controllers
                 }
                 else
                 {
-                    Message.Add(String.Format("Параметр с именем \"{0}\" не найден", parameter));
-                    status = Status.Error;
+                    responceResult.AddError(String.Format("Параметр с именем \"{0}\" не найден", parameter));
                 }
                
             }
 
-            return new
-            {
-                Status = status.GetName(),
-                Message = Message
-            };
+            return responceResult.ToResult();
 
         }
 
         [HttpGet]
         public object DeleteRestriction([FromQuery]string restrictionName = null)
         {
-            Status status = Status.Success;
-            List<string> Message = new List<string>();
+            ResponceResult responceResult = new ResponceResult();
+
             if (restrictionName == null)
             {
-                Message.Add("Ограничение не указано");
-                status = Status.Error;
+                responceResult.AddError("Ограничение не указано");
             }
             else
             {
@@ -161,30 +150,17 @@ namespace SystemStabilityAnalysis.Controllers
                 }
                 else
                 {
-                    Message.Add(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
-                    status = Status.Error;
+                    responceResult.AddError(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
                 }
 
                 if(!contains)
                 {
-                    Message.Add("Ограничение для данного параметра не найдено");
-                    status = Status.Error;
+                    responceResult.AddError("Ограничение для данного параметра не найдено");
                 }
                
             }
-            
-            if (status == Status.Error)
-            {
-                return new
-                {
-                    Status = status.GetName(),
-                    Message = Message
-                };
-            }
-            return new
-            {
-                Status = Status.Success.GetName()
-            };
+
+            return responceResult.ToResult();
         }
 
         [HttpGet]
