@@ -36,6 +36,7 @@ $(".ui.button.delete-all").click(deleteAll);
 $(".ui.dropdown.names").click(getNames);
 $(".ui.dropdown.conditions").click(getConditions);
 $(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filename"},saveFile);
+$(".ui.button.save-system1").click({url: "GetParametersWithEnter", param: "filename"},saveFile1);
 $(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
 $(".ui.button.validate").click(validateSystem);
@@ -242,6 +243,34 @@ function clearFilters(){
 }
 
 function saveFile(event){
+  if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
+    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+    element.before(`
+      <div class="ui input save-system">
+        <input type="text" placeholder="Имя">
+      </div>
+    `);
+
+  }
+  else {
+    filename = $(".ui.input.save-system").find("input").val();
+    if (filename.length > 0) {
+      const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      // the filename you want
+      a.download = `${filename}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      
+      window.URL.revokeObjectURL(url);
+    }
+  }
+}
+
+
+function saveFile1(event){
   if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
     element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
     element.before(`
