@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -24,6 +25,7 @@ namespace SystemStabilityAnalysis.Controllers
                 Systems = new List<string>() { "Система1", "Система2", "Система3", "Система4", "Система5", "Система6", "Система7" }
             };
         }
+
         [HttpGet]
         public object GetParametersForChart()
         {
@@ -43,7 +45,7 @@ namespace SystemStabilityAnalysis.Controllers
                 ParametersForDiagram = StaticData.CurrentSystems.GetParametersForDiagram()
             };
         }
-        static Random random { get; set; } = new Random();
+
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
@@ -112,7 +114,6 @@ namespace SystemStabilityAnalysis.Controllers
     
         }
 
-
         [HttpGet]
         public object GetCalculationForDiagram([FromQuery]string queryString)
         {
@@ -122,11 +123,11 @@ namespace SystemStabilityAnalysis.Controllers
 
             if (parameterForCalculationDiagram.namesSystems.Count < 1)
             {
-                responceResult.AddError("Для построения графика необходимо выбрать одну или несколько систем");
+                responceResult.AddError("Для построения диаграммы необходимо выбрать одну или несколько систем");
             }
             if (string.IsNullOrWhiteSpace(parameterForCalculationDiagram.parameterName))
             {
-                responceResult.AddError("Для построения графика необходимо выбрать параметр");
+                responceResult.AddError("Для построения диаграммы необходимо выбрать параметр");
             }
 
             if (!responceResult.IsCorrect)
@@ -156,6 +157,74 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
+        [HttpPost]
+        public object LoadSystemFromFile([FromQuery]IFormFile file)
+        {
+            if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
+            {
+                return new
+                {
+                    Message = "Файл не выбран",
+                    Status = Status.Error.GetName(),
+                };
+            }
+
+
+            //using (var reader = new StreamReader(file.OpenReadStream()))
+            //{
+            //    while (!sr.EndOfStream)
+            //    {
+            //    }
+            //        var record = csv.GetRecords<Foo>();
+            //    var t = record.First();
+            //}
+
+
+            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
+            return new
+            {
+
+                Status = Status.Success.GetName(),
+                Parameters = ParametersWithEnter,
+                Message = message
+            };
+        }
+
+        [HttpPost]
+        public object DeleteSystem([FromQuery]string nameSystem)
+        {
+            //if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
+            //{
+            //    return new
+            //    {
+            //        Message = "Файл не выбран",
+            //        Status = Status.Error.GetName(),
+            //    };
+            //}
+
+
+            ////using (var reader = new StreamReader(file.OpenReadStream()))
+            ////{
+            ////    while (!sr.EndOfStream)
+            ////    {
+            ////    }
+            ////        var record = csv.GetRecords<Foo>();
+            ////    var t = record.First();
+            ////}
+
+            return null;
+
+            //var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
+            //return new
+            //{
+
+            //    Status = Status.Success.GetName(),
+            //    Parameters = ParametersWithEnter,
+            //    Message = message
+            //};
+        }
+
+
         public class ParameterForCalculationChart
         {
             public List<string> namesSystems { get; set; }
@@ -170,5 +239,7 @@ namespace SystemStabilityAnalysis.Controllers
             public List<string> namesSystems { get; set; }
             public string parameterName { get; set; }
         }
+
+        static Random random { get; set; } = new Random();
     }
 }
