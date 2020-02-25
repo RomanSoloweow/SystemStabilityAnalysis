@@ -528,8 +528,7 @@ function createLinearChart(){
     }
   });
   Result = JSON.parse("{\u0022ParameterSelect\u0022:\u0022Tn\u0022,\u0022Tn\u0022:[20.0,20.11111111111111,20.22222222222222,20.333333333333332,20.444444444444443,20.555555555555554,20.666666666666664,20.777777777777775,20.888888888888886],\u0022P\u0022:[2.434181973074066E-07,2.1785025870934773E-07,1.9496790177364581E-07,1.744890408809124E-07,1.5616121992637724E-07,1.3975849976991407E-07,1.2507867355899056E-07,1.11940773583199E-07,1.0018284036333434E-07]}")
-      console.log(Result)
-      showChart2(Result);
+
 }
 
 function createDiagram(){
@@ -545,11 +544,10 @@ function createDiagram(){
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
     if (msg.status == "Success") {
-      console.log("Здесь будут диаграммы")
+      showChart3(msg)
     }
   });
 }
-
 
 async function AJAXSubmit (oFormElement) {
   var resultElement = oFormElement.elements.namedItem("result");
@@ -602,3 +600,32 @@ async function AJAXSubmit (oFormElement) {
   }
 
 
+  function showChart3(Result)
+  {
+    let labels = [];
+    let diagData = [];
+    let colors = [];
+    $.each(Result.calculations, function(index, element){
+      labels.push(element.nameSystem);
+      diagData.push(element.value);
+      colors.push(`rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`)
+    });
+    color = "27,110,194"
+    console.log(diagData)
+    config1.data = {
+        labels: labels,
+        datasets: [{
+            data: diagData,
+            borderColor: color,
+            backgroundColor:  colors,
+            pointBorderColor: "rgb( " + color + ")",
+            pointBackgroundColor: "rgb( " + color + ")",
+            pointBorderWidth: 1,
+
+        }]
+    }
+    console.log(config)
+    // config.options.scales.yAxes[0].scaleLabel.labelString = "P";
+    // config.options.scales.xAxes[0].scaleLabel.labelString = Result.ParameterSelect;
+    window.myLine1.update();
+  };
