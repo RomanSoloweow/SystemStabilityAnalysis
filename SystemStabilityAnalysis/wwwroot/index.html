@@ -114,14 +114,16 @@
   </div>
   <div class="ui bottom attached tab segment" data-tab="third">
   <div class="ui top attached tabular menu">
-    <a class="item active" data-tab="third/a">Настройки</a>
+    <a class="item active" data-tab="third/a">Системы</a>
     <a class="item" data-tab="third/b">Диаграммы</a>
     <a class="item" data-tab="third/c">Графики</a>
   </div>
   <div class="ui bottom attached tab segment active" data-tab="third/a">
-    <div class="ui internally celled grid">
+    <label class="basic ui label big">Добавленные системы</label><br><br>
+    <div class="ui celled grid">
       <div class="row">
         <div class="eight wide column">
+          
           <div class="ui vertical buttons system-list">
             
           </div>
@@ -133,7 +135,7 @@
                 <button class="ui primary button upload-csv"><i class="download icon"></i>Загрузить</button><br><br>
               </div>
               <div class="row">
-                <button class="ui primary button upload-csv"><i class="trash icon"></i>Удалить</button><br><br>
+                <button class="ui primary button"><i class="trash icon"></i>Удалить</button><br><br>
               </div>
               <div class="row">
                 <button class="ui primary button">
@@ -150,12 +152,12 @@
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/b">
     <div class="ui six column grid relaxed padded">
-      <div class="six wide column">
+      <div class=" center aligned  six wide column">
         <label>Системы</label>
         <select multiple="" class="ui fluid dropdown systems-cb">
         </select>
       </div>
-      <div class=" four wide column">
+      <div class="center aligned four wide column">
         <label>Параметр</label>
         <select class="ui fluid search dropdown param-diag" >
         </select>
@@ -171,29 +173,29 @@
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/c">
     <div class="ui twelve column grid relaxed padded">
-      <div class="four wide column">
+      <div class=" center aligned four wide column">
         <label>Системы</label>
         <select name="skills" multiple="" class="ui fluid dropdown systems-cb">
         </select>
       </div>
-      <div class="four wide column">
+      <div class=" center aligned four wide column">
         <label>Параметр</label>
         <select class="ui fluid search dropdown param-chart" >
         </select>
       </div>
-      <div class="ui input column">
+      <div class=" center aligned ui input column">
         <label>От</label>
         <input class="name" type="text" placeholder="">
       </div>
-      <div class="ui input column">
+      <div class=" center aligned ui input column">
         <label>До</label>
         <input class="name" type="text" placeholder="">
       </div>
-      <div class="two wide ui input column">
+      <div class=" center aligned two wide ui input column">
         <label>Количество точек</label>
         <input class="name" type="text" placeholder="">
       </div>
-      <div class="two wide ui input  column">
+      <div class=" center aligned two wide ui input  column">
         <label>&ensp;<br></label>
         <button class="ui primary button create-linear-chart">
           Построить

@@ -64,6 +64,7 @@ function nextTab(event){
 function addFilter(){
   let parameter = $(".ui.names").find(".item.active").attr("data-value");
   let condition = $(".ui.conditions ").find(".item.active").attr("data-value");
+  let value = $(".input.value ").val();
   $.ajax({
     method: "GET",
     url: `Restrictions/AddRestriction?parameter=${parameter == undefined ? "" : parameter}&condition=${condition == undefined ? "" : condition}&value=${value == undefined ? "" : value}`,
@@ -242,7 +243,7 @@ function saveFile(event){
         a.style.display = 'none';
         a.href = url;
         // the filename you want
-        a.download = 'todo-1.json';
+        a.download = 'filename.csv';
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -316,7 +317,6 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
     method: "GET",
     url: "Systems/GetParametersWithCalculate",
   }).done(function(msg){
-    console.log(msg)
     if (msg.status == "Success") {
       $.each( msg.parametersWithCalculate, function( key, value ) {
         $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
@@ -417,10 +417,12 @@ function validateSystem() {
     data: {validateArr: JSON.stringify(validationArr)}
   }).done(function(msg){
     $.each(msg.parametersCorrect, function(index, value){
-      if (value.correct == true)
-        blocked = 1;
-      $("[data-tab='second/a']").find("table").find(`td[data-value='${value.parameterName}']`).parent().find(".validate-div").addClass(`${value.correct == true ? "" : "error"}`)
+      if (value.correct == false)
+        $("[data-tab='second/a']").find("table").find(`td[data-value='${value.parameterName}']`).parent().find(".validate-div").addClass("error")
+      else
+      $("[data-tab='second/a']").find("table").find(`td[data-value='${value.parameterName}']`).parent().find(".validate-div").removeClass("error")
     });
+    $(".message").remove()
     notification("Error",msg.message,"second/a")
 
   });
