@@ -43,7 +43,7 @@ namespace SystemStabilityAnalysis.Controllers
                 ParametersForDiagram = StaticData.CurrentSystems.GetParametersForDiagram()
             };
         }
-
+        static Random random { get; set; } = new Random();
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
@@ -80,11 +80,11 @@ namespace SystemStabilityAnalysis.Controllers
             
 
             List<object> calculations = new List<object>();
-            Random random = new Random();
+   
             List<object> values = new List<object>();
             int count = 100;
             foreach (var t in parameterForCalculationChart.namesSystems)
-            {
+            {                       
                 values.Clear();
                 for(int i = 0; i<count;i++)
                 {
