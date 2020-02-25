@@ -11,25 +11,34 @@
 <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.3/dist/semantic.min.js"></script>
 </head>
 <body>
-  <form action="Restrictions/LoadRestrictionsFromFile" 
+  
+  
+<form action="Restrictions/LoadRestrictionsFromFile" 
   enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;" 
   method="post" hidden>
 <dl>
-    <dt>
-        <label for="FileUpload_FormFile">File</label>
-    </dt>
     <dd>
       <input id="FileUpload_FormFile" type="file" 
       name="file" accept=".csv" multiple/>
     </dd>
 </dl>
-
 <input id="upload-csv" class="btn" type="submit" value="Upload" multiple/>
-
-<div style="margin-top:15px">
-    <output name="result"></output>
-</div>
 </form>
+
+
+<form action="Systems/LoadSystemFromFile" 
+  enctype="multipart/form-data" onsubmit="AJAXSubmit1(this);return false;" 
+  method="post" hidden>
+<dl>
+    <dd>
+      <input id="FileUpload_FormFile1" type="file" 
+      name="file" accept=".csv" multiple/>
+    </dd>
+</dl>
+<input id="upload-csv1" class="btn" type="submit" value="Upload" multiple/>
+</form>
+
+
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="first">Ограничения</a>
     <a class="item" data-tab="second">Системы</a>

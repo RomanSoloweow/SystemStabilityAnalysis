@@ -262,6 +262,7 @@ function saveFile(event){
       a.download = `${filename}.csv`;
       document.body.appendChild(a);
       a.click();
+      
       window.URL.revokeObjectURL(url);
     }
   }
@@ -566,48 +567,52 @@ async function AJAXSubmit (oFormElement) {
   var resultElement = oFormElement.elements.namedItem("result");
   const formData = new FormData(oFormElement);
   try {
-
   const response = await fetch(oFormElement.action, {
     method: 'POST',
     body: formData
   })
   .then(response => response.text())
   .then(msg => {
-    $(".ui.celled.table.restructions").remove()
-    $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
-    <thead>
-      <tr>
-        <th>Наименование показателя</th>
-        <th>Обозначение</th>
-        <th>Единица измерения</th>
-        <th>Условие</th>
-        <th>Значение</th>
-        <th class="minus one wide center aligned"></th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-    </table>`)
-    $.each( JSON.parse(msg).restrictions, function( key, value ) {
-
-      $(".ui.celled.table.restructions tbody").append(`<tr>
-      <td data-label="description" data-value=${value.description}>${value.description}</td>
-      <td data-label="name">${value.name}</td>
-      <td data-label="unit">${value.unit}</td>
-      <td data-label="condition">${value.condition}</td>
-      <td data-label="value">${value.value}</td>
-      <td data-label="button" class="center aligned" >
-        <button class="ui icon button minus">
-          <i class="minus icon"></i>
-        </button>
-      </td>
-      </tr>`)
-    });
-    $(".ui.icon.button.minus").unbind();
-    $(".ui.icon.button.minus").click(deleteFilter);
+    if (JSON.parse(msg).status == "Success") {
+      $(".ui.celled.table.restructions").remove()
+      $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
+      <thead>
+        <tr>
+          <th>Наименование показателя</th>
+          <th>Обозначение</th>
+          <th>Единица измерения</th>
+          <th>Условие</th>
+          <th>Значение</th>
+          <th class="minus one wide center aligned"></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+      </table>`)
+      $.each( JSON.parse(msg).restrictions, function( key, value ) {
+        $(".ui.celled.table.restructions tbody").append(`<tr>
+        <td data-label="description" data-value=${value.description}>${value.description}</td>
+        <td data-label="name">${value.name}</td>
+        <td data-label="unit">${value.unit}</td>
+        <td data-label="condition">${value.condition}</td>
+        <td data-label="value">${value.value}</td>
+        <td data-label="button" class="center aligned" >
+          <button class="ui icon button minus">
+            <i class="minus icon"></i>
+          </button>
+        </td>
+        </tr>`)
+      });
+      $(".ui.icon.button.minus").unbind();
+      $(".ui.icon.button.minus").click(deleteFilter);
+    }
+    else {
+      notification("Error", JSON.parse(msg).message,"first")
+    }
   });
   
   } catch (error) {
+    notification("Error", JSON.parse(msg).message,"first")
     console.error('Error:', error);
   }
   }
@@ -698,5 +703,68 @@ function showChart4(Result)
 };
 
 function downloadSystem1(){
-//
+  $('#FileUpload_FormFile1').click();
 };
+
+
+$('#FileUpload_FormFile1').on('change', function(e) {
+  $('#upload-csv1').click();
+});
+
+async function AJAXSubmit1 (oFormElement) {
+  
+  const formData = new FormData(oFormElement);
+  try {
+  const response = await fetch(oFormElement.action, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(msg => {
+    if (JSON.parse(msg).status == "Success") {
+      $(".tab.segment[data-tab='second/a']").find('table').remove()
+      $(".tab.segment[data-tab='second/a']").append(`
+          <table class="ui celled blue table center aligned analys">
+                <thead>
+                  <tr>
+                    <th>Наименование показателя</th>
+                    <th>Обозначение</th>
+                    <th>Единица измерения</th>
+                    <th>Значение показателя</th>
+                  </tr>
+                </thead>
+              <tbody>
+            </tbody>
+          </table>
+        `)
+      $.ajax({
+        method: "GET",
+        url: "Systems/GetParametersWithEnter",
+      }).done(function(msg){
+        if (msg.status == "Success") {
+          $.each( msg.parametersWithEnter, function( key, value ) {
+            $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
+              <td data-label="description" data-value=${value.name}>${value.description}</td>
+              <td data-label="name">${value.designation}</td>
+              <td data-label="unit">${value.unit}</td>
+              <td data-label="button" class="center aligned" >
+              <div class="ui input validate-div">
+                <input type="number" placeholder="" class="system-validate" value="${value.value}">
+              </div>
+              </td>
+              </tr>`
+            )
+          });
+        }
+      }); 
+    }
+    else {
+      notification("Error", JSON.parse(msg).message,"second")
+    }
+  });
+  
+  } catch (error) {
+    notification("Error", msg.message,"second")
+    console.error('Error:', error);
+  }
+  }
