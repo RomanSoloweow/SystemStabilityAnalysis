@@ -45,6 +45,7 @@ $(".ui.button.create-linear-chart").click(createLinearChart);
 $(".ui.button.create-diagram").click(createDiagram);
 $(".ui.button.new-system").click(newSystem);
 $(".ui.button.delete1").click(deleteSystem);
+$(".ui.button.download-system-1").click(downloadSystem1);
 
 
 $('.ui.dropdown.names').change(function(){
@@ -256,16 +257,39 @@ function saveFile(event){
   else {
     filename = $(".ui.input.save-system").find("input").val();
     if (filename.length > 0) {
-      const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      // the filename you want
-      a.download = `${filename}.csv`;
-      document.body.appendChild(a);
-      a.click();
+      $.ajax({
+        method: "GET",
+        url: `Restrictions/SaveRestrictionsToFile?filename=${filename}`,
+      }).done(function(msg){
+        if (msg.status == "Success") {
+          currentCombobox.find(".menu").empty();
+          currentCombobox.dropdown('refresh')
+          $.each( msg.conditions, function( key, value ) {
+            currentCombobox.find(".menu").append(`<div class="item" 
+              data-value="${value.value}"
+              data-text="${value.name}"
+              > 
+              ${value.name} </div>
+            `)
+          });
+          currentCombobox.dropdown('refresh');
+        } 
+        else {
+          notification("Error", msg.message,"first")
+        }
+
+      });
+
+      // const url = ``;
+      // const a = document.createElement('a');
+      // a.style.display = 'none';
+      // a.href = url;
+      // // the filename you want
+      // a.download = `${filename}.csv`;
+      // document.body.appendChild(a);
+      // a.click();
       
-      window.URL.revokeObjectURL(url);
+      // window.URL.revokeObjectURL(url);
     }
   }
 }
@@ -284,16 +308,28 @@ function saveFile1(event){
   else {
     filename = $(".ui.input.save-system1").find("input").val();
     if (filename.length > 0) {
-      const url = `Systems/SaveSystemToFile?filename=${filename}`;
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      // the filename you want
-      a.download = `${filename}.csv`;
-      document.body.appendChild(a);
-      a.click();
+      $.ajax({
+        method: "GET",
+        url: `Systems/ValidateSystemBeforeSave?filename=${filename}`,
+      }).done(function(msg){
+        if (msg.status == "Success") {
+          const url = `Systems/SaveSystemToFile?filename=${filename}`;
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = `${filename}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          
+          window.URL.revokeObjectURL(url);
+        } 
+        else {
+          notification("Error", msg.message,"second/b")
+        }
+
+      });
       
-      window.URL.revokeObjectURL(url);
     }
   }
 }
@@ -404,14 +440,15 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
     url: "Systems/GetParametersForAnalysis",
   }).done(function(msg){
     if (msg.status == "Success") {
-      if ($(".tab.segment[data-tab='second/c']").find(".header").length == 0)
+      if ($(".tab.segment[data-tab='second/c']").find(".header.result").length == 0) {
         $(".tab.segment[data-tab='second/c']").find("table").before(`<div class='ui large message'>
-          <div class="header">
+          <div class="result header">
             U = ${msg.u}
           </div>
           ${msg.result}
           </div>`
         )
+      }
       $.each( msg.parametersForAnalysis, function( key, value ) {
         $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
           <td data-label="description">${value.description}</td>
@@ -421,9 +458,9 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
           </tr>`
         )
       });
-      $(".message").remove()
-      notification("Error",msg.message,"second/c")
+      $(".negative.message").remove()
     }
+    notification("Error",msg.message,"second/c")
   });  
 }});
 
@@ -732,12 +769,9 @@ function showChart4(Result)
 
 };
 
-
-
 function downloadSystem1(){
   $('#FileUpload_FormFile1').click();
 };
-
 
 $('#FileUpload_FormFile1').on('change', function(e) {
   $('#upload-csv1').click();
@@ -830,5 +864,5 @@ function generateReport(){
 }
 
 function deleteSystem(){
-  
+
 }
