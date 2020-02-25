@@ -43,7 +43,32 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        
+        [HttpGet]
+        public object GetCalculationForChart([FromQuery]string queryString)
+        {
+            return null;
+        }
 
+
+        [HttpGet]
+        public object GetCalculationForDiagram([FromQuery]string queryString)
+        {
+            return null;
+        }
+
+        public class ParameterForCalculationChart
+        {
+            public List<string> namesSystems { get; set; }
+            public double? From { get; set; }
+            public double? To { get; set; }
+            public int? CountDote { get; set; }
+            public string parameterName { get; set; }
+        }
+
+        public class ParameterForCalculationDiagram
+        {
+            public List<string> namesSystems { get; set; }
+            public string parameterName { get; set; }
+        }
     }
 }

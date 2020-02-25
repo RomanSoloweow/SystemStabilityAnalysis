@@ -199,12 +199,6 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        public class Foo
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
-
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
@@ -262,7 +256,11 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
 
-
+        public class Foo
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
 
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)

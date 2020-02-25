@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SystemStabilityAnalysis.Helpers;
@@ -26,6 +29,7 @@ namespace SystemStabilityAnalysis.Controllers
                 Message = new List<string> { "Blabla1", "Blabla2" }
             };
         }
+
         [HttpGet]
         public object GetParametersWithCalculate()
         {
@@ -46,6 +50,7 @@ namespace SystemStabilityAnalysis.Controllers
                 Message = message
             }; ;
         }
+
         [HttpGet]
         public object GetParametersForAnalysis()
         {
@@ -61,10 +66,11 @@ namespace SystemStabilityAnalysis.Controllers
                 Message = message
             };
         }
+
         [HttpGet]
         public object Validate([FromQuery]string validateArr)
         {
-            var Parameters = JsonConvert.DeserializeObject<List<Param>>(validateArr);
+            var Parameters = JsonConvert.DeserializeObject<List<ParameterForValidate>>(validateArr);
 
             List<object> parametersCorrect = new List<object>();
             List<string> message = new List<string>();
@@ -107,14 +113,86 @@ namespace SystemStabilityAnalysis.Controllers
        
         }
 
-        public class Param
+        [HttpPost]
+        public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
-            public Param()
+            if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
+            {
+                return new
+                {
+                    Message = "Файл не выбран",
+                    Status = Status.Error.GetName(),
+                };
+            }
+
+
+            //using (var reader = new StreamReader(file.OpenReadStream()))
+            //{
+            //    while (!sr.EndOfStream)
+            //    {
+            //    }
+            //        var record = csv.GetRecords<Foo>();
+            //    var t = record.First();
+            //}
+
+
+            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter();
+            return new
+            {
+
+                Status = Status.Success.GetName(),
+                Parameters = ParametersWithEnter
+            };
+        }
+
+        [HttpGet]
+        public object SaveSystemToFile([FromQuery]string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return new
+                {
+                    Message = "Имя файла не указано",
+                    Status = Status.Error.GetName(),
+                };
+            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+            //FileExtensionContentTypeProvider.tr
+            //GetMimeMapping
+            memory.Position = 0;
+            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".docx"));
+        }
+
+        [HttpGet]
+        public object GenerateReport()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
+
+            memory.Position = 0;
+            return File(memory, "text/csv", Path.ChangeExtension("отчет", ".csv"));
+        }
+
+        public class ParameterForValidate
+        {
+            public ParameterForValidate()
             {
 
             }
             public NameParameterWithEnter parameterName { get; set; }
             public double? value { get; set; }
         }
+
     }
 }
