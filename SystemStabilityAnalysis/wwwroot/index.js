@@ -325,7 +325,7 @@ function saveFile1(event){
           window.URL.revokeObjectURL(url);
         } 
         else {
-          notification("Error", msg.message,"second/b")
+          notification("Error", msg.message,"second/c")
         }
 
       });
@@ -480,13 +480,42 @@ $(".item[data-tab='third']").tab({'onVisible':function(){
     url: "Analysis/GetSystems",
   }).done(function(msg){
     if (msg.status == "Success") {
-      let list = $(".tab.segment[data-tab='third/a']").find(".system-list");
+      // let list = $(".tab.segment[data-tab='third/a']").find(".system-list");
+      // list.empty();
+      // $.each( msg.systems, function( key, value ) {
+      //   list.append(`
+      //     <button class="ui button system-item">${value}</button>
+      //   `
+      //   )
+      // });
+      if ($(".list.system-list1").length == 0)
+      $(".segment.active[data-tab='third/a']").append(
+        `<div class="ui segment system-segment">
+        <div class="ui divided list system-list1">
+    
+        </div>
+      </div>`
+      )
+      let list = $(".tab.segment[data-tab='third/a']").find(".system-list1");
       list.empty();
       $.each( msg.systems, function( key, value ) {
         list.append(`
-          <button class="ui button system-item">${value}</button>
+
+        <div class="item">
+          <div class="right floated content">
+            <button class="circular ui icon button mini delete1">
+              <i class="icon delete"></i>
+            </button>
+          </div>
+          <div class="content system-list-item">
+          
+            ${value}
+          </div>
+        </div>
         `
         )
+        $(".delete1").unbind();
+        $(".delete1").click(deleteSystem)
       });
     }
   });  
@@ -847,22 +876,60 @@ function generateReport(){
 
   }
   else {
-    filename = $(".ui.input.save-system2").find("input").val();
-    if (filename.length > 0) {
-      const url = `Systems/GenerateReport?filename=${filename}`;
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      // the filename you want
-      a.download = `${filename}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      
-      window.URL.revokeObjectURL(url);
-    }
+
+    $.ajax({
+      method: "GET",
+      url: `Systems/ValidateSystemBeforeSave?filename=${filename}`,
+    }).done(function(msg){
+      if (msg.status == "Success") {
+
+        filename = $(".ui.input.save-system2").find("input").val();
+        if (filename.length > 0) {
+          const url = `Systems/GenerateReport?filename=${filename}`;
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = `${filename}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          
+          window.URL.revokeObjectURL(url);
+        }
+      } 
+      else {
+        notification("Error", msg.message,"second/c")
+      }
+
+    });
   }
 }
 
-function deleteSystem(){
+function deleteSystem(event){
 
+  let currentButton;
+  if ( $( event.target ).is( ":button" ) ) {
+    currentButton =  event.target 
+  }
+  else {
+    currentButton =  event.target.closest("button");
+  }
+  let curElement = $(currentButton).parent().parent();
+  let textElement = curElement.find(".system-list-item").html().replace(/\s/g, '');
+  $(curElement).remove()
+  // <div class="ui divided list system-list1">
+
+  //   </div>
+  if ($(".list.system-list1").children().length == 0)
+    $(".system-segment").remove()
+
+  $.ajax({
+    method: "GET",
+    url: `Systems/DeleteSystem`,
+    data: {nameSystem: textElement}
+  }).done(function(msg){
+    if (msg.status == "Error")
+      notification("Error",msg.message,"second/a")
+
+  });
 }
