@@ -602,6 +602,16 @@ async function AJAXSubmit (oFormElement) {
 
   function showChart3(Result)
   {
+    Chart.plugins.register({
+      beforeDraw: function(c) {
+          var legends = c.legend.legendItems;
+          legends.forEach(function (e, i) {
+          e.fillStyle = 'rgba(255,255,255,1)'
+          e.strokeStyle = 'rgba(255, 255, 255, 1)'
+        });
+      }
+    });
+
     let labels = [];
     let diagData = [];
     let colors = [];
@@ -614,7 +624,7 @@ async function AJAXSubmit (oFormElement) {
     config1.data = {
         labels: labels,
         datasets: [{
-            label: ['График'],
+            label: [Result.parameterName],
             data: diagData,
             borderColor: color,
             backgroundColor:  colors,
@@ -624,11 +634,7 @@ async function AJAXSubmit (oFormElement) {
 
         }]
     }
-    let legends = window.myLine1.legend.legendItems;
-    legends.forEach(function (e, i) {
-      e.fillStyle = 'rgba(255,99,132,1)'
-      e.strokeStyle = 'rgba(255, 159, 64, 1)'
-    });
+    config1.options.legend.display = true
     // config.options.scales.yAxes[0].scaleLabel.labelString = "P";
     // config.options.scales.xAxes[0].scaleLabel.labelString = Result.ParameterSelect;
     window.myLine1.update();
