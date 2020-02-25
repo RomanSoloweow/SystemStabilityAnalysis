@@ -58,7 +58,7 @@ let config1 =
     data: {
       labels: [],
       datasets: [{
-        label: ['График'],
+        label: [],
         data: [],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -108,7 +108,7 @@ let config1 =
         }]
       },
       legend: {
-        display: true
+        display: false
       },  
       pan:
       {
