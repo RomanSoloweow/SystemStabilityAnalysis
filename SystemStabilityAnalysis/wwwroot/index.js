@@ -39,7 +39,9 @@ $(".ui.button.save-system").click({url: "GetParametersWithEnter", param: "filena
 $(".ui.button.save-restrictions").click({url: "SaveRestrictionsToFile", param: "parametersWithEnter"},saveFile);
 $(".ui.button.upload-csv").click(uploadCsv);
 $(".ui.button.validate").click(validateSystem);
-//$(".ui.button.create-linear-chart").click(linearChart);
+$(".ui.button.create-linear-chart").click(createLinearChart);
+$(".ui.button.create-diagram").click(createDiagram);
+
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -331,6 +333,8 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
         )
       });
     }
+    $(".message").remove()
+    notification("Error",msg.message,"second/b")
   });  
 }});
 
@@ -374,6 +378,8 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
           </tr>`
         )
       });
+      $(".message").remove()
+      notification("Error",msg.message,"second/c")
     }
   });  
 }});
@@ -498,6 +504,40 @@ function getParamChart(){
     }
   });
   
+}
+
+
+function createLinearChart(){
+  let params = {}
+  params.namesSystems = $(".ui.systems-cb.system-chart").find(".item.active").attr("data-text");
+  params.from = $(".linear-chart-from").val();
+  params.to = $(".linear-chart-to").val();
+  params.countDote = $(".linear-chart-dots-count").val();
+  params.parameterName = $(".ui.param-chart").find(".item.active").attr("data-value");
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetCalculationForChart",
+    data: {queryString: JSON.stringify(params)}
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      console.log("Здесь будет график")
+    }
+  });
+}
+
+function createDiagram(){
+  let params = {}
+  params.namesSystems = $(".ui.systems-cb.system-diagram").find(".item.active").attr("data-text");
+  params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
+  $.ajax({
+    method: "GET",
+    url: "Analysis/GetCalculationForDiagram",
+    data: {queryString: JSON.stringify(params)}
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      console.log("Здесь будут диаграммы")
+    }
+  });
 }
 
 
