@@ -419,7 +419,8 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
       });
     }
     $(".message").remove()
-    notification("Error",msg.message,"second/b")
+    if (msg.message.length > 0)
+      notification("Error",msg.message,"second/b")
   });  
 }});
 
@@ -466,7 +467,8 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
       });
       $(".negative.message").remove()
     }
-    notification("Error",msg.message,"second/c")
+    if (msg.message.length > 0)
+      notification("Error",msg.message,"second/c")
   });  
 }});
 
@@ -638,7 +640,7 @@ function createLinearChart(){
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
       showChart4(msg)
-      if (msg.hasOwnProperty('message')) {
+      if (msg.hasOwnProperty('message') && msg.message.length > 0) {
         notification("Error",msg.message,'third/c')
       }
   });
@@ -659,7 +661,7 @@ function createDiagram(){
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
     showChart3(msg)
-    if (msg.hasOwnProperty('message')) {
+    if (msg.hasOwnProperty('message') && msg.message.length > 0) {
       notification("Error",msg.message,'third/b')
     }
     
