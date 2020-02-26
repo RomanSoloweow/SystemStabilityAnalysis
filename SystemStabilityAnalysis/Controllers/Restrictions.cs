@@ -12,6 +12,7 @@ using SystemStabilityAnalysis.Models.Parameters;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Globalization;
+using CsvHelper;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -129,26 +130,15 @@ namespace SystemStabilityAnalysis.Controllers
         {
             ResponceResult responceResult = new ResponceResult();
 
-            if (restrictionName == null)
+            if (string.IsNullOrEmpty(restrictionName))
             {
                 responceResult.AddError("Ограничение не указано");
             }
             else
             {
-                bool contains = true;
-                if (Enum.TryParse(restrictionName, out NameParameterWithEnter parameterWithEnter))
-                {
-                    contains = parameterWithEnter.DeleteFromRestrictions();
-                }
-                else if (Enum.TryParse(restrictionName, out NameParameterWithCalculation parameterWithCalculation))
-                {
-                    contains = parameterWithCalculation.DeleteFromRestrictions();
-                }
-                else if (Enum.TryParse(restrictionName, out NameParameterForAnalysis parameterForAnalysis))
-                {
-                    contains = parameterForAnalysis.DeleteFromRestrictions();
-                }
-                else
+                bool contains = ParameterUniversal.DeleteFromRestrictions(restrictionName, out bool correct);
+
+                if(!correct)
                 {
                     responceResult.AddError(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
                 }
@@ -178,15 +168,37 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
-           if((file==null)||(string.IsNullOrEmpty(file.FileName)))
+            ResponceResult responceResult = new ResponceResult();
+
+            if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                return new
+                responceResult.AddError("Файл не выбран.");
+                return responceResult.ToResult();
+            }
+            
+            using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
+            {
+                
+                using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture))
                 {
-                    Message = "Файл не выбран",
-                    Status = Status.Error.GetName(),
-                };
+
+                    csvReader.Configuration.Delimiter = ",";
+                    csvReader.Configuration.HasHeaderRecord = false;
+                    try
+                    {
+                        var t = csvReader.GetRecords<Restriction>().ToList();
+                    }
+                    catch(Exception ex)
+                    {
+                        responceResult.AddError("Не корректный файл, выберите файл, сохраненный системой");
+                        return responceResult.ToResult();
+                    }
+                   
+                }
             }
 
+            responceResult.AddError("Файл корректный");
+            return responceResult.ToResult();
             //using (var reader = new StreamReader(file.OpenReadStream()))
             //{
             //    while (!sr.EndOfStream)
@@ -229,6 +241,13 @@ namespace SystemStabilityAnalysis.Controllers
            
             memory.Position = 0;
             return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
+        }
+
+        public class Restriction
+        {
+            public string ParameterName { get; set; }
+            public ConditionType Condition { get; set; }
+            public double Value { get; set; } 
         }
 
         //[HttpGet("{parameter}/{condition}/{value}")]

@@ -190,38 +190,16 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpGet]
         public object DeleteSystem([FromQuery]string nameSystem)
         {
-            //if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
-            //{
-            //    return new
-            //    {
-            //        Message = "Файл не выбран",
-            //        Status = Status.Error.GetName(),
-            //    };
-            //}
+            ResponceResult responceResult = new ResponceResult();
+            if(string.IsNullOrEmpty(nameSystem))
+            {
+                responceResult.AddError("Система не указана");
+            }
 
-
-            ////using (var reader = new StreamReader(file.OpenReadStream()))
-            ////{
-            ////    while (!sr.EndOfStream)
-            ////    {
-            ////    }
-            ////        var record = csv.GetRecords<Foo>();
-            ////    var t = record.First();
-            ////}
-
-            return null;
-
-            //var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
-            //return new
-            //{
-
-            //    Status = Status.Success.GetName(),
-            //    Parameters = ParametersWithEnter,
-            //    Message = message
-            //};
+            return responceResult.ToResult();
         }
 
 
