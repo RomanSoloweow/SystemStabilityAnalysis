@@ -587,10 +587,12 @@ $('.ui.dropdown.param-diag').dropdown({
   }
  });
 
+
+
 function getParamDiagram(){
   let currentCombobox = $(".ui.dropdown.param-diag");
   currentCombobox.find(".menu").empty();
-  //currentCombobox.dropdown('clear');
+   //currentCombobox.dropdown('clear');
   $.ajax({
     method: "GET",
     url: "Analysis/GetParametersForDiagram",
@@ -629,6 +631,8 @@ function getParamChart(){
         `)
       });
       currentCombobox.dropdown('refresh')
+      
+      
     }
   });
   
@@ -833,14 +837,23 @@ function showChart4(Result)
   let labels = [];
   let diagData = [];
   let colors = [];
-  let datasets = []
+  let datasets = [];
+  let xValues = [];
+  let yValues = [];
   $.each(Result.calculations, function(index, element){
     // labels.push(element.nameSystem);
     // diagData.push(element.value);
+    xValues = [];
+    yValues = [];
     let color = `rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`
+
+    $.each(element.values, function(index, val){
+     xValues.push(val.x);
+     yValues.push(val.y);
+    });
     let dataset = {
-      label: element.nameSystem,
-      data: element.values,
+      label: [element.nameSystem],
+      data: yValues,
       borderColor: color,
       backgroundColor: "transparent",
       pointBorderColor: color,
@@ -849,11 +862,13 @@ function showChart4(Result)
     };
     datasets.push(dataset)
     //colors.push(`rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`)
+    
   });
   console.log(datasets)
   color = "27,110,194"
+
   config.data = {
-      labels: Result.parameterNameX,
+      labels: xValues,
       datasets: datasets
   }
   config.options.legend.display = true
