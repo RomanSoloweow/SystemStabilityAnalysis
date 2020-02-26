@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Globalization;
 using CsvHelper;
+using HeyRed.Mime;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -53,7 +54,7 @@ namespace SystemStabilityAnalysis.Controllers
             ConditionType conditionValue = ConditionType.NoCorrect;
             double Value = 0 ;
 
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 responceResult.AddError("Значение ограничения не указано");
             }
@@ -69,7 +70,7 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
-            if (condition == null)
+            if (string.IsNullOrEmpty(condition))
             {
                 responceResult.AddError("Условие для ограничения не указано");
             }
@@ -83,36 +84,16 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
-            if (parameter == null)
+            if (string.IsNullOrEmpty(parameter))
             {
                 responceResult.AddError("Параметр для ограничения не указан");
             }
             else 
             {
-
-                if (Enum.TryParse(parameter, out NameParameterWithEnter parameterWithEnter))
+                var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, out bool correct);
+                if(correct)
                 {
-                    if (responceResult.IsCorrect)
-                    {
-                        parameterWithEnter.AddToRestrictions(conditionValue, Value);
-                        return parameterWithEnter.ToRestriction(conditionValue, Value);
-                    }
-                }
-                else if (Enum.TryParse(parameter, out NameParameterWithCalculation parameterWithCalculation))
-                {
-                    if (responceResult.IsCorrect)
-                    {
-                        parameterWithCalculation.AddToRestrictions(conditionValue, Value);
-                        return parameterWithCalculation.ToRestriction(conditionValue, Value);
-                    }
-                }
-                else if (Enum.TryParse(parameter, out NameParameterForAnalysis parameterForAnalysis))
-                {
-                    if (responceResult.IsCorrect)
-                    {
-                        parameterForAnalysis.AddToRestrictions(conditionValue, Value);
-                        return parameterForAnalysis.ToRestriction(conditionValue, Value);
-                    }
+                    return result;
                 }
                 else
                 {
@@ -156,9 +137,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object DeleteAllRestriction()
         {
-            StaticData.ConditionsForParameterWithCalculation.Clear();
-            StaticData.ConditionsForParameterForAnalysis.Clear();
-            StaticData.ConditionsForParameterWithEnter.Clear();
+            ParameterUniversal.DeleteAllRestriction();
             return new
             {
                 Status = Status.Success.GetName()
@@ -177,78 +156,78 @@ namespace SystemStabilityAnalysis.Controllers
             }
             
             using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
-            {
-                
+            {            
                 using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture))
                 {
 
                     csvReader.Configuration.Delimiter = ",";
-                    csvReader.Configuration.HasHeaderRecord = false;
+                    //csvReader.Configuration.HasHeaderRecord = false;
                     try
                     {
-                        var t = csvReader.GetRecords<Restriction>().ToList();
+                       foreach(var restriction in  csvReader.GetRecords<Restriction>().ToList())
+                        {
+                            var result = ParameterUniversal.AddToRestriction(restriction.ParameterName, restriction.Condition, restriction.Value, out bool correct);
+                            if (!correct)
+                            {
+                                responceResult.AddError(String.Format("Не корректный параметр {0}", restriction.ParameterName));
+                                break;
+                            }
+                        }
                     }
                     catch(Exception ex)
                     {
-                        responceResult.AddError("Не корректный файл, выберите файл, сохраненный системой");
+                        responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                         return responceResult.ToResult();
-                    }
-                   
+                    }                  
                 }
             }
 
-            responceResult.AddError("Файл корректный");
             return responceResult.ToResult();
-            //using (var reader = new StreamReader(file.OpenReadStream()))
+            //var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x=> x.ToRestriction(ConditionType.More, 0.111));
+            //var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
+            //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
+            //return new
             //{
-            //    while (!sr.EndOfStream)
-            //    {
-            //    }
-            //        var record = csv.GetRecords<Foo>();
-            //    var t = record.First();
-            //}
-
-
-            var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x=> x.ToRestriction(ConditionType.More, 0.111));
-            var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
-            var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
-            return new
-            {
              
-                Status = Status.Success.GetName(),
-                Restrictions = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
-            };
+            //    Status = Status.Success.GetName(),
+            //    Restrictions = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
+            //};
         }
 
         [HttpGet] 
         public object SaveRestrictionsToFile([FromQuery]string fileName)
         {
+            ResponceResult responceResult = new ResponceResult();
+
             if (string.IsNullOrEmpty(fileName))
             {
-                return new
-                {
-                    Message = "Имя файла не указано",
-                    Status = Status.Error.GetName(),
-                };
+                responceResult.AddError("Имя файла не указано");
+                return responceResult.ToResult();
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(),"test.csv");
 
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            string filePath = Path.ChangeExtension(fileName, ".csv");
+
+
+            //using (var stream = new FileStream(path, FileMode.Open))
+            //{
+            //    stream.CopyTo(memory);
+            //}
+
+
+            MemoryStream memory = new MemoryStream();
+            using (StreamWriter streamWriter = new StreamWriter(memory))
             {
-                stream.CopyTo(memory);
+                using (var csv = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
+                {
+                    csv.WriteRecords(Restriction.GetRestctions());
+                }
+
             }
-           
-            memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
+
+            //memory.Position = 0;
+            return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
-        public class Restriction
-        {
-            public string ParameterName { get; set; }
-            public ConditionType Condition { get; set; }
-            public double Value { get; set; } 
-        }
 
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)

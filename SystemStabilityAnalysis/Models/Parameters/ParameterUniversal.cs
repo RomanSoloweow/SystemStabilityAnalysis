@@ -26,10 +26,33 @@ namespace SystemStabilityAnalysis.Models.Parameters
             correct = false;
             return false;
         }
+        public static void DeleteAllRestriction()
+        {
+            StaticData.ConditionsForParameterWithCalculation.Clear();
+            StaticData.ConditionsForParameterForAnalysis.Clear();
+            StaticData.ConditionsForParameterWithEnter.Clear();
+        }
 
-        //public static object AddToRestriction(string name,ConditionType conditionType, double value, out bool correct)
-        //{
-
-        //}
+        public static object AddToRestriction(string name, ConditionType conditionType, double value, out bool correct)
+        {
+            correct = true;
+            if (Enum.TryParse(name, out NameParameterWithEnter parameterWithEnter))
+            {
+                parameterWithEnter.AddToRestrictions(conditionType, value);
+                return parameterWithEnter.ToRestriction(conditionType, value);
+            }
+            else if (Enum.TryParse(name, out NameParameterWithCalculation parameterWithCalculation))
+            {
+                parameterWithCalculation.AddToRestrictions(conditionType, value);
+                return parameterWithCalculation.ToRestriction(conditionType, value);
+            }
+            else if (Enum.TryParse(name, out NameParameterForAnalysis parameterForAnalysis))
+            {
+                parameterForAnalysis.AddToRestrictions(conditionType, value);
+                return parameterForAnalysis.ToRestriction(conditionType, value);
+            }
+            correct = false;
+            return null;
+        }
     }
 }
