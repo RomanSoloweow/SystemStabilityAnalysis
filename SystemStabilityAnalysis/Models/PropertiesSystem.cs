@@ -331,9 +331,9 @@ namespace SystemStabilityAnalysis.Models
         {
             return new
             {
-                Name = Name,
+                Name = Designation,
                 Description = Description,
-                Value = Value
+                Value = Name
             };
         }
 
