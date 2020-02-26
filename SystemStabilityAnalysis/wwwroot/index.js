@@ -1060,13 +1060,13 @@ async function AJAXSubmit2 (oFormElement) {
       });  
     }
     else {
-      notification("Error", msg.message,"second")
+      notification("Error", msg.message,"third/a")
     }
     $("#FormAJAX2")[0].reset();
   });
   
   } catch (error) {
-    notification("Error", msg.message,"third/c")
+    notification("Error", msg.message,"third/a")
     console.error('Error:', error);
   }
   }
