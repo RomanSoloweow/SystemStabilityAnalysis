@@ -669,7 +669,9 @@ function createDiagram(){
 }
 
 async function AJAXSubmit (oFormElement) {
-
+  let currentCombobox = $(".ui.dropdown.names");
+  currentCombobox.find(".menu").empty();
+  currentCombobox.dropdown('clear')
   const formData = new FormData(oFormElement);
   try {
   const response = await fetch(oFormElement.action, {
@@ -861,6 +863,7 @@ $('#FileUpload_FormFile1').on('change', function(e) {
 });
 
 async function AJAXSubmit1 (oFormElement) {
+  
   const formData = new FormData(oFormElement);
   try {
   const response = await fetch(oFormElement.action, {
@@ -1080,6 +1083,9 @@ async function AJAXSubmit2 (oFormElement) {
 
 
   async function AJAXSubmit4 (oFormElement) {
+    let currentCombobox = $(".ui.dropdown.names");
+    currentCombobox.find(".menu").empty();
+    currentCombobox.dropdown('clear')
     const formData = new FormData(oFormElement);
     try {
     const response = await fetch(oFormElement.action, {
