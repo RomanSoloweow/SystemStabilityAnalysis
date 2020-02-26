@@ -159,7 +159,11 @@ namespace SystemStabilityAnalysis.Models
 
                ParametersWithEnter[parameterWithEnter].Value= parameterValue;
 
-               return values;
+               return new
+               {
+                   values = values,
+                   nameSystem = Name
+               };
         }
 
 
