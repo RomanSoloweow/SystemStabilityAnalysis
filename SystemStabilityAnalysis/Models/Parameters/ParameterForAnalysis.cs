@@ -120,14 +120,29 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Value = parameter.GetName(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription()
+                Unit = parameter.GetUnit().GetDesignation()
             };
+        }
+
+        public static bool AddedToRestrictions(this NameParameterForAnalysis parameter)
+        {
+            return StaticData.ConditionsForParameterForAnalysis.Keys.Contains(parameter);
         }
 
         public static void AddToRestrictions(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
         {
             StaticData.ConditionsForParameterForAnalysis.Add(parameter, new Condition(conditionType, value));
         }
+        //public static bool AddToRestrictions(this NameParameterForAnalysis parameter, ConditionType conditionType, double value, out string message)
+        //{
+        //    message = null;
+        //    if (!StaticData.ConditionsForParameterForAnalysis.TryAdd(parameter, new Condition(conditionType, value)))
+        //    {
+        //        message = string.Format("Ограничение для параметра {0} уже добавлено", parameter.GetDesignation());
+        //        return false;
+        //    }
+        //    return false;
+        //}
 
         public static bool DeleteFromRestrictions(this NameParameterForAnalysis parameter)
         {
@@ -152,7 +167,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Status = Status.Success.GetName(),
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription(),
+                Unit = parameter.GetUnit().GetDesignation(),
                 Condition = conditionType.GetDesignation(),
                 Value = value,
                 RestrictionName = parameter.GetName()
@@ -166,7 +181,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetName(),
                 Designation = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription(),
+                Unit = parameter.GetUnit().GetDesignation(),
                 Value = value.HasValue ? value.Value.ToString() : "_",
                 Correct = correct
 
@@ -214,9 +229,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
             Calculate = calculate;
         }
 
-        public ResponceResult Verification()
+        public QueryResponse Verification()
         {
-            ResponceResult result = new ResponceResult();
+            QueryResponse result = new QueryResponse();
            string postfix =  string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             if (!Value.HasValue)
             {

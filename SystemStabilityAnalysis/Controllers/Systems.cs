@@ -73,7 +73,7 @@ namespace SystemStabilityAnalysis.Controllers
 
             List<object> parametersCorrect = new List<object>();
             List<string> message = new List<string>();
-            ResponceResult resultVerification;
+            QueryResponse resultVerification;
             foreach(var parameter in Parameters)
             {
                 if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))
@@ -109,7 +109,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
             //responceResult.AddError("Тестовая ошибка");
 
             //return responceResult.ToResult();
@@ -187,7 +187,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateSystemBeforeSave()
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
             responceResult.AddError("Какая-то ошибка");
            return responceResult.ToResult();
         }

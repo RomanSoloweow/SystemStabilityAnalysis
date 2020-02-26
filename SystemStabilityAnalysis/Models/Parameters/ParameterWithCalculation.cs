@@ -474,7 +474,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetDesignation(),
                 Value = parameter.GetName(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription()
+                Unit = parameter.GetUnit().GetDesignation()
             };
         }
 
@@ -494,6 +494,21 @@ namespace SystemStabilityAnalysis.Models.Parameters
             return null;
         }
 
+        public static bool AddedToRestrictions(this NameParameterWithCalculation parameter)
+        {
+            return StaticData.ConditionsForParameterWithCalculation.Keys.Contains(parameter);
+        }
+
+        //public static bool AddToRestrictions(this NameParameterWithCalculation parameter, ConditionType conditionType, double value, out string message)
+        //{
+        //    message = null;
+        //    if (!StaticData.ConditionsForParameterWithCalculation.TryAdd(parameter, new Condition(conditionType, value)))
+        //    {
+        //        message = string.Format("Ограничение для параметра {0} уже добавлено", parameter.GetDesignation());
+        //        return false;
+        //    }
+        //    return false;
+        //}
         public static void AddToRestrictions(this NameParameterWithCalculation parameter, ConditionType conditionType, double value)
         {
             StaticData.ConditionsForParameterWithCalculation.Add(parameter, new Condition(conditionType, value));
@@ -521,7 +536,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Status = Status.Success.GetName(),
                 Name = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription(),
+                Unit = parameter.GetUnit().GetDesignation(),
                 Condition = conditionType.GetDesignation(),
                 Value = value,
                 RestrictionName = parameter.GetName()
@@ -535,7 +550,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 Name = parameter.GetName(),
                 Designation = parameter.GetDesignation(),
                 Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDescription(),
+                Unit = parameter.GetUnit().GetDesignation(),
                 Value = value.HasValue ? value.Value.ToString() : "_",
                 Correct = correct
             };
@@ -581,9 +596,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
             Calculate = calculate;
         }
 
-        public ResponceResult Verification()
+        public QueryResponse Verification()
         {
-            ResponceResult result = new ResponceResult();
+            QueryResponse result = new QueryResponse();
             string postfix = string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
             var t = Value;
             if (!Value.HasValue)

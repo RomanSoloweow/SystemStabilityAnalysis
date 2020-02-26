@@ -26,7 +26,7 @@ namespace SystemStabilityAnalysis.Models
         }
     }
 
-    public class ResponceResult
+    public class QueryResponse
     {
         public Status Status { get; set; } = Status.Success;
 

@@ -18,7 +18,7 @@ namespace SystemStabilityAnalysis.Models
         {
             List<object> parameters = new List<object>();
             message = new List<string>();
-            ResponceResult resultVerification;
+            QueryResponse resultVerification;
             foreach (var parameter in ParametersWithEnter.Values)
             {
                 resultVerification = parameter.Verification();
@@ -34,7 +34,7 @@ namespace SystemStabilityAnalysis.Models
          
             List<object> parameters = new List<object>();
             message = new List<string>();
-            ResponceResult resultVerification;
+            QueryResponse resultVerification;
             foreach (var parameter in ParametersWithCalculation.Values)
             {
                 resultVerification = parameter.Verification();
@@ -50,7 +50,7 @@ namespace SystemStabilityAnalysis.Models
 
             List<object> parameters = new List<object>();
             message = new List<string>();
-            ResponceResult resultVerification;
+            QueryResponse resultVerification;
             foreach (var parameter in ParametersForAnalysis.Values)
             {
                 resultVerification = parameter.Verification();

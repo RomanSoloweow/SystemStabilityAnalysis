@@ -14,6 +14,7 @@ using System.IO;
 using System.Globalization;
 using CsvHelper;
 using HeyRed.Mime;
+using System.Text;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -49,7 +50,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object AddRestriction(string parameter = null, string condition = null, string value = null)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
             ConditionType conditionValue = ConditionType.NoCorrect;
             double Value = 0 ;
@@ -91,12 +92,15 @@ namespace SystemStabilityAnalysis.Controllers
             else 
             {               
                var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, responceResult.IsCorrect, out bool correct);
-                if(correct)
+
+                if (responceResult.IsCorrect)
                 {
-                        return result;
+                   return result;
                 }
-                else
+
+                if (!correct)
                 {
+                   
                     responceResult.AddError(String.Format("Параметр с именем \"{0}\" не найден", parameter));
                 }
                
@@ -109,7 +113,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object DeleteRestriction([FromQuery]string restrictionName = null)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
             if (string.IsNullOrEmpty(restrictionName))
             {
@@ -147,30 +151,43 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 responceResult.AddError("Файл не выбран.");
                 return responceResult.ToResult();
             }
-            
+            List<object> Restrictions = new List<object>();
             using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
             {            
-                using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture))
+                using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
                 {
 
-                    csvReader.Configuration.Delimiter = ",";
+                    csvReader.Configuration.Delimiter = ";";
                     //csvReader.Configuration.HasHeaderRecord = false;
                     try
                     {
-                       foreach(var restriction in  csvReader.GetRecords<Restriction>().ToList())
+
+                       foreach (var restriction in csvReader.GetRecords<Restriction>().ToList())
                         {
-                            var result = ParameterUniversal.AddToRestriction(restriction.ParameterName, restriction.Condition, restriction.Value,true, out bool correct);
-                            if (!correct)
+                            if (restriction.AddedToRestriction())
                             {
-                                responceResult.AddError(String.Format("Не корректный параметр {0}", restriction.ParameterName));
-                                break;
+                                responceResult.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
+                            }
+                            else
+                            {
+                                bool correct = restriction.AddToRestriction();
+                                if (correct)
+                                {
+                                    Restrictions.Add(restriction.ToResponse());
+                                }
+                                else
+                                {
+                                    responceResult.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
+
+                                    break;
+                                }
                             }
                         }
                     }
@@ -182,22 +199,24 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
+            if(!responceResult.IsCorrect)
             return responceResult.ToResult();
+
+
             //var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x=> x.ToRestriction(ConditionType.More, 0.111));
             //var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
             //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
-            //return new
-            //{
-             
-            //    Status = Status.Success.GetName(),
-            //    Restrictions = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
-            //};
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Restrictions = Restrictions
+            };
         }
 
         [HttpGet] 
         public object SaveRestrictionsToFile([FromQuery]string fileName)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
             if (string.IsNullOrEmpty(fileName))
             {
@@ -215,11 +234,13 @@ namespace SystemStabilityAnalysis.Controllers
 
 
             MemoryStream memory = new MemoryStream();
-            using (StreamWriter streamWriter = new StreamWriter(memory))
+            using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
             {
-                using (var csv = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
+                using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
                 {
-                    csv.WriteRecords(Restriction.GetRestctions());
+                    csvWriter.Configuration.Delimiter = ";";
+          
+                    csvWriter.WriteRecords(ParameterUniversal.GetRestctions());
                 }
 
             }
@@ -231,9 +252,9 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateRestrictionsBeforeSave()
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
-            if(Restriction.GetRestctions().Count<1)
+            if(ParameterUniversal.GetRestctions().Count<1)
                 responceResult.AddError("Ограничения для сохранения не добавлены");
 
             return responceResult.ToResult();

@@ -50,7 +50,7 @@ namespace SystemStabilityAnalysis.Controllers
         public object GetCalculationForChart([FromQuery]string queryString)
         {
             ParameterForCalculationChart parameterForCalculationChart = JsonConvert.DeserializeObject<ParameterForCalculationChart>(queryString);
-            ResponceResult responceResult = new ResponceResult(); 
+            QueryResponse responceResult = new QueryResponse(); 
 
             if (parameterForCalculationChart.namesSystems.Count < 1)
             {
@@ -119,7 +119,7 @@ namespace SystemStabilityAnalysis.Controllers
         {
             ParameterForCalculationDiagram parameterForCalculationDiagram = JsonConvert.DeserializeObject<ParameterForCalculationDiagram>(queryString);
 
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
 
             if (parameterForCalculationDiagram.namesSystems.Count < 1)
             {
@@ -160,40 +160,20 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
+            QueryResponse responceResult = new QueryResponse();
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                return new
-                {
-                    Message = "Файл не выбран",
-                    Status = Status.Error.GetName(),
-                };
+                responceResult.AddError("Файл не выбран");
+                
             }
-
-
-            //using (var reader = new StreamReader(file.OpenReadStream()))
-            //{
-            //    while (!sr.EndOfStream)
-            //    {
-            //    }
-            //        var record = csv.GetRecords<Foo>();
-            //    var t = record.First();
-            //}
-
-
-            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
-            return new
-            {
-
-                Status = Status.Success.GetName(),
-                Parameters = ParametersWithEnter,
-                Message = message
-            };
+            //GMIKE  здесь сделать чтение системы из файла
+            return responceResult.ToResult();
         }
 
         [HttpGet]
         public object DeleteSystem([FromQuery]string nameSystem)
         {
-            ResponceResult responceResult = new ResponceResult();
+            QueryResponse responceResult = new QueryResponse();
             if(string.IsNullOrEmpty(nameSystem))
             {
                 responceResult.AddError("Система не указана");

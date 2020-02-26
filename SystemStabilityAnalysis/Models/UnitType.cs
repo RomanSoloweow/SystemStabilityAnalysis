@@ -42,7 +42,7 @@ namespace SystemStabilityAnalysis.Helpers
 
     public static class UnitTypeExtension
     {
-        public static Dictionary<UnitType, string> Descriptions = new Dictionary<UnitType, string>()
+        public static Dictionary<UnitType, string> Designations = new Dictionary<UnitType, string>()
         {
             {UnitType.NoType, "_" },
             {UnitType.Man, "чел." },
@@ -54,9 +54,9 @@ namespace SystemStabilityAnalysis.Helpers
             {UnitType.Hour, "час" }
         };
 
-        public static string GetDescription(this UnitType parameter)
+        public static string GetDesignation(this UnitType parameter)
         {
-            if (Descriptions.TryGetValue(parameter, out string description))
+            if (Designations.TryGetValue(parameter, out string description))
             {
                 return description;
             }
@@ -69,7 +69,7 @@ namespace SystemStabilityAnalysis.Helpers
     {
         public UnitType UnitType { get; }
 
-        public string Description { get { return UnitType.GetDescription(); } }
+        public string Description { get { return UnitType.GetDesignation(); } }
 
         public Unit(UnitType unitType)
         {
