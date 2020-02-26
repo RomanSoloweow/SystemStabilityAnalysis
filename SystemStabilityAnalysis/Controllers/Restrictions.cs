@@ -295,7 +295,7 @@ namespace SystemStabilityAnalysis.Controllers
                     }
                 }
             }
-            return Restrictions;
+            return message.Count()<1;
 
         }
 
