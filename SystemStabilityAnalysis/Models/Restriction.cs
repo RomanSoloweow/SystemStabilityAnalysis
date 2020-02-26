@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CsvHelper.Configuration.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,15 @@ namespace SystemStabilityAnalysis.Models
             Condition = condition.ConditionType;
             Value = condition.Value;
         }
+        //[Name("Наименование показателя")]
+        //public string Description { get; set; }
+        //[Name("Наименование ")]
+        //public string Designation { get; set; }
+        //[Name("Единица измерения")]
+        //public string Unit { get; set; }
+        //[Name("Единица измерения")]
+        //public string Condition { get; set; }
+
         public string ParameterName { get; set; }
         public ConditionType Condition { get; set; }
         public double Value { get; set; }

@@ -89,11 +89,11 @@ namespace SystemStabilityAnalysis.Controllers
                 responceResult.AddError("Параметр для ограничения не указан");
             }
             else 
-            {
-                var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, out bool correct);
+            {               
+               var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, responceResult.IsCorrect, out bool correct);
                 if(correct)
                 {
-                    return result;
+                        return result;
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace SystemStabilityAnalysis.Controllers
                     {
                        foreach(var restriction in  csvReader.GetRecords<Restriction>().ToList())
                         {
-                            var result = ParameterUniversal.AddToRestriction(restriction.ParameterName, restriction.Condition, restriction.Value, out bool correct);
+                            var result = ParameterUniversal.AddToRestriction(restriction.ParameterName, restriction.Condition, restriction.Value,true, out bool correct);
                             if (!correct)
                             {
                                 responceResult.AddError(String.Format("Не корректный параметр {0}", restriction.ParameterName));
@@ -228,7 +228,13 @@ namespace SystemStabilityAnalysis.Controllers
             return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
-
+        [HttpGet]
+        public object ValidateRestrictionsBeforeSave()
+        {
+            ResponceResult responceResult = new ResponceResult();
+            //responceResult.AddError("Какая-то ошибка");
+            return responceResult.ToResult();
+        }
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
         //[HttpGet]

@@ -33,23 +33,26 @@ namespace SystemStabilityAnalysis.Models.Parameters
             StaticData.ConditionsForParameterWithEnter.Clear();
         }
 
-        public static object AddToRestriction(string name, ConditionType conditionType, double value, out bool correct)
+        public static object AddToRestriction(string name, ConditionType conditionType, double value, bool addToCondition, out bool correct)
         {
             correct = true;
             if (Enum.TryParse(name, out NameParameterWithEnter parameterWithEnter))
             {
                 parameterWithEnter.AddToRestrictions(conditionType, value);
-                return parameterWithEnter.ToRestriction(conditionType, value);
+                if(addToCondition)
+                    return parameterWithEnter.ToRestriction(conditionType, value);
             }
             else if (Enum.TryParse(name, out NameParameterWithCalculation parameterWithCalculation))
             {
                 parameterWithCalculation.AddToRestrictions(conditionType, value);
-                return parameterWithCalculation.ToRestriction(conditionType, value);
+                if (addToCondition)
+                    return parameterWithCalculation.ToRestriction(conditionType, value);
             }
             else if (Enum.TryParse(name, out NameParameterForAnalysis parameterForAnalysis))
             {
                 parameterForAnalysis.AddToRestrictions(conditionType, value);
-                return parameterForAnalysis.ToRestriction(conditionType, value);
+                if (addToCondition)
+                    return parameterForAnalysis.ToRestriction(conditionType, value);
             }
             correct = false;
             return null;
