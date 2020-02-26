@@ -44,7 +44,8 @@ $(".ui.button.new-system").click(newSystem);
 $(".ui.button.delete1").click(deleteSystem);
 $(".ui.button.upload-csv2").click(downloadSystem2);
 $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
-$(".rezet-zoom-diag").click(()=> window.myLine1.resetZoom());
+$(".rezet-zoom-diag").click();
+$(".download-system-1").click(downloadSystem1);
 
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
@@ -286,6 +287,9 @@ function saveFile(event){
       
       // window.URL.revokeObjectURL(url);
     }
+    else {
+      notification("Error",["Введите имя файла"],"first")
+    }
   }
 }
 
@@ -325,6 +329,9 @@ function saveFile1(event){
         
         window.URL.revokeObjectURL(url);
       
+    }
+    else {
+      notification("Error",["Введите имя файла"],"first")
     }
   }
 }
@@ -897,6 +904,9 @@ function generateReport(){
       a.click();
       window.URL.revokeObjectURL(url);
     }
+    else {
+      notification("Error",["Введите имя файла"],"first")
+    }
   }
 }
 
@@ -1005,3 +1015,4 @@ async function AJAXSubmit2 (oFormElement) {
     console.error('Error:', error);
   }
   }
+
