@@ -474,12 +474,10 @@ $(".item[data-tab='second/c'").tab({'onVisible':function(){
 
 $(".item[data-tab='third/b']").tab({'onVisible':function(){
   getSystems();
-  getParamDiagram(); 
 }});
 
 $(".item[data-tab='third/c']").tab({'onVisible':function(){
   getSystems();
-  getParamChart(); 
 }});
 
 $(".item[data-tab='third']").tab({'onVisible':function(){
@@ -577,6 +575,18 @@ function getSystems(){
   
 }
 
+$('.ui.dropdown.param-diag').dropdown({
+  onShow: function() {
+    getParamDiagram();
+  }
+ });
+
+ $('.ui.dropdown.param-chart').dropdown({
+  onShow: function() {
+    getParamChart();
+  }
+ });
+
 function getParamDiagram(){
   let currentCombobox = $(".ui.dropdown.param-diag");
   currentCombobox.find(".menu").empty();
@@ -627,8 +637,8 @@ function getParamChart(){
 function createLinearChart(){
   let params = {}
   params.namesSystems = []
-  $(".ui.systems-cb.system-chart").find(".item.active").each(function( index, element  ) {
-    params.namesSystems.push($(element).attr("data-text"))
+  $("[data-tab='third/c']").find(".ui.label.transition.visible").each(function( index, element  ) {
+    params.namesSystems.push($(element).text())
   });
   params.from = $(".linear-chart-from").val();
   params.to = $(".linear-chart-to").val();
@@ -651,8 +661,8 @@ function createLinearChart(){
 function createDiagram(){
   let params = {}
   params.namesSystems = []
-  $(".ui.systems-cb.system-diagram").find(".item.active").each(function( index, element  ) {
-    params.namesSystems.push($(element).attr("data-text"))
+  $("[data-tab='third/b']").find(".ui.label.transition.visible").each(function( index, element  ) {
+    params.namesSystems.push($(element).text())
   });
   params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
   $.ajax({
@@ -840,6 +850,7 @@ function showChart4(Result)
     datasets.push(dataset)
     //colors.push(`rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`)
   });
+  console.log(datasets)
   color = "27,110,194"
   config.data = {
       labels: Result.parameterNameX,
@@ -1149,3 +1160,13 @@ async function AJAXSubmit2 (oFormElement) {
       console.error('Error:', error);
     }
     }
+
+// function getSystemsChart {
+
+// };
+
+// function getParamsChart {
+
+// };
+
+// function getSystemGra
