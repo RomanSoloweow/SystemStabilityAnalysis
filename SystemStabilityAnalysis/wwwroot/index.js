@@ -46,6 +46,8 @@ $(".ui.button.create-diagram").click(createDiagram);
 $(".ui.button.new-system").click(newSystem);
 $(".ui.button.delete1").click(deleteSystem);
 $(".ui.button.download-system-1").click(downloadSystem1);
+$(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
+$(".rezet-zoom-diag").click(()=> window.myLine1.resetZoom());
 
 
 $('.ui.dropdown.names').change(function(){
