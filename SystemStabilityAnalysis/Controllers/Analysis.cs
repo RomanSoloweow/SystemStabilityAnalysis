@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
+using SystemStabilityAnalysis.Models.Parameters;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -22,7 +27,7 @@ namespace SystemStabilityAnalysis.Controllers
             return new
             {
                 Status = Status.Success.GetName(),
-                Systems = new List<string>() { "Система1", "Система2", "Система3", "Система4", "Система5", "Система6", "Система7" }
+                Systems = StaticData.Systems.Keys.ToList()
             };
         }
 
@@ -39,6 +44,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParametersForDiagram()
         {
+
             return new
             {
                 Status = Status.Success.GetName(),
@@ -79,36 +85,18 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 return responceResult.ToResult();
             }
-            
-
-            List<object> calculations = new List<object>();
    
-            List<object> values = new List<object>();
-            int count = 100;
-            foreach (var t in parameterForCalculationChart.namesSystems)
-            {                       
-                values.Clear();
-                for(int i = 0; i<count;i++)
-                {
-                    values.Add(new
-                    {
-                        x = random.NextDouble(),
-                        y = random.NextDouble()
-                    });
-                }
-                calculations.Add(new
-                {
-                    NameSystem = t,
-                    Values = values
-                });
-
+            List<object> calculations = new List<object>();
+            foreach (var nameSystem in parameterForCalculationChart.namesSystems)
+            {
+                calculations.Add(StaticData.Systems[nameSystem].GetCalculationsForChart(parameterForCalculationChart));
             }
 
             return new
             {
                 Status = Status.Success.GetName(),
-                ParameterNameX = "БлаБлаБла",
-                ParameterNameY = "U",
+                ParameterNameX = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName),
+                ParameterNameY = StaticData.CurrentSystems.GetParameterDesignation("U"),
                 Calculations = calculations
             };
     
@@ -129,30 +117,27 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 responceResult.AddError("Для построения диаграммы необходимо выбрать параметр");
             }
-
             if (!responceResult.IsCorrect)
             {
                 return responceResult.ToResult();
             }
 
             List<object> calculations = new List<object>();
-            Random random = new Random();
-            foreach (var t in parameterForCalculationDiagram.namesSystems)
+            foreach (var nameSystem in parameterForCalculationDiagram.namesSystems)
             {
                 calculations.Add(new 
                 {
-                    NameSystem = t,
-                    Value = random.NextDouble()
+
+                    NameSystem = nameSystem,
+                    Value = StaticData.Systems[nameSystem].GetParameterValue(parameterForCalculationDiagram.parameterName)
                 });
 
             }
-
-              
-
+            
             return new
             {
                 Status = Status.Success.GetName(),
-                ParameterName = "БлаБлаБла сюда верну имя параметра",
+                ParameterName = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName),
                 Calculations = calculations
             };
         }
@@ -164,9 +149,44 @@ namespace SystemStabilityAnalysis.Controllers
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 responceResult.AddError("Файл не выбран");
-                
+
             }
-            //GMIKE  здесь сделать чтение системы из файла
+
+            if (responceResult.IsCorrect)
+            {
+                using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
+                {
+                    using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                    {
+
+                        csvReader.Configuration.Delimiter = ";";
+                        try
+                        {
+                            List<ParameterWithEnter> parametersWithEnter = csvReader.GetRecords<ParameterWithEnter>().ToList();
+                            if (parametersWithEnter.Count != HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Count)
+                            {
+                                responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                            }
+                            else
+                            {
+                                string nameSystem = Path.GetFileNameWithoutExtension(file.FileName);
+                                SystemForAnalys systemForAnalys = new SystemForAnalys(nameSystem);
+                                foreach (var parameterWithEnter in parametersWithEnter)
+                                {
+                                    systemForAnalys.ParametersWithEnter[parameterWithEnter.TypeParameter].Value = parameterWithEnter.Value;
+                                }
+                                StaticData.Systems.Add(nameSystem, systemForAnalys);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                        }
+                    }
+                }
+            }
+
+
             return responceResult.ToResult();
         }
 
@@ -178,6 +198,8 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 responceResult.AddError("Система не указана");
             }
+
+            StaticData.Systems.Remove(nameSystem);
 
             return responceResult.ToResult();
         }

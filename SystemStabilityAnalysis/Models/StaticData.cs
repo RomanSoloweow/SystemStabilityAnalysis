@@ -26,5 +26,10 @@ namespace SystemStabilityAnalysis.Models
         public static Dictionary<NameParameterWithCalculation, Condition> ConditionsForParameterWithCalculation { get; set; } = new Dictionary<NameParameterWithCalculation, Condition>();
 
         public static Dictionary<NameParameterForAnalysis, Condition> ConditionsForParameterForAnalysis { get; set; } = new Dictionary<NameParameterForAnalysis, Condition>();
+    
+        public static void SaveCurrentSystem()
+        {
+            AddSystem(CurrentSystems);
+        }
     }
 }

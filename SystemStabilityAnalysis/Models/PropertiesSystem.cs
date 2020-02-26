@@ -19,7 +19,7 @@ namespace SystemStabilityAnalysis.Models
             U = new ParameterU(this, () => { return (ρ * f * (h.Pow(3.0))) / ((a * (q.Pow(3.0))) * (q + d)) - ((b + f) * (h.Pow(4.0))) / (a * (q.Pow(4.0)));});
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         public ParameterU U { get; set; }
 
@@ -257,7 +257,9 @@ namespace SystemStabilityAnalysis.Models
     {
         public PropertiesSystem propertiesSystem;
         public Func<double?> Calculate;
-
+        public string Name { get; set; } = "U";
+        public string Designation { get; set; } = "U";
+        public string Description { get; set; } = "Показатель неустойчивости системы";
         public ParameterU(PropertiesSystem _propertiesSystem, Func<double?> calculate)
         {
             Calculate = calculate;
@@ -268,34 +270,54 @@ namespace SystemStabilityAnalysis.Models
             get
             {
                 return VerificationDependences() ? Calculate.Invoke() : null;
-                //return ρ * f * h;
-
-                //U = (ρ×f×h〖^3〗)/ (a×q〖^3〗×(q + d))-((b + f)×h〖^4〗)/ (a×q〖^4〗)
 
             }
         }
         public string GetResult()
         {
-            if(Value.HasValue)
+            if (Value.HasValue)
             {
-                if(Value.Value>0)
+                if (Value.Value > 0)
                 {
-                    return String.Format("Cистема \"{0}\" устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.",propertiesSystem.deltaT.Value.Value.ToString());
                 }
                 else if (Value.Value == 0)
                 {
-                    return String.Format("Cистема \"{0}\" находится на пределе своей устойчивости в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема находится на пределе своей устойчивости в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
                 }
                 else
                 {
-                    return String.Format("Cистема \"{0}\" не устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема не устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
                 }
             }
             else
             {
-                return String.Format("Невозможно сделать вывод об устойчивости системы \"{0}\" т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей", propertiesSystem.Name);
+                return String.Format("Невозможно сделать вывод об устойчивости системы т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей");
             }
         }
+        //public string GetResult()
+        //{
+        //    if(Value.HasValue)
+        //    {
+        //        if(Value.Value>0)
+        //        {
+        //            return String.Format("Cистема \"{0}\" устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+        //        }
+        //        else if (Value.Value == 0)
+        //        {
+        //            return String.Format("Cистема \"{0}\" находится на пределе своей устойчивости в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+        //        }
+        //        else
+        //        {
+        //            return String.Format("Cистема \"{0}\" не устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return String.Format("Невозможно сделать вывод об устойчивости системы \"{0}\" т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей", propertiesSystem.Name);
+        //    }
+        //}
+
         public List<NameParameterForAnalysis> GetDependences()
         {
             return HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>();
@@ -305,7 +327,15 @@ namespace SystemStabilityAnalysis.Models
             return propertiesSystem.VerificationParametersForAnalysis(GetDependences());
         }
 
-
+        public object ToPair()
+        {
+            return new
+            {
+                Name = Name,
+                Description = Description,
+                Value = Value
+            };
+        }
 
     }
 }
