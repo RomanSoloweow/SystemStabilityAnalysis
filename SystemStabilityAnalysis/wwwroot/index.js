@@ -676,37 +676,12 @@ async function AJAXSubmit (oFormElement) {
   .then(response => response.json())
   .then(msg => {
     if (msg.status == "Success") {
-      $(".ui.celled.table.restructions").remove()
-      $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
-      <thead>
-        <tr>
-          <th>Наименование показателя</th>
-          <th>Обозначение</th>
-          <th>Единица измерения</th>
-          <th>Условие</th>
-          <th>Значение</th>
-          <th class="minus one wide center aligned"></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      </table>`)
-      $.each( msg.restrictions, function( key, value ) {
-        $(".ui.celled.table.restructions tbody").append(`<tr>
-        <td data-label="description" data-value=${value.description}>${value.description}</td>
-        <td data-label="name">${value.name}</td>
-        <td data-label="unit">${value.unit}</td>
-        <td data-label="condition">${value.condition}</td>
-        <td data-label="value">${value.value}</td>
-        <td data-label="button" class="center aligned" >
-          <button class="ui icon button minus">
-            <i class="minus icon"></i>
-          </button>
-        </td>
-        </tr>`)
+      $.ajax({
+        method: "GET",
+        url: "Restrictions/GetRestrictions",
+      }).done(function(msg){
+          tableWork(msg)
       });
-      $(".ui.icon.button.minus").unbind();
-      $(".ui.icon.button.minus").click(deleteFilter);
     }
     else {
       notification("Error", msg.message,"first")
@@ -823,41 +798,7 @@ async function AJAXSubmit1 (oFormElement) {
   .then(response => response.json())
   .then(msg => {
     if (msg.status == "Success") {
-      $(".tab.segment[data-tab='second/a']").find('table').remove()
-      $(".tab.segment[data-tab='second/a']").append(`
-          <table class="ui celled blue table center aligned analys">
-                <thead>
-                  <tr>
-                    <th>Наименование показателя</th>
-                    <th>Обозначение</th>
-                    <th>Единица измерения</th>
-                    <th>Значение показателя</th>
-                  </tr>
-                </thead>
-              <tbody>
-            </tbody>
-          </table>
-        `)
-      $.ajax({
-        method: "GET",
-        url: "Systems/GetParametersWithEnter",
-      }).done(function(msg){
-        if (msg.status == "Success") {
-          $.each( msg.parametersWithEnter, function( key, value ) {
-            $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
-              <td data-label="description" data-value=${value.name}>${value.description}</td>
-              <td data-label="name">${value.designation}</td>
-              <td data-label="unit">${value.unit}</td>
-              <td data-label="button" class="center aligned" >
-              <div class="ui input validate-div">
-                <input type="number" placeholder="" class="system-validate" value="${value.value}">
-              </div>
-              </td>
-              </tr>`
-            )
-          });
-        }
-      }); 
+      //метод заполнения таблицы
     }
     else {
       notification("Error", msg.message,"second")
@@ -1041,37 +982,15 @@ async function AJAXSubmit2 (oFormElement) {
     .then(response => response.json())
     .then(msg => {
       if (msg.status == "Success") {
-        if ($(".ui.celled.table.restructions").length == 0)
-          $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
-          <thead>
-            <tr>
-              <th>Наименование показателя</th>
-              <th>Обозначение</th>
-              <th>Единица измерения</th>
-              <th>Условие</th>
-              <th>Значение</th>
-              <th class="minus one wide center aligned"></th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-          </table>`)
-        $.each( msg.restrictions, function( key, value ) {
-          $(".ui.celled.table.restructions tbody").append(`<tr>
-          <td data-label="description" data-value=${value.description}>${value.description}</td>
-          <td data-label="name">${value.name}</td>
-          <td data-label="unit">${value.unit}</td>
-          <td data-label="condition">${value.condition}</td>
-          <td data-label="value">${value.value}</td>
-          <td data-label="button" class="center aligned" >
-            <button class="ui icon button minus">
-              <i class="minus icon"></i>
-            </button>
-          </td>
-          </tr>`)
+        $.ajax({
+          method: "GET",
+          url: "Restrictions/GetRestrictions",
+        }).done(function(msg){
+          if (msg.status == "Success") {
+            tableWork(msg)
+          }
         });
-        $(".ui.icon.button.minus").unbind();
-        $(".ui.icon.button.minus").click(deleteFilter);
+       
       }
       notification("Error", msg.message,"first")
       $("#FormAJAX4")[0].reset();
@@ -1082,3 +1001,38 @@ async function AJAXSubmit2 (oFormElement) {
       console.error('Error:', error);
     }
     }
+
+
+function tableWork(msg){
+  $(".ui.celled.table.restructions").remove()
+  $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
+  <thead>
+    <tr>
+      <th>Наименование показателя</th>
+      <th>Обозначение</th>
+      <th>Единица измерения</th>
+      <th>Условие</th>
+      <th>Значение</th>
+      <th class="minus one wide center aligned"></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+  </table>`)
+  $.each( msg.restrictions, function( key, value ) {
+    $(".ui.celled.table.restructions tbody").append(`<tr>
+    <td data-label="description" data-value=${value.description}>${value.description}</td>
+    <td data-label="name">${value.name}</td>
+    <td data-label="unit">${value.unit}</td>
+    <td data-label="condition">${value.condition}</td>
+    <td data-label="value">${value.value}</td>
+    <td data-label="button" class="center aligned" >
+      <button class="ui icon button minus">
+        <i class="minus icon"></i>
+      </button>
+    </td>
+    </tr>`)
+  });
+  $(".ui.icon.button.minus").unbind();
+  $(".ui.icon.button.minus").click(deleteFilter);
+}
