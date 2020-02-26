@@ -922,16 +922,17 @@ function deleteSystem(event){
   
 
   $.ajax({
-    method: "POST",
+    method: "GET",
     url: `Analysis/DeleteSystem`,
     data: {nameSystem: textElement}
   }).done(function(msg){
+    console.log(msg.status == "Success")
     if (msg.status == "Success") {
       if ($(".list.system-list1").children().length == 0)
         $(".system-segment").remove()
         $(curElement).remove()
     }
-    else (msg.status == "Error")
+    else
       notification("Error",msg.message,"third/a")
   });
 }
