@@ -1066,7 +1066,7 @@ async function AJAXSubmit2 (oFormElement) {
   });
   
   } catch (error) {
-    notification("Error", msg.message,"second")
+    notification("Error", msg.message,"third/c")
     console.error('Error:', error);
   }
   }
