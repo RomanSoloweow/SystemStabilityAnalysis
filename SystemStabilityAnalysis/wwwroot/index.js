@@ -916,20 +916,19 @@ function deleteSystem(event){
   // <div class="ui divided list system-list1">
 
   //   </div>
-  
 
   $.ajax({
     method: "GET",
     url: `Analysis/DeleteSystem`,
     data: {nameSystem: textElement}
   }).done(function(msg){
-    console.log(msg.status == "Success")
     if (msg.status == "Success") {
-      if ($(".list.system-list1").children().length == 0)
-        $(".system-segment").remove()
-        $(curElement).remove()
+        $(curElement).remove();
+        if ($(".list.system-list1").children().length == 0)
+          $(".system-segment").remove()
     }
     else
       notification("Error",msg.message,"third/a")
   });
+  
 }
