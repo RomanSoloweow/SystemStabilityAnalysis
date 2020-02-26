@@ -243,39 +243,38 @@ function clearFilters(){
 
 function saveFile(event){
   if ($(event.target).parent().parent().find(".ui.input.save-system").length == 0) {
-    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
-    element.before(`
-      <div class="ui input save-system">
-        <input type="text" placeholder="Имя">
-      </div>
-    `);
 
+    $.ajax({
+      method: "GET",
+      url: `Restrictions/ValidateRestrictionsBeforeSave`,
+    }).done(function(msg){
+      if (msg.status == "Success") {
+        element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+        element.before(`
+          <div class="ui input save-system">
+            <input type="text" placeholder="Имя">
+          </div>
+        `);
+      } 
+      else {
+        notification("Error", msg.message,"first")
+      }
+
+    });
   }
   else {
+
     filename = $(".ui.input.save-system").find("input").val();
     if (filename.length > 0) {
-      $.ajax({
-        method: "GET",
-        url: `Restrictions/ValidateRestrictionsBeforeSave`,
-      }).done(function(msg){
-          const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          // the filename you want
-          a.download = `${filename}.csv`;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-        if (msg.status == "Success") {
-         
-        } 
-        else {
-          notification("Error", msg.message,"first")
-        }
-
-      });
-
+        const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = `${filename}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
       // const url = ``;
       // const a = document.createElement('a');
       // a.style.display = 'none';
@@ -292,39 +291,39 @@ function saveFile(event){
 
 
 function saveFile1(event){
-  if ($(event.target).parent().parent().find(".ui.input.save-system1").length == 0) {
-    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
-    element.before(`
-      <div class="ui input save-system1">
-        <input type="text" placeholder="Имя">
-      </div>
-    `);
 
+  if ($(event.target).parent().parent().find(".ui.input.save-system1").length == 0) {
+    console.log($(event.target).parent().parent().find(".ui.input.save-system1").length == 0)
+    $.ajax({
+      method: "GET",
+      url: `Systems/ValidateSystemBeforeSave`,
+    }).done(function(msg){
+      if (msg.status == "Success") {
+        element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+        element.before(`
+          <div class="ui input save-system1">
+            <input type="text" placeholder="Имя">
+          </div>
+        `);
+      } 
+      else {
+        notification("Error", msg.message,"second/c")
+      }
+    });
   }
   else {
     filename = $(".ui.input.save-system1").find("input").val();
     if (filename.length > 0) {
-      $.ajax({
-        method: "GET",
-        url: `Systems/ValidateSystemBeforeSave?filename=${filename}`,
-      }).done(function(msg){
-        if (msg.status == "Success") {
-          const url = `Systems/SaveSystemToFile?filename=${filename}`;
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          // the filename you want
-          a.download = `${filename}.csv`;
-          document.body.appendChild(a);
-          a.click();
-          
-          window.URL.revokeObjectURL(url);
-        } 
-        else {
-          notification("Error", msg.message,"second/c")
-        }
-
-      });
+      const url = `Systems/SaveSystemToFile?filename=${filename}`;
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = `${filename}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
       
     }
   }
@@ -373,6 +372,9 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
           </tr>`
         )
       });
+    }
+    else {
+      notification("Error",msg.message,"second/a")
     }
   });  
 }});
@@ -658,16 +660,12 @@ function createDiagram(){
 async function AJAXSubmit (oFormElement) {
   var resultElement = oFormElement.elements.namedItem("result");
   const formData = new FormData(oFormElement);
-  try {
-  const response = await fetch(oFormElement.action, {
-    method: 'POST',
+  $.ajax({
+    method: "POST",
+    url: oFormElement.action,
     body: formData
-  })
-  .then(response => {
-    console.log(response)
-    response.text()})
-  .then(msg => {
-    if (JSON.parse(msg).status == "Success") {
+  }).done(function(msg){
+    if (msg.status == "Success") {
       $(".ui.celled.table.restructions").remove()
       $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
       <thead>
@@ -683,7 +681,7 @@ async function AJAXSubmit (oFormElement) {
       <tbody>
       </tbody>
       </table>`)
-      $.each( JSON.parse(msg).restrictions, function( key, value ) {
+      $.each( msg.restrictions, function( key, value ) {
         $(".ui.celled.table.restructions tbody").append(`<tr>
         <td data-label="description" data-value=${value.description}>${value.description}</td>
         <td data-label="name">${value.name}</td>
@@ -701,15 +699,28 @@ async function AJAXSubmit (oFormElement) {
       $(".ui.icon.button.minus").click(deleteFilter);
     }
     else {
-      notification("Error", JSON.parse(msg).message,"first")
+      notification("Error", msg.message,"first")
     }
   });
+
   
-  } catch (error) {
-    notification("Error", JSON.parse(msg).message,"first")
-    console.error('Error:', error);
-  }
-  }
+  // try {
+  // const response = await fetch(oFormElement.action, {
+  //   method: 'POST',
+  //   body: formData
+  // })
+  // .then(response => {
+  //   console.log(JSON.parse(response.text()))
+  //   response.text()})
+  // .then(msg => {
+    
+  // });
+  
+  // } catch (error) {
+  //   notification("Error", JSON.parse(error).message,"first")
+  //   console.error('Error:', error);
+  // }
+}
 
 
 function showChart3(Result)
@@ -807,6 +818,9 @@ $('#FileUpload_FormFile1').on('change', function(e) {
 async function AJAXSubmit1 (oFormElement) {
   
   const formData = new FormData(oFormElement);
+
+
+  
   try {
   const response = await fetch(oFormElement.action, {
     method: 'POST',
@@ -864,42 +878,40 @@ async function AJAXSubmit1 (oFormElement) {
 
 
 function generateReport(){
-  if ($(event.target).parent().parent().find(".ui.input.save-system2").length == 0) {
-    element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
-    element.before(`
-      <div class="ui input save-system2">
-        <input type="text" placeholder="Имя">
-      </div>
-    `);
 
-  }
-  else {
+  if ($(event.target).parent().parent().find(".ui.input.save-system2").length == 0) {
+
 
     $.ajax({
       method: "GET",
-      url: `Systems/ValidateSystemBeforeSave?filename=${filename}`,
+      url: `Systems/ValidateSystemBeforeSave`,
     }).done(function(msg){
       if (msg.status == "Success") {
-
-        filename = $(".ui.input.save-system2").find("input").val();
-        if (filename.length > 0) {
-          const url = `Systems/GenerateReport?filename=${filename}`;
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          // the filename you want
-          a.download = `${filename}.csv`;
-          document.body.appendChild(a);
-          a.click();
-          
-          window.URL.revokeObjectURL(url);
-        }
+        element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+        element.before(`
+          <div class="ui input save-system2">
+            <input type="text" placeholder="Имя">
+          </div>
+        `);
       } 
       else {
         notification("Error", msg.message,"second/c")
       }
-
     });
+  }
+  else {
+    filename = $(".ui.input.save-system2").find("input").val();
+    if (filename.length > 0) {
+      const url = `Systems/GenerateReport?filename=${filename}`;
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      // the filename you want
+      a.download = `${filename}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 }
 
