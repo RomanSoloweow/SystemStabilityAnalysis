@@ -42,7 +42,7 @@ $(".ui.button.create-linear-chart").click(createLinearChart);
 $(".ui.button.create-diagram").click(createDiagram);
 $(".ui.button.new-system").click(newSystem);
 $(".ui.button.delete1").click(deleteSystem);
-$(".ui.button.download-system-1").click(downloadSystem1);
+$(".ui.button.upload-csv2").click(downloadSystem2);
 $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click(()=> window.myLine1.resetZoom());
 
@@ -293,7 +293,7 @@ function saveFile(event){
 function saveFile1(event){
 
   if ($(event.target).parent().parent().find(".ui.input.save-system1").length == 0) {
-    console.log($(event.target).parent().parent().find(".ui.input.save-system1").length == 0)
+    
     $.ajax({
       method: "GET",
       url: `Systems/ValidateSystemBeforeSave`,
@@ -658,13 +658,15 @@ function createDiagram(){
 }
 
 async function AJAXSubmit (oFormElement) {
-  var resultElement = oFormElement.elements.namedItem("result");
+
   const formData = new FormData(oFormElement);
-  $.ajax({
-    method: "POST",
-    url: oFormElement.action,
+  try {
+  const response = await fetch(oFormElement.action, {
+    method: 'POST',
     body: formData
-  }).done(function(msg){
+  })
+  .then(response => response.json())
+  .then(msg => {
     if (msg.status == "Success") {
       $(".ui.celled.table.restructions").remove()
       $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
@@ -702,25 +704,12 @@ async function AJAXSubmit (oFormElement) {
       notification("Error", msg.message,"first")
     }
   });
-
   
-  // try {
-  // const response = await fetch(oFormElement.action, {
-  //   method: 'POST',
-  //   body: formData
-  // })
-  // .then(response => {
-  //   console.log(JSON.parse(response.text()))
-  //   response.text()})
-  // .then(msg => {
-    
-  // });
-  
-  // } catch (error) {
-  //   notification("Error", JSON.parse(error).message,"first")
-  //   console.error('Error:', error);
-  // }
-}
+  } catch (error) {
+    notification("Error", error,"first")
+    console.error('Error:', error);
+  }
+  }
 
 
 function showChart3(Result)
@@ -816,19 +805,15 @@ $('#FileUpload_FormFile1').on('change', function(e) {
 });
 
 async function AJAXSubmit1 (oFormElement) {
-  
   const formData = new FormData(oFormElement);
-
-
-  
   try {
   const response = await fetch(oFormElement.action, {
     method: 'POST',
     body: formData
   })
-  .then(response => response.text())
+  .then(response => response.json())
   .then(msg => {
-    if (JSON.parse(msg).status == "Success") {
+    if (msg.status == "Success") {
       $(".tab.segment[data-tab='second/a']").find('table').remove()
       $(".tab.segment[data-tab='second/a']").append(`
           <table class="ui celled blue table center aligned analys">
@@ -866,7 +851,7 @@ async function AJAXSubmit1 (oFormElement) {
       }); 
     }
     else {
-      notification("Error", JSON.parse(msg).message,"second")
+      notification("Error", msg.message,"second")
     }
   });
   
@@ -944,3 +929,79 @@ function deleteSystem(event){
   });
   
 }
+
+
+
+function downloadSystem2(){
+  $('#FileUpload_FormFile2').click();
+};
+
+$('#FileUpload_FormFile2').on('change', function(e) {
+  $('#upload-csv2').click();
+});
+
+async function AJAXSubmit2 (oFormElement) {
+  const formData = new FormData(oFormElement);
+  try {
+  const response = await fetch(oFormElement.action, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(msg => {
+    if (msg.status == "Success") {
+      $.ajax({
+        method: "GET",
+        url: "Analysis/GetSystems",
+      }).done(function(msg){
+        if (msg.status == "Success") {
+          // let list = $(".tab.segment[data-tab='third/a']").find(".system-list");
+          // list.empty();
+          // $.each( msg.systems, function( key, value ) {
+          //   list.append(`
+          //     <button class="ui button system-item">${value}</button>
+          //   `
+          //   )
+          // });
+          if ($(".list.system-list1").length == 0)
+          $(".segment.active[data-tab='third/a']").append(
+            `<div class="ui segment system-segment">
+            <div class="ui divided list system-list1">
+        
+            </div>
+          </div>`
+          )
+          let list = $(".tab.segment[data-tab='third/a']").find(".system-list1");
+          list.empty();
+          $.each( msg.systems, function( key, value ) {
+            list.append(`
+    
+            <div class="item">
+              <div class="right floated content">
+                <button class="circular ui icon button mini delete1">
+                  <i class="icon delete"></i>
+                </button>
+              </div>
+              <div class="content system-list-item">
+              
+                ${value}
+              </div>
+            </div>
+            `
+            )
+            $(".delete1").unbind();
+            $(".delete1").click(deleteSystem)
+          });
+        }
+      });  
+    }
+    else {
+      notification("Error", msg.message,"second")
+    }
+  });
+  
+  } catch (error) {
+    notification("Error", msg.message,"second")
+    console.error('Error:', error);
+  }
+  }

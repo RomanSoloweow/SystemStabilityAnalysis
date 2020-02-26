@@ -38,6 +38,19 @@
 <input id="upload-csv1" class="btn" type="submit" value="Upload" multiple/>
 </form>
 
+<form action="Analysis/LoadSystemFromFile" 
+  enctype="multipart/form-data" onsubmit="AJAXSubmit2(this);return false;" 
+  method="post" hidden>
+<dl>
+    <dd>
+      <input id="FileUpload_FormFile2" type="file" 
+      name="file" accept=".csv" multiple/>
+    </dd>
+</dl>
+<input id="upload-csv2" class="btn" type="submit" value="Upload" multiple/>
+</form>
+
+
 
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="first">Ограничения</a>
@@ -129,7 +142,7 @@
   </div>
   
   <div class="ui bottom attached tab segment active" data-tab="third/a">
-    <button class="ui primary button upload-csv"><i class="download icon"></i>Загрузить</button>
+    <button class="ui primary button upload-csv2"><i class="download icon"></i>Загрузить</button>
     <button class="ui primary button new-system">
       Добавить новую систему
     </button> 
