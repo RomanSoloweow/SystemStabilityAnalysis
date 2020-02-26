@@ -547,7 +547,8 @@ function validateSystem() {
       $("[data-tab='second/a']").find("table").find(`td[data-value='${value.parameterName}']`).parent().find(".validate-div").removeClass("error")
     });
     $(".message").remove()
-    notification("Error",msg.message,"second/a")
+    if (msg.hasOwnProperty('message'))
+      notification("Error",msg.message,"second/a")
 
   });
 }
