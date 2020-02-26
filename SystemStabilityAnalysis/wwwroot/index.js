@@ -258,7 +258,7 @@ function saveFile(event){
         method: "GET",
         url: `Restrictions/ValidateRestrictionsBeforeSave`,
       }).done(function(msg){
-          const url = `Systems/SaveRestrictionsToFile?filename=${filename}`;
+          const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
           const a = document.createElement('a');
           a.style.display = 'none';
           a.href = url;
@@ -266,7 +266,6 @@ function saveFile(event){
           a.download = `${filename}.csv`;
           document.body.appendChild(a);
           a.click();
-          
           window.URL.revokeObjectURL(url);
         if (msg.status == "Success") {
          
