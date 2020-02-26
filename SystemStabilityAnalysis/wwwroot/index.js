@@ -256,20 +256,19 @@ function saveFile(event){
     if (filename.length > 0) {
       $.ajax({
         method: "GET",
-        url: `Restrictions/SaveRestrictionsToFile?filename=${filename}`,
+        url: `Restrictions/ValidateRestrictionsBeforeSave`,
       }).done(function(msg){
+          const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = `${filename}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
         if (msg.status == "Success") {
-          currentCombobox.find(".menu").empty();
-          currentCombobox.dropdown('refresh')
-          $.each( msg.conditions, function( key, value ) {
-            currentCombobox.find(".menu").append(`<div class="item" 
-              data-value="${value.value}"
-              data-text="${value.name}"
-              > 
-              ${value.name} </div>
-            `)
-          });
-          currentCombobox.dropdown('refresh');
+         
         } 
         else {
           notification("Error", msg.message,"first")
@@ -664,7 +663,9 @@ async function AJAXSubmit (oFormElement) {
     method: 'POST',
     body: formData
   })
-  .then(response => response.text())
+  .then(response => {
+    console.log(response)
+    response.text()})
   .then(msg => {
     if (JSON.parse(msg).status == "Success") {
       $(".ui.celled.table.restructions").remove()
@@ -903,7 +904,6 @@ function generateReport(){
 }
 
 function deleteSystem(event){
-
   let currentButton;
   if ( $( event.target ).is( ":button" ) ) {
     currentButton =  event.target 
