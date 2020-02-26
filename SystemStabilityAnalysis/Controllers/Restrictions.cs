@@ -48,6 +48,16 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
+        public object GetRestrictions()
+        {
+            return new
+            {
+                Status = Status.Success.GetName(),
+                Restrictions = ParameterUniversal.GetRestrictions().Select(x => x.ToResponse())
+            };
+        }
+
+        [HttpGet]
         public object AddRestriction(string parameter = null, string condition = null, string value = null)
         {
             QueryResponse responceResult = new QueryResponse();
@@ -148,6 +158,68 @@ namespace SystemStabilityAnalysis.Controllers
             };
         }
 
+        //[HttpPost]
+        //public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
+        //{
+        //    QueryResponse responceResult = new QueryResponse();
+
+        //    if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
+        //    {
+        //        responceResult.AddError("Файл не выбран.");
+        //        return responceResult.ToResult();
+        //    }
+        //    if (responceResult.IsCorrect)
+        //    {
+        //        List<object> Restrictions = new List<object>();
+        //        using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
+        //        {
+        //            using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+        //            {
+
+        //                csvReader.Configuration.Delimiter = ";";
+        //                //csvReader.Configuration.HasHeaderRecord = false;
+        //                try
+        //                {
+        //                    List<Restriction> restrictions = csvReader.GetRecords<Restriction>().ToList();
+        //                    foreach (var restriction in restrictions)
+        //                    {
+
+        //                        if (restriction.AddedToRestriction())
+        //                        {
+        //                            responceResult.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
+        //                        }
+        //                        else
+        //                        {
+        //                            bool correct = restriction.AddToRestriction();
+        //                            if (correct)
+        //                            {
+        //                                Restrictions.Add(restriction.ToResponse());
+        //                            }
+        //                            else
+        //                            {
+        //                                responceResult.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
+
+        //                                break;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+        //                    return responceResult.ToResult();
+        //                }
+        //            }
+        //        }
+
+        //        if (!responceResult.IsCorrect)
+        //            return responceResult.ToResult();
+
+        //    }
+        //    return responceResult.ToResult();
+        //}
+
+
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
@@ -156,62 +228,77 @@ namespace SystemStabilityAnalysis.Controllers
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 responceResult.AddError("Файл не выбран.");
-                return responceResult.ToResult();
             }
-            List<object> Restrictions = new List<object>();
+
+            if (responceResult.IsCorrect)
+            {
+                ParameterUniversal.DeleteAllRestriction();
+
+                if (!RestrictionsFromFile(file, out List<string> message))
+                    responceResult.AddRangeError(message);
+            }
+            return responceResult.ToResult();
+        }
+
+        [HttpPost]
+        public object AddRestrictionsFromFile([FromQuery]IFormFile file)
+        {
+            QueryResponse responceResult = new QueryResponse();
+
+            if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
+            {
+                responceResult.AddError("Файл не выбран.");
+            }
+
+            if (responceResult.IsCorrect)
+            {
+                if (!RestrictionsFromFile(file, out List<string> message))
+                    responceResult.AddRangeError(message);
+            }
+            return responceResult.ToResult();
+        }
+
+        private bool RestrictionsFromFile(IFormFile file , out List<string> message)
+        {
+            message = new List<string>();
+
             using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
-            {            
+            {
                 using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
                 {
 
                     csvReader.Configuration.Delimiter = ";";
-                    //csvReader.Configuration.HasHeaderRecord = false;
                     try
                     {
-
-                       foreach (var restriction in csvReader.GetRecords<Restriction>().ToList())
+                        List<Restriction> restrictions = csvReader.GetRecords<Restriction>().ToList();
+                        foreach (var restriction in restrictions)
                         {
+
                             if (restriction.AddedToRestriction())
                             {
-                                responceResult.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
+                                message.Add(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
                             }
                             else
                             {
-                                bool correct = restriction.AddToRestriction();
-                                if (correct)
+                                if(!restriction.AddToRestriction())
                                 {
-                                    Restrictions.Add(restriction.ToResponse());
-                                }
-                                else
-                                {
-                                    responceResult.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
+                                    message.Add(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
 
                                     break;
                                 }
                             }
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
-                        return responceResult.ToResult();
-                    }                  
+                        message.Add(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                    }
                 }
             }
+            return Restrictions;
 
-            if(!responceResult.IsCorrect)
-            return responceResult.ToResult();
-
-
-            //var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x=> x.ToRestriction(ConditionType.More, 0.111));
-            //var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
-            //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToRestriction(ConditionType.More, 0.111));
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Restrictions = Restrictions
-            };
         }
+
 
         [HttpGet] 
         public object SaveRestrictionsToFile([FromQuery]string fileName)
@@ -240,7 +327,7 @@ namespace SystemStabilityAnalysis.Controllers
                 {
                     csvWriter.Configuration.Delimiter = ";";
           
-                    csvWriter.WriteRecords(ParameterUniversal.GetRestctions());
+                    csvWriter.WriteRecords(ParameterUniversal.GetRestrictions());
                 }
 
             }
@@ -254,7 +341,7 @@ namespace SystemStabilityAnalysis.Controllers
         {
             QueryResponse responceResult = new QueryResponse();
 
-            if(ParameterUniversal.GetRestctions().Count<1)
+            if(ParameterUniversal.GetRestrictions().Count<1)
                 responceResult.AddError("Ограничения для сохранения не добавлены");
 
             return responceResult.ToResult();

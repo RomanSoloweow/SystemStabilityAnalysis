@@ -76,7 +76,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         }
 
 
-        public static List<Restriction> GetRestctions()
+        public static List<Restriction> GetRestrictions()
         {
             List<Restriction> restrictions = new List<Restriction>();
 
