@@ -549,7 +549,7 @@ function validateSystem() {
 function getSystems(){
   let currentCombobox = $(".ui.dropdown.systems-cb");
   currentCombobox.find(".menu").empty();
-  currentCombobox.dropdown('clear');
+  //currentCombobox.dropdown('clear');
   $.ajax({
     method: "GET",
     url: "Analysis/GetSystems",
@@ -916,20 +916,22 @@ function deleteSystem(event){
   }
   let curElement = $(currentButton).parent().parent();
   let textElement = curElement.find(".system-list-item").html().replace(/\s/g, '');
-  $(curElement).remove()
   // <div class="ui divided list system-list1">
 
   //   </div>
-  if ($(".list.system-list1").children().length == 0)
-    $(".system-segment").remove()
+  
 
   $.ajax({
-    method: "GET",
-    url: `Systems/DeleteSystem`,
+    method: "POST",
+    url: `Analysis/DeleteSystem`,
     data: {nameSystem: textElement}
   }).done(function(msg){
-    if (msg.status == "Error")
-      notification("Error",msg.message,"second/a")
-
+    if (msg.status == "Success") {
+      if ($(".list.system-list1").children().length == 0)
+        $(".system-segment").remove()
+        $(curElement).remove()
+    }
+    else (msg.status == "Error")
+      notification("Error",msg.message,"third/a")
   });
 }
