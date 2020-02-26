@@ -25,9 +25,6 @@ $('.message .close').on('click', function() {
   $(this).closest('.message').transition('fade');
 });
 
-
-
-
 $(".ui.icon.button.plus").click(addFilter);
 $(".ui.icon.button.minus").click(deleteFilter);
 $(".ui.button.next").click(nextPage);
@@ -49,7 +46,6 @@ $(".ui.button.download-system-1").click(downloadSystem1);
 $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click(()=> window.myLine1.resetZoom());
 
-
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
     currentElement = $(".ui.dropdown.names").find(".item.active");
@@ -57,7 +53,6 @@ $('.ui.dropdown.names').change(function(){
     $('.disField').find(".unit").val(currentElement.attr("data-unit"));
   }, 1);
 });
-
 
 function nextPage(event){
   let currentSegment = $(event.target).closest('.segment')
@@ -92,7 +87,7 @@ function addFilter(){
   }).done(function(msg){
     if (msg.status == "Success") {
       if ($(".ui.celled.table.restructions").length == 0 ) {
-        $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
+        $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
         <thead>
           <tr>
             <th>Наименование показателя</th>
@@ -673,7 +668,7 @@ async function AJAXSubmit (oFormElement) {
   .then(msg => {
     if (JSON.parse(msg).status == "Success") {
       $(".ui.celled.table.restructions").remove()
-      $('.ui.form').append(`<table class="ui celled blue table center aligned restructions">
+      $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
       <thead>
         <tr>
           <th>Наименование показателя</th>

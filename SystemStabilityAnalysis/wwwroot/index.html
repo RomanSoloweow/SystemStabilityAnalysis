@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="column ui form center aligned ">
+        <div class="column ui form form1 center aligned ">
           <div class="filter">
             <div class="fields">
               <div class="six wide field">
@@ -168,72 +168,124 @@
     
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/b">
-    <div class="ui twelve column  grid relaxed padded">
+    <div class="ui  grid relaxed padded">
+      <div class="column ui form form3 center aligned">
+          <div class="fields">
+            <div class="six wide field">
+              <label>Системы</label>
+              <select multiple="" class="ui fluid dropdown systems-cb system-diagram">
+              </select>
+            </div>
+            <div class="six wide field disField">
+              <label>Параметр</label>
+              <select class="ui fluid search dropdown param-diag" >
+              </select>
+            </div>
+            <div class="field">
+              <label>&ensp;<br></label>
+              <button class="ui primary button create-diagram">
+                Построить
+              </button> 
+            </div>
+            <div class="field">
+              <label>&ensp;<br></label>
+              <button class="ui primary button rezet-zoom-diag">
+                Сбросить масштаб
+              </button> 
+            </div>
+  
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="ui twelve column  grid relaxed padded">
       <div class=" center aligned  seven wide column">
-        <label><b>Системы</b></label>
-        <select multiple="" class="ui fluid dropdown systems-cb system-diagram">
-        </select>
+        
       </div>
       <div class="center aligned five wide column">
-        <label><b>Параметр</b></label>
-        <select class="ui fluid search dropdown param-diag" >
-        </select>
+        
       </div>
 
       <div class="ui column">
-        <label>&ensp;<br></label>
-        <button class="ui primary button create-diagram">
-          Построить
-        </button> 
+       
       </div>
       <div class="  ui column">
-        <label>&ensp;<br></label>
-        <button class="ui primary button rezet-zoom-diag">
-          Сбросить масштаб
-        </button> 
+        
       </div>
-    </div>
+    </div> -->
     <div id="canvas-container" style="position: relative; height:70vh; width:95vw">
       <canvas id="diagram"></canvas>
     </div>
   </div>
   <div class="ui bottom attached tab segment" data-tab="third/c">
-    <div class="ui twelve column grid relaxed padded">
-      <div class=" center aligned four wide column">
-        <label><b>Системы</b></label>
-        <select name="skills" multiple="" class="ui fluid dropdown systems-cb system-chart">
-        </select>
-      </div>
-      <div class=" center aligned three wide column">
-        <label><b>Параметр</b></label>
-        <select class="ui fluid search dropdown param-chart" >
-        </select>
-      </div>
-      <div class=" center aligned ui input column">
-        <label><b>От</b></label>
-        <input class="linear-chart-from" type="number" placeholder="">
-      </div>
-      <div class=" center aligned ui input column">
-        <label><b>До</b></label>
-        <input class="linear-chart-to" type="number" placeholder="">
-      </div>
-      <div class=" center aligned two wide ui input column">
-        <label><b>Количество точек</b></label>
-        <input class="linear-chart-dots-count" type="number" placeholder="">
-      </div>
-      <div class=" center aligned ui column">
-        <label>&ensp;<br></label>
-        <button class="ui primary button create-linear-chart">
-          Построить
-        </button> 
-      </div>
-      <div class="  ui column">
-        <label>&ensp;<br></label>
-        <button class="ui primary button rezet-zoom-chart">
-          Сбросить масштаб
-        </button> 
+
+
+  <div class="ui  grid relaxed padded">
+    <div class="column ui form form2 center aligned">
+        <div class="fields">
+          <div class="four wide field">
+            <label>Системы</label>
+            <select name="skills" multiple="" class="ui fluid dropdown systems-cb system-chart">
+            </select>
+          </div>
+          <div class="two wide field disField">
+            <label>Параметр</label>
+            <select class="ui fluid search dropdown param-chart" >
+            </select>
+          </div>
+          <div class="two wide field disField">
+            <label>От</label>
+            <input class="linear-chart-from" type="number" placeholder="">
+          </div>
+          <div class="two wide field">
+            <label>До</label>
+            <input class="linear-chart-to" type="number" placeholder="">
+          </div>
+          <div class="two wide field">
+            <label>Количество точек</label>
+            <input class="linear-chart-dots-count" type="number" placeholder="">
+          </div>
+          <div class="field">
+            <label>&ensp;<br></label>
+            <button class="ui primary button create-linear-chart">
+              Построить
+            </button> 
+          </div>
+          <div class="field">
+            <label>&ensp;<br></label>
+            <button class="ui primary button rezet-zoom-chart">
+              Сбросить масштаб
+            </button> 
+          </div>
+
       </div>
     </div>
+  </div>
+<!-- 
+
+    <div class="ui twelve column grid relaxed padded">
+      <div class=" center aligned four wide column">
+        
+      </div>
+      <div class=" center aligned three wide column">
+        
+      </div>
+      <div class=" center aligned ui input column">
+        
+      </div>
+      <div class=" center aligned ui input column">
+        
+      </div>
+      <div class=" center aligned two wide ui input column">
+        
+      </div>
+      <div class=" center aligned ui column">
+        
+      </div>
+      <div class="  ui column">
+        
+      </div>
+    </div> -->
 
       <div id="canvas-container" style="position: relative; height:70vh; width:95vw">
         <canvas id="chart"></canvas>
