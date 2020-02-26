@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
+using HeyRed.Mime;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -110,63 +114,71 @@ namespace SystemStabilityAnalysis.Controllers
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
             QueryResponse responceResult = new QueryResponse();
-            //responceResult.AddError("Тестовая ошибка");
-
-            //return responceResult.ToResult();
-
-
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                return new
+                responceResult.AddError("Файл не выбран");
+                  
+            }
+
+            if (responceResult.IsCorrect)
+            {
+                using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
                 {
-                    Message = "Файл не выбран",
-                    Status = Status.Error.GetName(),
-                };
+                    using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                    {
+
+                        csvReader.Configuration.Delimiter = ";";
+                        try
+                        {
+                            List<ParameterWithEnter> parametersWithEnter = csvReader.GetRecords<ParameterWithEnter>().ToList();
+                            foreach (var parameterWithEnter in parametersWithEnter)
+                            {
+                                if (StaticData.CurrentSystems.ParametersWithEnter.ContainsKey(parameterWithEnter.TypeParameter))
+                                {
+                                    StaticData.CurrentSystems.ParametersWithEnter[parameterWithEnter.TypeParameter].Value = parameterWithEnter.Value;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                        }
+                    }
+                }
             }
 
 
-            //using (var reader = new StreamReader(file.OpenReadStream()))
-            //{
-            //    while (!sr.EndOfStream)
-            //    {
-            //    }
-            //        var record = csv.GetRecords<Foo>();
-            //    var t = record.First();
-            //}
-
-
-            var ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message);
-            return new
-            {
-
-                Status = Status.Success.GetName(),
-                Parameters = ParametersWithEnter,
-                Message = message
-            };
+            return responceResult.ToResult();
         }
+
 
         [HttpGet]
         public object SaveSystemToFile([FromQuery]string fileName)
         {
+
+            QueryResponse responceResult = new QueryResponse();
+
             if (string.IsNullOrEmpty(fileName))
             {
-                return new
-                {
-                    Message = "Имя файла не указано",
-                    Status = Status.Error.GetName(),
-                };
+                responceResult.AddError("Имя файла не указано");
+                return responceResult.ToResult();
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            string filePath = Path.ChangeExtension(fileName, ".csv");
+
+            MemoryStream memory = new MemoryStream();
+            using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
             {
-                stream.CopyTo(memory);
+                using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
+                {
+                    csvWriter.Configuration.Delimiter = ";";
+
+                    csvWriter.WriteRecords(StaticData.CurrentSystems.ParametersWithEnter.Values);
+                }
+
             }
-            //FileExtensionContentTypeProvider.tr
-            //GetMimeMapping
-            memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension(fileName, ".csv"));
+
+            return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
         [HttpGet]
@@ -188,7 +200,10 @@ namespace SystemStabilityAnalysis.Controllers
         public object ValidateSystemBeforeSave()
         {
             QueryResponse responceResult = new QueryResponse();
-            responceResult.AddError("Какая-то ошибка");
+            if(!StaticData.CurrentSystems.U.Value.HasValue)
+            {
+                responceResult.AddError("Невозможно сохранить систему т.к. данные некорректны");
+            }
            return responceResult.ToResult();
         }
 

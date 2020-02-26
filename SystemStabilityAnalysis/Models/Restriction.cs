@@ -65,12 +65,6 @@ namespace SystemStabilityAnalysis.Models
         {
 
         }
-        //public Restriction(string parameterName, ConditionType condition, double value)
-        //{
-        //    ParameterName = parameterName;
-        //    Condition = condition;
-        //    Value = value;
-        //}
 
         public Restriction(NameParameterWithEnter parameter, Condition condition)
         {
@@ -90,6 +84,7 @@ namespace SystemStabilityAnalysis.Models
             ConditionType = condition.ConditionType;
             Value = condition.Value;
         }
+
         [Name("Наименование показателя")]
         public string Description 
         { 
@@ -97,6 +92,7 @@ namespace SystemStabilityAnalysis.Models
             set { }
         
         }
+
         [Name("Обозначение")]
         public string Designation 
         { 

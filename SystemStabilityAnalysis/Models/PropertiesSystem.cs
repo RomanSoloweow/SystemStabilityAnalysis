@@ -282,7 +282,7 @@ namespace SystemStabilityAnalysis.Models
                 {
                     return String.Format("Cистема \"{0}\" устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
                 }
-                else if (Value.Value < 0)
+                else if (Value.Value == 0)
                 {
                     return String.Format("Cистема \"{0}\" находится на пределе своей устойчивости в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
                 }

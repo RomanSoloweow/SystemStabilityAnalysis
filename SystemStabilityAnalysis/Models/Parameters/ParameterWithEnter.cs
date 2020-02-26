@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CsvHelper.Configuration.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -491,26 +492,37 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
     public class ParameterWithEnter
     {
-        public PropertiesSystem propertiesSystem;
-
-        public string Name { get { return  TypeParameter.GetName(); } }
-
+        [Name("Наименование показателя")]
         public string Description { get { return TypeParameter.GetDescription(); } }
 
-        public string Designation { get { return TypeParameter.GetDesignation(); } }
+        [Name("Обозначение")]       
+        public string Designation { get { return TypeParameter.GetDesignation(); }set { SetParameterType(value); } }
 
-        public Unit Unit { get; }
+        [Name("Единица измерения")]
+        public string Unit {get {return UnitType.GetDesignation();}}
 
-        public NameParameterWithEnter TypeParameter { get; }
-
+        [Name("Значение")]
         public double? Value { get; set; }
 
+        //[Ignore]
+        //public string Name { get { return TypeParameter.GetName(); } }
+
+        [Ignore]
+        public PropertiesSystem propertiesSystem;
+
+        [Ignore]
+        public UnitType UnitType { get { return TypeParameter.GetUnit(); } }
+
+        [Ignore]
+        public NameParameterWithEnter TypeParameter { get; set; }
+        public ParameterWithEnter()
+        {
+
+        }
         public ParameterWithEnter(PropertiesSystem _propertiesSystem, NameParameterWithEnter parameter)
         {
             TypeParameter = parameter;
         
-            Unit = new Unit(TypeParameter.GetUnit());
-
             propertiesSystem = _propertiesSystem;
 
             _propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
@@ -568,6 +580,17 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return Value.HasValue ? (double?)Math.Pow(Value.Value, y) : null;
         }
+
+        public void SetParameterType(string designation)
+        {
+
+            TypeParameter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().SingleOrDefault(x => x.GetDesignation() == designation);
+            if (!HelperEnum.IsDefault(TypeParameter))
+                return;
+
+            throw new ArgumentException(paramName: designation, message: "Неккоректное описание");
+        }
+
         public static double? operator +(ParameterWithEnter c1, double? c2)
         {
             return c1.Value+ c2;

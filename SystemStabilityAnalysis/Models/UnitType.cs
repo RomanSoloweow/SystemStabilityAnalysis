@@ -65,18 +65,18 @@ namespace SystemStabilityAnalysis.Helpers
         }
     }
 
-    public class Unit
-    {
-        public UnitType UnitType { get; }
+    //public class Unit
+    //{
+    //    public UnitType UnitType { get; }
 
-        public string Description { get { return UnitType.GetDesignation(); } }
+    //    public string Description { get { return UnitType.GetDesignation(); } }
 
-        public Unit(UnitType unitType)
-        {
-            UnitType = unitType;
+    //    public Unit(UnitType unitType)
+    //    {
+    //        UnitType = unitType;
 
-        }
+    //    }
 
-    }
+    //}
 
 }

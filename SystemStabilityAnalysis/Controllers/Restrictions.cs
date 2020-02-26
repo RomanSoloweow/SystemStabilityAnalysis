@@ -258,6 +258,7 @@ namespace SystemStabilityAnalysis.Controllers
             return responceResult.ToResult();
         }
 
+
         private bool RestrictionsFromFile(IFormFile file , out List<string> message)
         {
             message = new List<string>();
@@ -313,13 +314,6 @@ namespace SystemStabilityAnalysis.Controllers
 
             string filePath = Path.ChangeExtension(fileName, ".csv");
 
-
-            //using (var stream = new FileStream(path, FileMode.Open))
-            //{
-            //    stream.CopyTo(memory);
-            //}
-
-
             MemoryStream memory = new MemoryStream();
             using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
             {
@@ -332,7 +326,6 @@ namespace SystemStabilityAnalysis.Controllers
 
             }
 
-            //memory.Position = 0;
             return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
@@ -347,63 +340,5 @@ namespace SystemStabilityAnalysis.Controllers
             return responceResult.ToResult();
         }
 
-        //[HttpGet("{parameter}/{condition}/{value}")]
-        //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
-        //[HttpGet]
-        //public object AddRestriction([FromQuery]NameParameterWithEnter parameter, [FromQuery]ConditionType condition, [FromQuery]double value)
-        //{
-        //    Status status = Status.Success;
-
-        //    List<string> Message = new List<string>();
-
-        //    if (HelperEnum.IsDefault(parameter))
-        //    {
-        //        Message.Add("Параметр указано некорректно");
-        //        status = Status.Error;
-        //    }
-
-        //    if (HelperEnum.IsDefault(condition))
-        //    {
-        //        Message.Add("Условие указано некорректно");
-        //        status = Status.Error;
-        //    }
-        //    if (!(value > 0))
-        //    {
-        //        Message.Add("Значение параметра должно быть > 0");
-        //        status = Status.Error;
-        //    }
-
-        //    if (status == Status.Error)
-        //    {
-        //        return new
-        //        {
-        //            Status = status.GetName(),
-        //            Message = Message
-        //        };
-        //    }
-        //    StaticData.Conditions.Add(parameter, new Condition(condition, value));
-
-        //    return new
-        //    {
-        //        Status = status.GetName(),
-        //        Name = parameter.GetDesignation(),
-        //        Description = parameter.GetDescription(),
-        //        Unit = parameter.GetUnit().GetDescription(),
-        //        Condition = condition.GetDesignation(),
-        //        Value = value,
-        //        RestrictionName = parameter.GetName()
-        //    };
-        //}
-
-        //[HttpGet]
-        //public IActionResult GetBlobDownload()
-        //{
-        //    var net = new System.Net.WebClient();
-        //    var data = net.DownloadData("test");
-        //    var content = new System.IO.MemoryStream(data);
-        //    var contentType = "APPLICATION/octet-stream";
-        //    var fileName = "something.bin";
-        //    return File(content, contentType, fileName);
-        //}
     }
 }

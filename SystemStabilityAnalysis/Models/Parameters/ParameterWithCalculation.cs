@@ -577,7 +577,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public string Designation { get { return TypeParameter.GetDesignation(); } }
 
-        public Unit Unit { get; }
+        public UnitType UnitType { get { return TypeParameter.GetUnit(); } }
 
         public NameParameterWithCalculation TypeParameter { get; }
 
@@ -588,7 +588,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public ParameterWithCalculation(PropertiesSystem _propertiesSystem, NameParameterWithCalculation parameter, Func<double?> calculate)
         {
             TypeParameter = parameter;
-            Unit = new Unit(TypeParameter.GetUnit());
 
             propertiesSystem = _propertiesSystem;
             _propertiesSystem.ParametersWithCalculation.Add(TypeParameter, this);
