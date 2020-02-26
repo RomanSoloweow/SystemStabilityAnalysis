@@ -232,9 +232,13 @@ namespace SystemStabilityAnalysis.Controllers
         public object ValidateRestrictionsBeforeSave()
         {
             ResponceResult responceResult = new ResponceResult();
-            //responceResult.AddError("Какая-то ошибка");
+
+            if(Restriction.GetRestctions().Count<1)
+                responceResult.AddError("Ограничения для сохранения не добавлены");
+
             return responceResult.ToResult();
         }
+
         //[HttpGet("{parameter}/{condition}/{value}")]
         //public object AddRestriction(NameParameterWithRestriction parameter, ConditionType condition, double value)
         //[HttpGet]
