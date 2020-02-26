@@ -46,6 +46,7 @@ $(".ui.button.upload-csv2").click(downloadSystem2);
 $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click();
 $(".download-system-1").click(downloadSystem1);
+$(".ui.button.upload-csv4").click(uploadCsv4);
 
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
@@ -1019,3 +1020,65 @@ async function AJAXSubmit2 (oFormElement) {
   }
   }
 
+
+
+  $('#FileUpload_FormFile4').on('change', function(e) {
+    $('#upload-csv4').click();
+  });
+  
+  function uploadCsv4(){
+    $('#FileUpload_FormFile4').click();
+  }
+
+
+  async function AJAXSubmit4 (oFormElement) {
+    const formData = new FormData(oFormElement);
+    try {
+    const response = await fetch(oFormElement.action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(msg => {
+      if (msg.status == "Success") {
+        if ($(".ui.celled.table.restructions").length == 0)
+          $('.ui.form.form1').append(`<table class="ui celled blue table center aligned restructions">
+          <thead>
+            <tr>
+              <th>Наименование показателя</th>
+              <th>Обозначение</th>
+              <th>Единица измерения</th>
+              <th>Условие</th>
+              <th>Значение</th>
+              <th class="minus one wide center aligned"></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          </table>`)
+        $.each( msg.restrictions, function( key, value ) {
+          $(".ui.celled.table.restructions tbody").append(`<tr>
+          <td data-label="description" data-value=${value.description}>${value.description}</td>
+          <td data-label="name">${value.name}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="condition">${value.condition}</td>
+          <td data-label="value">${value.value}</td>
+          <td data-label="button" class="center aligned" >
+            <button class="ui icon button minus">
+              <i class="minus icon"></i>
+            </button>
+          </td>
+          </tr>`)
+        });
+        $(".ui.icon.button.minus").unbind();
+        $(".ui.icon.button.minus").click(deleteFilter);
+      }
+      notification("Error", msg.message,"first")
+      $("#FormAJAX4")[0].reset();
+    });
+    
+    } catch (error) {
+      notification("Error", msg.message,"second")
+      console.error('Error:', error);
+    }
+    }

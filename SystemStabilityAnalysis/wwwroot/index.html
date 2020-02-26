@@ -51,6 +51,18 @@
 </form>
 
 
+<form action="Restrictions/AddRestrictionsFromFile" 
+  enctype="multipart/form-data" onsubmit="AJAXSubmit4(this);return false;" 
+  method="post" id="FormAJAX2" hidden>
+<dl>
+    <dd>
+      <input id="FileUpload_FormFile4" type="file" 
+      name="file" accept=".csv" multiple/>
+    </dd>
+</dl>
+<input id="upload-csv4" class="btn" type="submit" value="Upload" multiple/>
+</form>
+
 
   <div class="ui top attached tabular menu">
     <a class="active item" data-tab="first">Ограничения</a>
@@ -63,7 +75,8 @@
       <div class="row">
         <div class="column">
           <button class="ui button primary save-system"><i class="save icon"></i>Сохранить</button>
-          <button class="ui button primary upload-csv"><i class="download icon"></i>Загрузить</button>
+          <button class="ui button primary upload-csv"><i class="download icon"></i>Загрузить из файла</button>
+          <button class="ui button primary upload-csv4"><i class="download icon"></i>Добавить из файла</button>
           <button class="ui button primary next">Дальше<i class="arrow right icon"></i></button>
         </div>
       </div>
