@@ -710,6 +710,7 @@ async function AJAXSubmit (oFormElement) {
     else {
       notification("Error", msg.message,"first")
     }
+    $("#FormAJAX")[0].reset();
   });
   
   } catch (error) {
@@ -860,6 +861,7 @@ async function AJAXSubmit1 (oFormElement) {
     else {
       notification("Error", msg.message,"second")
     }
+    $("#FormAJAX1")[0].reset();
   });
   
   } catch (error) {
@@ -1008,6 +1010,7 @@ async function AJAXSubmit2 (oFormElement) {
     else {
       notification("Error", msg.message,"second")
     }
+    $("#FormAJAX2")[0].reset();
   });
   
   } catch (error) {
