@@ -345,7 +345,7 @@ function uploadCsv(){
   $('#FileUpload_FormFile').click();
 }
 
-$(".item[data-tab='second'").tab({'onVisible':function(){
+$(".item[data-tab='second']").tab({'onVisible':function(){
 
   $(".tab.segment[data-tab='second/a']").find('table').remove()
   $(".tab.segment[data-tab='second/a']").append(`
@@ -387,7 +387,7 @@ $(".item[data-tab='second'").tab({'onVisible':function(){
   });  
 }});
 
-$(".item[data-tab='second/b'").tab({'onVisible':function(){
+$(".item[data-tab='second/b']").tab({'onVisible':function(){
   $(".tab.segment[data-tab='second/b']").find('table').remove()
   $(".tab.segment[data-tab='second/b']").append(`
       <table class="ui celled blue table center aligned analys">
@@ -425,7 +425,7 @@ $(".item[data-tab='second/b'").tab({'onVisible':function(){
 }});
 
 
-$(".item[data-tab='second/c'").tab({'onVisible':function(){
+$(".item[data-tab='second/c']").tab({'onVisible':function(){
   $(".tab.segment[data-tab='second/c']").find('table').remove();
   $(".tab.segment[data-tab='second/c']").append(`
       <table class="ui celled blue table center aligned analys">
