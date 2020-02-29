@@ -28,19 +28,20 @@ namespace SystemStabilityAnalysis.Models.Parameters
         }
         public static void DeleteAllRestriction()
         {
-            StaticData.ConditionsForParameterWithCalculation.Clear();
-            StaticData.ConditionsForParameterForAnalysis.Clear();
-            StaticData.ConditionsForParameterWithEnter.Clear();
+            NameParameterWithEnter.NoCorrect.DeleteAllRestrictions();
+            NameParameterWithCalculation.NoCorrect.DeleteAllRestrictions();
+            NameParameterForAnalysis.NoCorrect.DeleteAllRestrictions();
         }
 
         public static object AddToRestriction(string name, ConditionType conditionType, double value, bool addToCondition, out bool correct)
         {
+            string message;
             correct = true;
             if (Enum.TryParse(name, out NameParameterWithEnter parameterWithEnter))
             {
                 if ((addToCondition)&&(!parameterWithEnter.AddedToRestrictions()))
                 {
-                    parameterWithEnter.AddToRestrictions(conditionType, value);
+                    parameterWithEnter.AddToRestrictions(conditionType, value);                    
                     return parameterWithEnter.ToRestriction(conditionType, value);                
                 }
             }
@@ -50,7 +51,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 {
                     if ((addToCondition) && (!parameterWithEnter.AddedToRestrictions()))
                     {
-                        parameterWithCalculation.AddToRestrictions(conditionType, value);
+                        parameterWithCalculation.AddToRestrictions(conditionType, value);                       
                         return parameterWithCalculation.ToRestriction(conditionType, value);
                     }
                 }
@@ -61,7 +62,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 {
                     if ((addToCondition) && (!parameterWithEnter.AddedToRestrictions()))
                     {
-                        parameterForAnalysis.AddToRestrictions(conditionType, value);
+                        parameterForAnalysis.AddToRestrictions(conditionType, value);                       
                         return parameterForAnalysis.ToRestriction(conditionType, value);
                     }
                 }
@@ -83,6 +84,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             foreach (var condition in StaticData.ConditionsForParameterWithEnter)
             {
                 restrictions.Add(new Restriction(condition.Key, condition.Value));
+
             }
 
             foreach (var condition in StaticData.ConditionsForParameterWithCalculation)

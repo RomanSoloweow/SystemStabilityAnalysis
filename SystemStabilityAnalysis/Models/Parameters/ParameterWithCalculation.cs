@@ -495,7 +495,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
         }
 
         public static bool AddedToRestrictions(this NameParameterWithCalculation parameter)
-        {
+        {           
             return StaticData.ConditionsForParameterWithCalculation.Keys.Contains(parameter);
         }
 
@@ -510,8 +510,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
         //    return false;
         //}
         public static void AddToRestrictions(this NameParameterWithCalculation parameter, ConditionType conditionType, double value)
-        {
+        {           
             StaticData.ConditionsForParameterWithCalculation.Add(parameter, new Condition(conditionType, value));
+            parameter.VerificateParameterForCurrentSystem();
         }
 
         public static bool DeleteFromRestrictions(this NameParameterWithCalculation parameter)
@@ -520,13 +521,20 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 return false;
 
             StaticData.ConditionsForParameterWithCalculation.Remove(parameter);
-
+            parameter.VerificateParameterForCurrentSystem();
             return true;
+        }
+        private static void VerificateParameterForCurrentSystem(this NameParameterWithCalculation parameter)
+        {
+            StaticData.CurrentSystems.ParametersWithCalculation[parameter].Verification(out string message);
         }
 
         public static void DeleteAllRestrictions(this NameParameterWithCalculation parameter)
         {
-            StaticData.ConditionsForParameterWithCalculation.Clear();
+            foreach (var parameterWithCalculation in StaticData.ConditionsForParameterWithCalculation.Keys)
+            {
+                parameterWithCalculation.DeleteFromRestrictions();
+            }
         }
 
         public static object ToRestriction(this NameParameterWithCalculation parameter, ConditionType conditionType, double value)

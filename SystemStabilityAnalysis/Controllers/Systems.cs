@@ -110,6 +110,9 @@ namespace SystemStabilityAnalysis.Controllers
 
             if (responceResult.IsCorrect)
             {
+                //bool resultVerification;
+                //string message;
+                //List<string> messages = new List<string>();
                 using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
                 {
                     using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
@@ -122,6 +125,9 @@ namespace SystemStabilityAnalysis.Controllers
                             foreach (var parameterWithEnter in parametersWithEnter)
                             {
                                StaticData.CurrentSystems.ParametersWithEnter[parameterWithEnter.TypeParameter].Value = parameterWithEnter.Value;
+                                //resultVerification = StaticData.CurrentSystems.ParametersWithEnter[parameterWithEnter.TypeParameter].Verification(out message);
+                                //if (!resultVerification)
+                                //    messages.Add(message);
                             }
                         }
                         catch (Exception ex)
@@ -130,6 +136,7 @@ namespace SystemStabilityAnalysis.Controllers
                         }
                     }
                 }
+                //responceResult.AddRangeErrorWithIfNotEmpty(messages);
             }
 
 

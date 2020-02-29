@@ -130,8 +130,13 @@ namespace SystemStabilityAnalysis.Models.Parameters
         }
 
         public static void AddToRestrictions(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
-        {
+        {          
             StaticData.ConditionsForParameterForAnalysis.Add(parameter, new Condition(conditionType, value));
+            parameter.VerificateParameterForCurrentSystem();
+        }
+        private static void VerificateParameterForCurrentSystem(this NameParameterForAnalysis parameter)
+        {
+            StaticData.CurrentSystems.ParametersForAnalysis[parameter].Verification(out string message);
         }
         //public static bool AddToRestrictions(this NameParameterForAnalysis parameter, ConditionType conditionType, double value, out string message)
         //{
@@ -151,13 +156,16 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 return false;
 
             StaticData.ConditionsForParameterForAnalysis.Remove(parameter);
-
+            parameter.VerificateParameterForCurrentSystem();
             return true;
         }
 
         public static void DeleteAllRestrictions(this NameParameterForAnalysis parameter)
         {
-            StaticData.ConditionsForParameterForAnalysis.Clear();
+            foreach (var parameterForAnalysis in StaticData.ConditionsForParameterForAnalysis.Keys)
+            {
+                parameterForAnalysis.DeleteFromRestrictions();
+            }
         }
 
         public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)

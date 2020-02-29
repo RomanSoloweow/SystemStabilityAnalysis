@@ -161,12 +161,18 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public static bool AddedToRestrictions(this NameParameterWithEnter parameter)
         {
+            
             return StaticData.ConditionsForParameterWithEnter.Keys.Contains(parameter);
         }
 
         public static void AddToRestrictions(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
-        {
+        {           
             StaticData.ConditionsForParameterWithEnter.Add(parameter, new Condition(conditionType, value));
+            parameter.VerificateParameterForCurrentSystem();
+        }
+        private static void VerificateParameterForCurrentSystem(this NameParameterWithEnter parameter)
+        {
+            StaticData.CurrentSystems.ParametersWithEnter[parameter].Verification(out string message);
         }
         public static bool DeleteFromRestrictions(this NameParameterWithEnter parameter)
         {
@@ -174,7 +180,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 return false;
 
             StaticData.ConditionsForParameterWithEnter.Remove(parameter);
-
+            parameter.VerificateParameterForCurrentSystem();
             return true;
         }
         public static object ToParameter(this NameParameterWithEnter parameter, double? value, bool correct)
@@ -192,7 +198,10 @@ namespace SystemStabilityAnalysis.Models.Parameters
         }
         public static void DeleteAllRestrictions(this NameParameterWithEnter parameter)
         {
-            StaticData.ConditionsForParameterWithEnter.Clear();
+            foreach(var parameterWithEnter in StaticData.ConditionsForParameterWithEnter.Keys)
+            {
+                parameterWithEnter.DeleteFromRestrictions();
+            }
         }
 
         public static object ToRestriction(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
