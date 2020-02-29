@@ -345,7 +345,7 @@ function uploadCsv(){
   $('#FileUpload_FormFile').click();
 }
 
-$(".item[data-tab='second']").tab({'onVisible':function(){
+$(".item[data-tab='second/a']").tab({'onVisible':function(){
 
   $(".tab.segment[data-tab='second/a']").find('table').remove()
   $(".tab.segment[data-tab='second/a']").append(`
