@@ -214,7 +214,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public NameParameterForAnalysis TypeParameter { get; }
 
-        public double? Value { get { return VerificationDependences() ? Calculate.Invoke() : null; } }
+        public bool isCorrect { get; set; }
+
+        public double? Value { get { return isCorrect ? Calculate.Invoke() : null; } }
 
 
         public Func<double?> Calculate;
@@ -228,35 +230,33 @@ namespace SystemStabilityAnalysis.Models.Parameters
             Calculate = calculate;
         }
 
-        public QueryResponse Verification()
+        public bool Verification(out string message)
         {
-            QueryResponse result = new QueryResponse();
-           string postfix =  string.Format("Проверьте правильность полей: {0}", string.Join(',', TypeParameter.GetDependences().Select(x => x.GetDesignation())));
+            message = "";
+            isCorrect = propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependences(), out List<string> messages);
+            string postfix =  string.Format("Проверьте правильность полей: {0}", string.Join(',', messages));
             if (!Value.HasValue)
             {
-                result.AddError(String.Format("Не удалось расчитать значение параметра {0}. {1}", Designation, postfix));
+                message = String.Format("Не удалось расчитать значение параметра {0}. {1}", Designation, postfix);
+                isCorrect = false;
             }
             else
             {
                 if (Value.Value < 0)
                 {
-                    result.AddError(String.Format("Значение параметра {0} должно быть > 0. {1}", Designation, postfix));
+                    message = String.Format("Значение параметра {0} должно быть > 0. {1}", Designation, postfix);
+                    isCorrect = false;
                 }
                 else if (StaticData.ConditionsForParameterForAnalysis.TryGetValue(this.TypeParameter, out Condition condition))
                 {
                     if (!condition.InvokeComparison(Value.Value))
                     {
-                        result.AddError(String.Format("Значение параметра {0} должно быть {1}. {2}",Designation, condition.ErrorMessage,postfix));
+                        message = String.Format("Значение параметра {0} должно быть {1}. {2}", Designation, condition.ErrorMessage, postfix);
+                        isCorrect = false;
                     }
                 }
-            }
-            
-            return result;
-        }
-
-        public bool VerificationDependences()
-        {
-            return propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependences());
+            }        
+            return isCorrect;
         }
 
         public double? Pow(double y)

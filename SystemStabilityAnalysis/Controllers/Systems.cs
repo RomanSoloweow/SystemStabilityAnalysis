@@ -66,35 +66,34 @@ namespace SystemStabilityAnalysis.Controllers
             var Parameters = JsonConvert.DeserializeObject<List<ParameterForValidate>>(validateArr);
 
             List<object> parametersCorrect = new List<object>();
-            List<string> message = new List<string>();
-            QueryResponse resultVerification;
-            foreach(var parameter in Parameters)
+            List<string> messages = new List<string>();
+            bool resultVerification;
+            string message;
+            foreach (var parameter in Parameters)
             {
                 if(StaticData.CurrentSystems.ParametersWithEnter.TryGetValue(parameter.parameterName, out ParameterWithEnter parameterWithEnter))
                 {
                     parameterWithEnter.Value = parameter.value;
-                    resultVerification = parameterWithEnter.Verification();
+                    resultVerification = parameterWithEnter.Verification(out message);
 
-                    if (!resultVerification.IsCorrect)
-                        message.AddRange(resultVerification.ErrorMessages);
+                    if (!resultVerification)
+                        messages.Add(message);
 
                     parametersCorrect.Add(new
                     {
                         parameterName = parameter.parameterName.GetName(),
-                        Correct = resultVerification.IsCorrect
+                        Correct = resultVerification
                     });
 
 
                 }
             }
            
-            //string json = JsonSerializer.Serialize<Param>(new Param());
-            //List <Param> t = JsonSerializer.Deserialize<List<Param>>(()validateArr);
             return new
             {
                 Status = Status.Success.ToString(),
                 parametersCorrect = parametersCorrect,
-                Message = message
+                Message = messages
             };
 
        

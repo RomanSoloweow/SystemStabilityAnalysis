@@ -168,17 +168,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             StaticData.ConditionsForParameterWithEnter.Add(parameter, new Condition(conditionType, value));
         }
-
-        //public static bool AddToRestrictions(this NameParameterWithEnter parameter, ConditionType conditionType, double value, out string message)
-        //{
-        //    message = null;
-        //    if (!StaticData.ConditionsForParameterWithEnter.TryAdd(parameter, new Condition(conditionType, value)))
-        //    {
-        //        message = string.Format("Ограничение для параметра {0} уже добавлено", parameter.GetDesignation());
-        //        return false;
-        //    }
-        //    return false;
-        //}
         public static bool DeleteFromRestrictions(this NameParameterWithEnter parameter)
         {
             if (!StaticData.ConditionsForParameterWithEnter.ContainsKey(parameter))
@@ -248,9 +237,24 @@ namespace SystemStabilityAnalysis.Models.Parameters
         [Name("Единица измерения")]
         public string Unit {get {return UnitType.GetDesignation();}}
 
+        
         [Name("Значение")]
-        public double? Value { get; set; }
+        public double? Value 
+        { 
+            get 
+            {
+                return _value;
+            }
+            set 
+            {
+                isCorrect = false; _value = value;
+            } 
+        }
 
+        [Ignore]
+        private double? _value;
+        [Ignore]
+        public bool isCorrect { get; set; }
         //[Ignore]
         //public string Name { get { return TypeParameter.GetName(); } }
 
@@ -262,6 +266,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         [Ignore]
         public NameParameterWithEnter TypeParameter { get; set; }
+
         public ParameterWithEnter()
         {
 
@@ -275,53 +280,56 @@ namespace SystemStabilityAnalysis.Models.Parameters
             _propertiesSystem.ParametersWithEnter.Add(TypeParameter, this);
         }
 
-        public QueryResponse Verification()
+        public bool Verification(out string message)
         {
-            QueryResponse result = new QueryResponse();
+            isCorrect = true;
+            message = "";
             if (!Value.HasValue)
             {
-                result.AddError(String.Format("Значение параметра {0} не указано", Designation));
-                
+                message = String.Format("Значение параметра {0} не указано", Designation);
+                isCorrect = false;
             }
             else
             {
                 if(Value.Value<0)
                 {
-                    result.AddError(String.Format("Значение параметра {0} должно быть > 0", Designation));
+                    message = String.Format("Значение параметра {0} должно быть > 0", Designation);
+                    isCorrect = false;
                 }
                 else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
                 {
                     if (!condition.InvokeComparison(Value.Value))
                     {
-                        result.AddError(String.Format("Значение параметра {0} должно быть {1}.", Designation, condition.ErrorMessage));
+                        message = String.Format("Значение параметра {0} должно быть {1}.", Designation, condition.ErrorMessage);
+                        isCorrect = false;
                     }
                 }
             }
-            return result;
+            return isCorrect;
         }
 
-        public bool EazyVerification()
-        {
-            if (!Value.HasValue)
-            {
-                return false;
-            }
-            else
-            {
-                if (Value.Value < 0)
-                {
-                    return false;
-                }
-                else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
-                {
-                    if (!condition.InvokeComparison(Value.Value))
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+        //public bool EazyVerification()
+        //{
+        //    if (!Value.HasValue)
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        if (Value.Value < 0)
+        //        {
+        //            return false;
+        //        }
+        //        else if (StaticData.ConditionsForParameterWithEnter.TryGetValue(this.TypeParameter, out Condition condition))
+        //        {
+        //            if (!condition.InvokeComparison(Value.Value))
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
 
         public double? Pow(double y)
         {

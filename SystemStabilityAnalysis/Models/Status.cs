@@ -48,6 +48,11 @@ namespace SystemStabilityAnalysis.Models
             SetNotCorrect();
             ErrorMessages.AddRange(errors);
         }
+        public void AddRangeErrorWithIfNotEmpty(List<string> errors)
+        {
+            if ((errors!=null)&&(errors.Count > 0))
+                AddRangeError(errors);
+        }
         public bool IsCorrect { get { return Status == Status.Success; } }
 
         public object ToResult()

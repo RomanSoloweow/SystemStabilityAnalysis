@@ -22,49 +22,61 @@ namespace SystemStabilityAnalysis.Models
 
     
 
-        public List<object> GetParametersWithEnter(out List<string> message)
+        public List<object> GetParametersWithEnter(out List<string> messages)
         {
             List<object> parameters = new List<object>();
-            message = new List<string>();
-            QueryResponse resultVerification;
+            messages = new List<string>();
+            bool resultVerification;
+            string message;
             foreach (var parameter in ParametersWithEnter.Values)
             {
-                resultVerification = parameter.Verification();
-                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
-                if (!resultVerification.IsCorrect)
-                    message.AddRange(resultVerification.ErrorMessages);
+                resultVerification = parameter.Verification(out message);
+
+                if (!resultVerification)
+                    messages.Add(message);
+
+                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification));
+
             }
             return parameters;
         }
 
-        public List<object>  GetParametersWithCalculate(out List<string> message)
+        public List<object>  GetParametersWithCalculate(out List<string> messages)
         {
          
             List<object> parameters = new List<object>();
-            message = new List<string>();
-            QueryResponse resultVerification;
+            messages = new List<string>();
+            bool resultVerification;
+            string message;
             foreach (var parameter in ParametersWithCalculation.Values)
             {
-                resultVerification = parameter.Verification();
-                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
-                if(!resultVerification.IsCorrect)
-                 message.AddRange(resultVerification.ErrorMessages);
+                resultVerification = parameter.Verification(out message);
+
+                if(!resultVerification)
+                    messages.Add(message);
+
+                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification));
+               
             }
             return parameters;
         }
 
-        public List<object> GetParametersForAnalysis(out List<string> message)
+        public List<object> GetParametersForAnalysis(out List<string> messages)
         {
 
             List<object> parameters = new List<object>();
-            message = new List<string>();
-            QueryResponse resultVerification;
+            messages = new List<string>();
+            bool resultVerification;
+            string message;
             foreach (var parameter in ParametersForAnalysis.Values)
             {
-                resultVerification = parameter.Verification();
-                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification.IsCorrect));
-                if (!resultVerification.IsCorrect)
-                    message.AddRange(resultVerification.ErrorMessages);
+                resultVerification = parameter.Verification(out message);
+
+                if (!resultVerification)
+                    messages.Add(message);
+
+                parameters.Add(parameter.TypeParameter.ToParameter(parameter.Value, resultVerification));
+
             }
             return parameters;
         }

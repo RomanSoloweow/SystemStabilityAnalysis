@@ -214,25 +214,29 @@ namespace SystemStabilityAnalysis.Models
 
         #endregion ParametersWithEnter
 
-        public bool VerificationParametersForAnalysis(List<NameParameterForAnalysis> parametersForAnalysis)
+        //public bool VerificationParametersForAnalysis(List<NameParameterForAnalysis> parametersForAnalysis)
+        //{
+        //    bool result = true;
+
+        //    foreach (var parameterForAnalysis in parametersForAnalysis)
+        //    {
+        //        result = result & ParametersForAnalysis[parameterForAnalysis].VerificationDependences();
+        //    }
+
+        //    return result;
+        //}
+
+        public bool VerificationParametersWithEnter(List<NameParameterWithEnter> parametersWithEnter, out List<string> message)
         {
+            message = new List<string>();
             bool result = true;
-
-            foreach (var parameterForAnalysis in parametersForAnalysis)
-            {
-                result = result & ParametersForAnalysis[parameterForAnalysis].VerificationDependences();
-            }
-
-            return result;
-        }
-
-        public bool VerificationParametersWithEnter(List<NameParameterWithEnter> parametersWithEnter)
-        {
-            bool result = true;
-
             foreach (var parameterWithEnter in parametersWithEnter)
             {
-                result = result & ParametersWithEnter[parameterWithEnter].EazyVerification();
+                if(!ParametersWithEnter[parameterWithEnter].isCorrect)
+                {
+                    message.Add(ParametersWithEnter[parameterWithEnter].Designation);
+                    result = false;
+                }
             }
 
             return result;
@@ -265,11 +269,12 @@ namespace SystemStabilityAnalysis.Models
             Calculate = calculate;
             propertiesSystem = _propertiesSystem;
         }
+        public bool isCorrect { get; set; }
         public double? Value
         {
             get
             {
-                return VerificationDependences() ? Calculate.Invoke() : null;
+                return isCorrect? Calculate.Invoke() : null;
 
             }
         }
@@ -295,36 +300,10 @@ namespace SystemStabilityAnalysis.Models
                 return String.Format("Невозможно сделать вывод об устойчивости системы т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей");
             }
         }
-        //public string GetResult()
-        //{
-        //    if(Value.HasValue)
-        //    {
-        //        if(Value.Value>0)
-        //        {
-        //            return String.Format("Cистема \"{0}\" устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
-        //        }
-        //        else if (Value.Value == 0)
-        //        {
-        //            return String.Format("Cистема \"{0}\" находится на пределе своей устойчивости в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
-        //        }
-        //        else
-        //        {
-        //            return String.Format("Cистема \"{0}\" не устойчива в течении периода \"{1}\" при заданных условиях и ограничениях.", propertiesSystem.Name, propertiesSystem.deltaT.Value.Value.ToString());
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return String.Format("Невозможно сделать вывод об устойчивости системы \"{0}\" т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей", propertiesSystem.Name);
-        //    }
-        //}
 
         public List<NameParameterForAnalysis> GetDependences()
         {
             return HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>();
-        }
-        public bool VerificationDependences()
-        {
-            return propertiesSystem.VerificationParametersForAnalysis(GetDependences());
         }
 
         public object ToPair()
