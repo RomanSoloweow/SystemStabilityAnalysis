@@ -80,7 +80,15 @@ namespace SystemStabilityAnalysis.Models
             }
             return parameters;
         }
-
+        public object GetParameterU(out string result)
+        {        
+           bool resultVerification =  U.Verification(out string message);
+            
+            result = U.GetResult();
+            if (!resultVerification)
+                result += " " + message;
+            return U.Value.HasValue ? U.Value.Value.ToString() : "_";
+        }
         public List<object> GetParametersForChart()
         {
             List<object> parameters = new List<object>();

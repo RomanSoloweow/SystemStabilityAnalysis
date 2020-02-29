@@ -16,7 +16,7 @@ namespace SystemStabilityAnalysis.Models
             InitialParametersWithEnter();
             InitialParametersForAnalysis();
             InitialParametersWithCalculation();
-            U = new ParameterU(this, () => { return (ρ * f * (h.Pow(3.0))) / ((a * (q.Pow(3.0))) * (q + d)) - ((b + f) * (h.Pow(4.0))) / (a * (q.Pow(4.0)));});
+            U = new ParameterU(this, () => { return (ρ * f * (h.Pow(3.0))) / ((a * (q.Pow(3.0))) * (q + d)) - ((b + f) * (h.Pow(4.0))) / (a * (q.Pow(4.0))); });
         }
 
         public string Name { get; set; }
@@ -214,17 +214,21 @@ namespace SystemStabilityAnalysis.Models
 
         #endregion ParametersWithEnter
 
-        //public bool VerificationParametersForAnalysis(List<NameParameterForAnalysis> parametersForAnalysis)
-        //{
-        //    bool result = true;
+        public bool VerificationParametersForAnalysis(List<NameParameterForAnalysis> parametersForAnalysis, out List<string> message)
+        {
+            message = new List<string>();
+            bool result = true;
+            foreach (var parameterForAnalysis in parametersForAnalysis)
+            {
+                if (!ParametersForAnalysis[parameterForAnalysis].isCorrect)
+                {
+                    message.Add(ParametersForAnalysis[parameterForAnalysis].Designation);
+                    result = false;
+                }
+            }
 
-        //    foreach (var parameterForAnalysis in parametersForAnalysis)
-        //    {
-        //        result = result & ParametersForAnalysis[parameterForAnalysis].VerificationDependences();
-        //    }
-
-        //    return result;
-        //}
+            return result;
+        }
 
         public bool VerificationParametersWithEnter(List<NameParameterWithEnter> parametersWithEnter, out List<string> message)
         {
@@ -232,7 +236,7 @@ namespace SystemStabilityAnalysis.Models
             bool result = true;
             foreach (var parameterWithEnter in parametersWithEnter)
             {
-                if(!ParametersWithEnter[parameterWithEnter].isCorrect)
+                if (!ParametersWithEnter[parameterWithEnter].isCorrect)
                 {
                     message.Add(ParametersWithEnter[parameterWithEnter].Designation);
                     result = false;
@@ -253,68 +257,8 @@ namespace SystemStabilityAnalysis.Models
         //    return true;
         //}
 
-        
-    }
-
-
-    public class ParameterU
-    {
-        public PropertiesSystem propertiesSystem;
-        public Func<double?> Calculate;
-        public string Name { get; set; } = "U";
-        public string Designation { get; set; } = "U";
-        public string Description { get; set; } = "Показатель неустойчивости системы";
-        public ParameterU(PropertiesSystem _propertiesSystem, Func<double?> calculate)
-        {
-            Calculate = calculate;
-            propertiesSystem = _propertiesSystem;
-        }
-        public bool isCorrect { get; set; }
-        public double? Value
-        {
-            get
-            {
-                return isCorrect? Calculate.Invoke() : null;
-
-            }
-        }
-        public string GetResult()
-        {
-            if (Value.HasValue)
-            {
-                if (Value.Value > 0)
-                {
-                    return String.Format("Cистема устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.",propertiesSystem.deltaT.Value.Value.ToString());
-                }
-                else if (Value.Value == 0)
-                {
-                    return String.Format("Cистема находится на пределе своей устойчивости в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
-                }
-                else
-                {
-                    return String.Format("Cистема не устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
-                }
-            }
-            else
-            {
-                return String.Format("Невозможно сделать вывод об устойчивости системы т.к. показатель устойчивости не может быть вычислен. Проверьте корректность остальных показателей");
-            }
-        }
-
-        public List<NameParameterForAnalysis> GetDependences()
-        {
-            return HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>();
-        }
-
-        public object ToPair()
-        {
-            return new
-            {
-                Name = Designation,
-                Description = Description,
-                Value = Name
-            };
-        }
 
     }
 }
+
+

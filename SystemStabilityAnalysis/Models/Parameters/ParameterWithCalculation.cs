@@ -44,8 +44,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
     {
         public static Dictionary<NameParameterWithCalculation, string> Descriptions = new Dictionary<NameParameterWithCalculation, string>()
         {
-            {NameParameterWithCalculation.R, "Стоимость функционирования системы в период ∆T"},
-            {NameParameterWithCalculation.S, "Количество персонала "},
+            {NameParameterWithCalculation.R, "Стоимость функционирования системы в период функционирования"},
+            {NameParameterWithCalculation.S, "Необходимое количество персонала для всей системы на период функционирования"},
             {NameParameterWithCalculation.Rcyt1, "Расход ресурсов на  1 группу (Стоимость) в сутки"},
             {NameParameterWithCalculation.Rf1, "Расход ресурсов на  1 группу (Стоимость) за период функционирования"},
             {NameParameterWithCalculation.Rcyt2, "Расход ресурсов на 2 группу (Стоимость) в сутки"},
@@ -60,19 +60,19 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterWithCalculation.Wcyt3, "Расход человеко-часов на 3 группу в сутки"},
             {NameParameterWithCalculation.Wf3, "Расход человеко-часов на  3 группу за период функционирования"},
             {NameParameterWithCalculation.Wcyt, "Расход человеко-часов на функционирование системы за сутки"},
-            {NameParameterWithCalculation.W, "Расход человеко-часов на функционирование системы за период (∆T)"},
+            {NameParameterWithCalculation.W, "Расход человеко-часов на функционирование системы за период функционирования "},
             {NameParameterWithCalculation.Smin1, "Мин. необходимое количество специалистов в 1 смене для 1 группы"},
             {NameParameterWithCalculation.Smin2, "Мин. необходимое количество специалистов в 1 смене для 2 группы"},
             {NameParameterWithCalculation.Smin3, "Мин. необходимое количество специалистов в 1 смене для 3 группы"},
             {NameParameterWithCalculation.SminC, "Мин. необходимое количество персонала в 1 смене для всей системы"},
-            {NameParameterWithCalculation.Smin, "Мин. необходимое кол-во персонала для всей системы на период ∆T"},
+            {NameParameterWithCalculation.Smin, "Мин. необходимое кол-во персонала для всей системы на период функционирования"},
             {NameParameterWithCalculation.S1, "Необходимое количество специалистов в  одной смене для 1 группы"},
             {NameParameterWithCalculation.S2, "Необходимое количество специалистов в  одной смене для 2 группы"},
             {NameParameterWithCalculation.S3, "Необходимое количество специалистов в одной смене для 3 группы"},
             {NameParameterWithCalculation.Sс, "Необходимое количество персонала в одной смене для всей системы"},
-            {NameParameterWithCalculation.SN1, "Из этого количества: в ремонтно-восстановительные формирования"},
-            {NameParameterWithCalculation.SN2, "Непосредственно для обеспечения функционирования (выполнения основных функций) системы"},
-            {NameParameterWithCalculation.SN3, "Для подсистемы обеспечения подсистемы хранения запасов и резервирования"}
+            {NameParameterWithCalculation.SN1, "Необходимое количество персонала в ремонтно-восстановительные формирования на период функционирования"},
+            {NameParameterWithCalculation.SN2, "Необходимое количество персонала непосредственно для обеспечения функционирования (выполнения основных функций) системы на период функционирования"},
+            {NameParameterWithCalculation.SN3, "Необходимое количество персонала для обеспечения подсистемы хранения запасов и резервирования на период функционирования"}
         };
 
         public static Dictionary<NameParameterWithCalculation, string> Designations = new Dictionary<NameParameterWithCalculation, string>()
@@ -86,9 +86,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterWithCalculation.Rcyt, "Rсут"},
             {NameParameterWithCalculation.Wсyt1, "Wсут1"},
             {NameParameterWithCalculation.Wf1, "Wф1"},
-            {NameParameterWithCalculation.Wcyt2, "Wcyt2"},
+            {NameParameterWithCalculation.Wcyt2, "Wсут2"},
             {NameParameterWithCalculation.Wf2, "Wф2"},
-            {NameParameterWithCalculation.Wcyt3, "Wcyt3"},
+            {NameParameterWithCalculation.Wcyt3, "Wсут3"},
             {NameParameterWithCalculation.Wf3, "Wф3"},
             {NameParameterWithCalculation.Wcyt, "Wсут"}
         };
@@ -478,11 +478,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
             };
         }
 
-        public static double Round (this NameParameterWithCalculation parameter, double value)
+        public static double? Round (this NameParameterWithCalculation parameter, double? value)
         {
-            if (Rounds.TryGetValue(parameter, out TypeRound round))
+            if ((value.HasValue)&&(Rounds.TryGetValue(parameter, out TypeRound round)))
             {
-                return round.Round(value);
+                return round.Round(value.Value);
             }
 
             return value;
@@ -583,7 +583,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public bool isCorrect { get; set; }
 
-        public double? Value{ get {  return isCorrect ? Calculate.Invoke():null; }}
+        public double? Value{ get {  return isCorrect ? TypeParameter.Round(Calculate.Invoke()):null; }}
 
         public Func<double?> Calculate;
 

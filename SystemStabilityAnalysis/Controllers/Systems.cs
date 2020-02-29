@@ -48,15 +48,14 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParametersForAnalysis()
         {
-            //var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Select(x => x.ToParameter(0.123, false));
-
             return new
             {
                 Status = Status.Success.GetName(),
-                U = StaticData.CurrentSystems.U.Value.HasValue? StaticData.CurrentSystems.U.Value.Value.ToString():"_",
-                Result = StaticData.CurrentSystems.U.GetResult(),
-                ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message),
-                Message = message
+                ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> messages),
+                U = StaticData.CurrentSystems.GetParameterU(out string result),
+                Result = result,
+               
+                Message = messages
             };
         }
 
