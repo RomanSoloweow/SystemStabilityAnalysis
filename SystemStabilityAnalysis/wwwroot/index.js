@@ -345,131 +345,32 @@ function uploadCsv(){
   $('#FileUpload_FormFile').click();
 }
 
-$(".item[data-tab='second/a']").tab({'onVisible':function(){
+$(".item[data-tab='second']").tab({'onVisible':function(){
+  activeTab = $("[data-tab='second']").find(".item.active").attr("data-tab");
+  switch (activeTab) {
+    case "second/a":
+      secondATab();
+      break;
+    case "second/b":
+      secondBTab();
+      break;
+    case "second/c":
+      secondCTab();
+      break;
+  }
+}});
 
-  $(".tab.segment[data-tab='second/a']").find('table').remove()
-  $(".tab.segment[data-tab='second/a']").append(`
-      <table class="ui celled blue table center aligned analys">
-            <thead>
-              <tr>
-                <th>Наименование показателя</th>
-                <th>Обозначение</th>
-                <th>Единица измерения</th>
-                <th>Значение показателя</th>
-              </tr>
-            </thead>
-          <tbody>
-        </tbody>
-      </table>
-    `)
-  $.ajax({
-    method: "GET",
-    url: "Systems/GetParametersWithEnter",
-  }).done(function(msg){
-    if (msg.status == "Success") {
-      $.each( msg.parametersWithEnter, function( key, value ) {
-        $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
-          <td data-label="description" data-value=${value.name}>${value.description}</td>
-          <td data-label="name">${value.designation}</td>
-          <td data-label="unit">${value.unit}</td>
-          <td data-label="button" class="center aligned" >
-          <div class="ui input validate-div">
-            <input type="number" placeholder="" class="system-validate" value="${value.value}">
-          </div>
-          </td>
-          </tr>`
-        )
-      });
-    }
-    else {
-      notification("Error",msg.message,"second/a")
-    }
-  });  
+$(".item[data-tab='second/a']").tab({'onVisible':function(){
+  secondATab();
 }});
 
 $(".item[data-tab='second/b']").tab({'onVisible':function(){
-  $(".tab.segment[data-tab='second/b']").find('table').remove()
-  $(".tab.segment[data-tab='second/b']").append(`
-      <table class="ui celled blue table center aligned analys">
-            <thead>
-              <tr>
-                <th>Наименование показателя</th>
-                <th>Обозначение</th>
-                <th>Единица измерения</th>
-                <th>Значение показателя</th>
-              </tr>
-            </thead>
-          <tbody>
-        </tbody>
-      </table>
-    `)
-  $.ajax({
-    method: "GET",
-    url: "Systems/GetParametersWithCalculate",
-  }).done(function(msg){
-    if (msg.status == "Success") {
-      $.each( msg.parametersWithCalculate, function( key, value ) {
-        $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
-          <td data-label="description">${value.description}</td>
-          <td data-label="name">${value.designation}</td>
-          <td data-label="unit">${value.unit}</td>
-          <td data-label="value">${value.value}</td>
-          </tr>`
-        )
-      });
-    }
-    $(".message").remove()
-    if (msg.message.length > 0)
-      notification("Error",msg.message,"second/b")
-  });  
+  secondBTab();
 }});
 
 
 $(".item[data-tab='second/c']").tab({'onVisible':function(){
-  $(".tab.segment[data-tab='second/c']").find('table').remove();
-  $(".tab.segment[data-tab='second/c']").append(`
-      <table class="ui celled blue table center aligned analys">
-            <thead>
-              <tr>
-                <th>Наименование показателя</th>
-                <th>Обозначение</th>
-                <th>Единица измерения</th>
-                <th>Значение показателя</th>
-              </tr>
-            </thead>
-          <tbody>
-        </tbody>
-      </table>
-    `)
-  
-  $.ajax({
-    method: "GET",
-    url: "Systems/GetParametersForAnalysis",
-  }).done(function(msg){
-    if (msg.status == "Success") {
-      if ($(".tab.segment[data-tab='second/c']").find(".header.result").length == 0) {
-        $(".tab.segment[data-tab='second/c']").find("table").before(`<div class='ui large message'>
-          <div class="result header">
-            U = ${msg.u}
-          </div>
-          ${msg.result}
-          </div>`
-        )
-      }
-      $.each( msg.parametersForAnalysis, function( key, value ) {
-        $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
-          <td data-label="description">${value.description}</td>
-          <td data-label="name">${value.designation}</td>
-          <td data-label="unit">${value.unit}</td>
-          <td data-label="value">${value.value}</td>
-          </tr>`
-        )
-      });
-      $(".negative.message").remove()
-    }
-    if (msg.message.length > 0)
-      notification("Error",msg.message,"second/c")
-  });  
+ secondCTab(); 
 }});
 
 $(".item[data-tab='third/b']").tab({'onVisible':function(){
@@ -1176,6 +1077,131 @@ async function AJAXSubmit2 (oFormElement) {
     }
     }
 
+
+function secondATab() {
+  $(".tab.segment[data-tab='second/a']").find('table').remove()
+  $(".tab.segment[data-tab='second/a']").append(`
+      <table class="ui celled blue table center aligned analys">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParametersWithEnter",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.parametersWithEnter, function( key, value ) {
+        $(".tab.segment[data-tab='second/a']").find('tbody').append(`<tr>
+          <td data-label="description" data-value=${value.name}>${value.description}</td>
+          <td data-label="name">${value.designation}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="button" class="center aligned" >
+          <div class="ui input validate-div">
+            <input type="number" placeholder="" class="system-validate" value="${value.value}">
+          </div>
+          </td>
+          </tr>`
+        )
+      });
+    }
+    else {
+      notification("Error",msg.message,"second/a")
+    }
+  }); 
+};
+
+function secondBTab() {
+  $(".tab.segment[data-tab='second/b']").find('table').remove()
+  $(".tab.segment[data-tab='second/b']").append(`
+      <table class="ui celled blue table center aligned analys">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParametersWithCalculate",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      $.each( msg.parametersWithCalculate, function( key, value ) {
+        $(".tab.segment[data-tab='second/b']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
+          <td data-label="description">${value.description}</td>
+          <td data-label="name">${value.designation}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="value">${value.value}</td>
+          </tr>`
+        )
+      });
+    }
+    $(".message").remove()
+    if (msg.message.length > 0)
+      notification("Error",msg.message,"second/b")
+  });  
+};
+
+function secondCTab() {
+  $(".tab.segment[data-tab='second/c']").find('table').remove();
+  $(".tab.segment[data-tab='second/c']").append(`
+      <table class="ui celled blue table center aligned analys">
+            <thead>
+              <tr>
+                <th>Наименование показателя</th>
+                <th>Обозначение</th>
+                <th>Единица измерения</th>
+                <th>Значение показателя</th>
+              </tr>
+            </thead>
+          <tbody>
+        </tbody>
+      </table>
+    `)
+  
+  $.ajax({
+    method: "GET",
+    url: "Systems/GetParametersForAnalysis",
+  }).done(function(msg){
+    if (msg.status == "Success") {
+      if ($(".tab.segment[data-tab='second/c']").find(".header.result").length == 0) {
+        $(".tab.segment[data-tab='second/c']").find("table").before(`<div class='ui large message'>
+          <div class="result header">
+            U = ${msg.u}
+          </div>
+          ${msg.result}
+          </div>`
+        )
+      }
+      $.each( msg.parametersForAnalysis, function( key, value ) {
+        $(".tab.segment[data-tab='second/c']").find('tbody').append(`<tr class="${value.correct == true ? "" : "error"}">
+          <td data-label="description">${value.description}</td>
+          <td data-label="name">${value.designation}</td>
+          <td data-label="unit">${value.unit}</td>
+          <td data-label="value">${value.value}</td>
+          </tr>`
+        )
+      });
+      $(".negative.message").remove()
+    }
+    if (msg.message.length > 0)
+      notification("Error",msg.message,"second/c")
+  }); 
+};
 // function getSystemsChart {
 
 // };
