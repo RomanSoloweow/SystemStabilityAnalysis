@@ -47,6 +47,8 @@ $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click();
 $(".download-system-1").click(downloadSystem1);
 $(".ui.button.upload-csv4").click(uploadCsv4);
+$(".export-diag").click(() => exportCanvas("diagram"));
+$(".export-chart").click(() => exportCanvas("chart"));
 
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
@@ -467,9 +469,16 @@ function getSystems(){
         currentCombobox.find(".menu").append(`<div class="item" 
           data-text="${value}"
           > 
-          ${value} </div>
+          ${value} 
+          </div>
         `)
       });
+      if (msg.systems.length == 0) {
+        currentCombobox.find(".menu").append(`<div class="disabled item"> 
+          Нет добавленных систем
+          </div>
+        `)
+      }
       currentCombobox.dropdown('refresh')
     }
   });
@@ -734,10 +743,6 @@ function showChart4(Result)
       // });
     }
   });
-
-  let labels = [];
-  let diagData = [];
-  let colors = [];
   let datasets = [];
   let xValues = [];
   let yValues = [];
@@ -765,7 +770,6 @@ function showChart4(Result)
     //colors.push(`rgba(${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, ${Math.floor(Math.random() * Math.floor(255))}, 0.5)`)
     
   });
-  console.log(datasets)
   color = "27,110,194"
 
   config.data = {
@@ -853,8 +857,6 @@ async function AJAXSubmit1 (oFormElement) {
 function generateReport(){
 
   if ($(event.target).parent().parent().find(".ui.input.save-system2").length == 0) {
-
-
     $.ajax({
       method: "GET",
       url: `Systems/ValidateSystemBeforeSave`,
@@ -1202,12 +1204,16 @@ function secondCTab() {
       notification("Error",msg.message,"second/c")
   }); 
 };
-// function getSystemsChart {
 
-// };
-
-// function getParamsChart {
-
-// };
-
-// function getSystemGra
+function exportCanvas(canvasId) {
+  console.log($(`#${canvasId}`))
+  var url_base64jp = $(`#${canvasId}`)[0].toDataURL("image/jpg");
+  //<a id="link2" download="ChartJpg.jpg">Save as jpg</a>
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url_base64jp;
+  a.download = "График.jpg";
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url_base64jp);
+}
