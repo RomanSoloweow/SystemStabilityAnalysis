@@ -397,7 +397,8 @@ $(".item[data-tab='third']").tab({'onVisible':function(){
       //   `
       //   )
       // });
-      if ($(".list.system-list1").length == 0)
+      console.log(msg.systems.length)
+      if ($(".list.system-list1").length == 0 && msg.systems.length > 0)
       $(".segment.active[data-tab='third/a']").append(
         `<div class="ui segment system-segment">
         <div class="ui divided list system-list1">
@@ -466,6 +467,7 @@ function getSystems(){
   }).done(function(msg){
     if (msg.status == "Success") {
       $.each( msg.systems, function( key, value ) {
+        currentCombobox.hasClass("multiple") ? "" : currentCombobox.addClass("multiple");
         currentCombobox.find(".menu").append(`<div class="item" 
           data-text="${value}"
           > 
@@ -474,6 +476,8 @@ function getSystems(){
         `)
       });
       if (msg.systems.length == 0) {
+        console.log(currentCombobox.hasClass("multiple"))
+        currentCombobox.hasClass("multiple") ? currentCombobox.removeClass("multiple") : "";
         currentCombobox.find(".menu").append(`<div class="disabled item"> 
           Нет добавленных систем
           </div>
@@ -902,7 +906,7 @@ function deleteSystem(event){
     currentButton =  event.target.closest("button");
   }
   let curElement = $(currentButton).parent().parent();
-  let textElement = curElement.find(".system-list-item").html().replace(/\s/g, '');
+  let textElement = curElement.find(".system-list-item").html().trim();
   // <div class="ui divided list system-list1">
 
   //   </div>
