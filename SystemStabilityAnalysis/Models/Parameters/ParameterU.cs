@@ -12,14 +12,14 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public Func<double?> Calculate;
         public string Name { get; set; } = "U";
         public string Designation { get; set; } = "U";
-        public string Description { get; set; } = "Показатель неустойчивости системы";
+        public string Description { get; set; } = "Показатель устойчивости системы";
         public ParameterU(PropertiesSystem _propertiesSystem, Func<double?> calculate)
         {
             Calculate = calculate;
             propertiesSystem = _propertiesSystem;
         }
         
-        public bool IsCorrect { get; set; }
+        public bool IsCorrect { get; set; } = true;
 
         public double? Value
         {

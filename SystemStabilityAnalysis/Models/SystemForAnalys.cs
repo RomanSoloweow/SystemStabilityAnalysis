@@ -186,7 +186,22 @@ namespace SystemStabilityAnalysis.Models
                };
         }
 
-
+        public void SetAsCorrect()
+        {
+            foreach (var parameter in ParametersWithEnter.Values)
+            {
+                parameter.isCorrect = true;
+            }
+            foreach (var parameter in ParametersWithCalculation.Values)
+            {
+                parameter.isCorrect = true;
+            }
+            foreach (var parameter in ParametersForAnalysis.Values)
+            {
+                parameter.isCorrect = true;
+            }
+           
+        }
 
 
     }

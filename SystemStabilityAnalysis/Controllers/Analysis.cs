@@ -175,6 +175,7 @@ namespace SystemStabilityAnalysis.Controllers
                                 {
                                     systemForAnalys.ParametersWithEnter[parameterWithEnter.TypeParameter].Value = parameterWithEnter.Value;
                                 }
+                                systemForAnalys.SetAsCorrect();
                                 StaticData.Systems.Add(nameSystem, systemForAnalys);
                             }
                         }

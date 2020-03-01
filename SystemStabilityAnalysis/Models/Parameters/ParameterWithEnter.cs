@@ -300,7 +300,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             }
             else
             {
-                if(Value.Value<0)
+                if(Value.Value<1)
                 {
                     message = String.Format("Значение параметра {0} должно быть > 0", Designation);
                     isCorrect = false;
