@@ -617,7 +617,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             }
             else
             {
-                if (Value.Value < 1)
+                if (Value.Value <= 0)
                 {
                     message = String.Format("Значение параметра {0} должно быть > 0. {1}", Designation, postfix);
                     isCorrect = false;
