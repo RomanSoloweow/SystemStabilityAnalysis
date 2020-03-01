@@ -101,14 +101,14 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
-            QueryResponse responceResult = new QueryResponse();
+            QueryResponse queryResponse = new QueryResponse();
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                responceResult.AddError("Файл не выбран");
+                queryResponse.AddNegativeMessage("Файл не выбран");
                   
             }
 
-            if (responceResult.IsCorrect)
+            if (queryResponse.IsSuccess)
             {
                 //bool resultVerification;
                 //string message;
@@ -132,27 +132,27 @@ namespace SystemStabilityAnalysis.Controllers
                         }
                         catch (Exception ex)
                         {
-                            responceResult.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                            queryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                         }
                     }
                 }
-                //responceResult.AddRangeErrorWithIfNotEmpty(messages);
+                //queryResponse.AddRangeErrorWithIfNotEmpty(messages);
             }
 
 
-            return responceResult.ToResult();
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object SaveSystemToFile([FromQuery]string fileName)
         {
 
-            QueryResponse responceResult = new QueryResponse();
+            QueryResponse queryResponse = new QueryResponse();
 
             if (string.IsNullOrEmpty(fileName))
             {
-                responceResult.AddError("Имя файла не указано");
-                return responceResult.ToResult();
+                queryResponse.AddNegativeMessage("Имя файла не указано");
+                return queryResponse.ToResult();
             }
 
             string filePath = Path.ChangeExtension(fileName, ".csv");
@@ -191,12 +191,12 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateSystemBeforeSave()
         {
-            QueryResponse responceResult = new QueryResponse();
+            QueryResponse queryResponse = new QueryResponse();
             if(!StaticData.CurrentSystems.U.Value.HasValue)
             {
-                responceResult.AddError("Невозможно сохранить систему т.к. данные некорректны");
+                queryResponse.AddNegativeMessage("Невозможно сохранить систему т.к. данные некорректны");
             }
-           return responceResult.ToResult();
+           return queryResponse.ToResult();
         }
 
         public class ParameterForValidate

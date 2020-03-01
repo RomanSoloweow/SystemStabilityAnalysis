@@ -28,43 +28,66 @@ namespace SystemStabilityAnalysis.Models
 
     public class QueryResponse
     {
-        public Status Status { get; set; } = Status.Success;
+        private Status status = Status.Success;
 
-        public void SetNotCorrect()
+        private List<string> messages = new List<string>();
+
+        public bool IsSuccess { get { return status == Status.Success; } }
+
+        public bool IsNegative { get { return status == Status.Error; } }
+
+        private void CheckBeforeSet()
         {
-            Status = Status.Error;
+            if (status == Status.Error)
+            {
+                throw new ArgumentException(paramName: "status", message: "Status already set as Success");
+            }
         }
-        public void SetCorrect()
+
+        private void Success()
         {
-            Status = Status.Success;
+            CheckBeforeSet();
+            status = Status.Success;
         }
-        public void AddError(string error)
+        private void Error()
         {
-            SetNotCorrect();
-            ErrorMessages.Add(error);
+            status = Status.Error;
         }
-        public void AddRangeError(List<string> errors)
+
+        public void AddNegativeMessage(string error, bool checkOnEmpty = false)
         {
-            SetNotCorrect();
-            ErrorMessages.AddRange(errors);
+            Error();
+            messages.Add(error);
         }
-        public void AddRangeErrorWithIfNotEmpty(List<string> errors)
+
+        public void AddNegativeMessages(List<string> errors)
         {
-            if ((errors!=null)&&(errors.Count > 0))
-                AddRangeError(errors);
+            Error();
+            messages.AddRange(errors);
         }
-        public bool IsCorrect { get { return Status == Status.Success; } }
+
+        public void AddSuccessMessage(string error)
+        {
+            Success();
+            messages.Add(error);
+        }
+
+        public void AddSuccessMessages(List<string> errors)
+        {
+            Success();
+            messages.AddRange(errors);
+        }
 
         public object ToResult()
         {
             return new
             {
-                Status = Status.GetName(),
-                Message = ErrorMessages
+                Status = status.GetName(),
+                Message = messages
             };
         }
 
-        public List<string> ErrorMessages { get; } = new List<string>();
+        
     }
 
 }
