@@ -15,6 +15,7 @@ using System.Globalization;
 using CsvHelper;
 using HeyRed.Mime;
 using System.Text;
+using System.Dynamic;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -26,35 +27,29 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParameters()
         {
+            QueryResponse queryResponse = new QueryResponse();          
             var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToJson());
-            
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Properties = ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis)
-            };
+            queryResponse.Add("Properties", ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis));
+           
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetConditions()
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Conditions = HelperEnum.GetValuesWithoutDefault<ConditionType>().Select(x => x.ToJson())
-            };
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("Conditions", HelperEnum.GetValuesWithoutDefault<ConditionType>().Select(x => x.ToJson()));
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetRestrictions()
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Restrictions = ParameterUniversal.GetRestrictions().Select(x => x.ToResponse())
-            };
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("Restrictions", ParameterUniversal.GetRestrictions().Select(x => x.ToResponse()));
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
@@ -152,10 +147,9 @@ namespace SystemStabilityAnalysis.Controllers
         public object DeleteAllRestriction()
         {
             ParameterUniversal.DeleteAllRestriction();
-            return new
-            {
-                Status = Status.Success.GetName()
-            };
+
+            QueryResponse queryResponse = new QueryResponse();
+            return queryResponse.ToResult();
         }
 
         //[HttpPost]

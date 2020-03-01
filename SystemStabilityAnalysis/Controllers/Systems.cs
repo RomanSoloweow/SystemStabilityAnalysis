@@ -26,46 +26,40 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParametersWithEnter()
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                ParametersWithEnter = StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message),
-                Message = message
-            };
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("ParametersWithEnter", StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message));
+            queryResponse.AddNegativeMessages(message, true);
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersWithCalculate()
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                ParametersWithCalculate = StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message),
-                Message = message
-            }; ;
+
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("ParametersWithCalculate", StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message));
+            queryResponse.AddNegativeMessages(message, true);
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersForAnalysis()
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                ParametersForAnalysis = StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> messages),
-                U = StaticData.CurrentSystems.GetParameterU(out string result),
-                Result = result,
-               
-                Message = messages
-            };
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("ParametersForAnalysis", StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message));
+            queryResponse.AddNegativeMessages(message, true);
+            queryResponse.Add("U", StaticData.CurrentSystems.GetParameterU(out string result));
+            queryResponse.Add("result", result);
+            return queryResponse.ToResult();
         }
 
         [HttpGet]
         public object Validate([FromQuery]string validateArr)
         {
+            QueryResponse queryResponse = new QueryResponse();
             var Parameters = JsonConvert.DeserializeObject<List<ParameterForValidate>>(validateArr);
 
             List<object> parametersCorrect = new List<object>();
-            List<string> messages = new List<string>();
             bool resultVerification;
             string message;
             foreach (var parameter in Parameters)
@@ -76,7 +70,7 @@ namespace SystemStabilityAnalysis.Controllers
                     resultVerification = parameterWithEnter.Verification(out message);
 
                     if (!resultVerification)
-                        messages.Add(message);
+                        queryResponse.AddNegativeMessage(message);
 
                     parametersCorrect.Add(new
                     {
@@ -87,15 +81,9 @@ namespace SystemStabilityAnalysis.Controllers
 
                 }
             }
-           
-            return new
-            {
-                Status = Status.Success.ToString(),
-                parametersCorrect = parametersCorrect,
-                Message = messages
-            };
 
-       
+            queryResponse.Add("parametersCorrect", parametersCorrect);
+            return queryResponse.ToResult();
         }
 
         [HttpPost]

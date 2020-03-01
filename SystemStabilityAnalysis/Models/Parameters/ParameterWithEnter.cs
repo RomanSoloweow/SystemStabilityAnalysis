@@ -206,16 +206,15 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
         public static object ToRestriction(this NameParameterWithEnter parameter, ConditionType conditionType, double value)
         {
-            return new
-            {
-                Status = Status.Success.GetName(),
-                Name = parameter.GetDesignation(),
-                Description = parameter.GetDescription(),
-                Unit = parameter.GetUnit().GetDesignation(),
-                Condition = conditionType.GetDesignation(),
-                Value = value,
-                RestrictionName = parameter.GetName()
-            };
+            QueryResponse queryResponse = new QueryResponse();
+            queryResponse.Add("Name", parameter.GetDesignation());
+            queryResponse.Add("Description", parameter.GetDescription());
+            queryResponse.Add("Unit", parameter.GetUnit().GetDesignation());
+            queryResponse.Add("Condition", conditionType.GetDesignation());
+            queryResponse.Add("Value", value);
+            queryResponse.Add("RestrictionName", parameter.GetName());
+
+            return queryResponse.ToResult();
         }
 
         /// <summary>
