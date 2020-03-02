@@ -25,7 +25,7 @@ namespace SystemStabilityAnalysis.Controllers
         {
             
             QueryResponse.Add("ParametersWithEnter", StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message));
-            QueryResponse.AddNegativeMessages(message, true);
+            //QueryResponse.AddNegativeMessages(message, true);
             return QueryResponse.ToResult();
         }
 
