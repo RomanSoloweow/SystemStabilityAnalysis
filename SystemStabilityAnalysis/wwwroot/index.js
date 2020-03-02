@@ -1171,13 +1171,20 @@ function exportChart() {
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
       if (msg.status != "negative")
-        var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = `Analysis/SaveChartToFile?chart=${url_base64jp}`; 
-        a.download = "График.jpg";
-        document.body.appendChild(a);
-        a.click();
+        var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg");
+        $.ajax({
+          method: "POST",
+          url: `Analysis/SaveChartToFile`,
+          data: {chart: url_base64jp.replace("data:image/png;base64,", "")}
+        }).done(function(msg){
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url_base64jp;
+          a.download = "График.png";
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(a.href);
+        });
         window.URL.revokeObjectURL(a.href);
       if (msg.message.length > 0) {
         notification(msg.status,  msg.header, msg.message,event.target)
@@ -1197,15 +1204,22 @@ function exportDiag() {
     url: "Analysis/ValidateDiagramBeforeSave",
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
-    if (msg.status != "negative")
-      var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = `Analysis/SaveDiagramToFile?diagram=${url_base64jp}`; 
-      a.download = "Диаграмма.jpg";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(a.href);
+    if (msg.status != "negative") {
+      var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg")
+      $.ajax({
+        method: "POST",
+        url: `Analysis/SaveDiagramToFile`,
+        data: {diagram: url_base64jp.replace("data:image/png;base64,", "")}
+      }).done(function(msg){
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url_base64jp;
+        a.download = "Диаграмма.png";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(a.href);
+      });
+    }
     if (msg.message.length > 0) {
       notification(msg.status,  msg.header, msg.message,event.target)
     }
