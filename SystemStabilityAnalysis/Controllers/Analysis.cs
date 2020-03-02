@@ -200,8 +200,8 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
 
-        [HttpGet]
-        public object SaveChartToFile([FromQuery]string chart)
+        [HttpPost]
+        public object SaveChartToFile(string chart)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
@@ -227,7 +227,7 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
-        public object SaveDiagramToFile([FromQuery]string diagram)
+        public object SaveDiagramToFile([FromForm ]byte[] diagram)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
