@@ -160,17 +160,17 @@ namespace SystemStabilityAnalysis.Controllers
         public object GenerateReport()
         {
 
-            List<FieldContent> fieldContents = new List<FieldContent>();
-            fieldContents.Add(new FieldContent("deltaT", "55"));
-            string filePath = "resultTemplate.dotx";
-            using (var outputDocument = new TemplateProcessor("resultTemplate.dotx")
-                .SetRemoveContentControls(true))
-            {
-                outputDocument.FillContent(new Content(fieldContents.ToArray()));
-                outputDocument.SaveChanges();
-            }
+            //List<FieldContent> fieldContents = new List<FieldContent>();
+            //fieldContents.Add(new FieldContent("deltaT", "55"));
+            //string filePath = "resultTemplate.dotx";
+            //using (var outputDocument = new TemplateProcessor("resultTemplate.dotx")
+            //    .SetRemoveContentControls(true))
+            //{
+            //    outputDocument.FillContent(new Content(fieldContents.ToArray()));
+            //    outputDocument.SaveChanges();
+            //}
 
-            return null ;
+            //return null ;
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
@@ -181,7 +181,7 @@ namespace SystemStabilityAnalysis.Controllers
             }
 
             memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("отчет", ".docx"));
+            return File(memory, "text/csv", Path.ChangeExtension("test", ".csv"));
 
 
         }

@@ -203,31 +203,53 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object SaveChartToFile([FromQuery]string chart)
         {
-            if (string.IsNullOrEmpty(chart))
-            {
-                QueryResponse.AddNegativeMessage("Строка пустая");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
-            }
-            else
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
             {
-                QueryResponse.AddSuccessMessage("Что-то дошло");
+                stream.CopyTo(memory);
             }
-            return QueryResponse.ToResult();
+
+            memory.Position = 0;
+            return File(memory, "text/csv", Path.ChangeExtension("chart", ".csv"));
+
+            //if (string.IsNullOrEmpty(chart))
+            //{
+            //    QueryResponse.AddNegativeMessage("Строка пустая");
+
+            //}
+            //else
+            //{
+            //    QueryResponse.AddSuccessMessage("Что-то дошло");
+            //}
+            //return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object SaveDiagramToFile([FromQuery]string diagram)
         {
-            if (string.IsNullOrEmpty(diagram))
-            {
-                QueryResponse.AddNegativeMessage("Строка пустая");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
-            }
-            else
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
             {
-                QueryResponse.AddSuccessMessage("Что-то дошло");
+                stream.CopyTo(memory);
             }
-            return QueryResponse.ToResult();
+
+            memory.Position = 0;
+            return File(memory, "text/csv", Path.ChangeExtension("diagram", ".csv"));
+
+            //if (string.IsNullOrEmpty(diagram))
+            //{
+            //    QueryResponse.AddNegativeMessage("Строка пустая");
+
+            //}
+            //else
+            //{
+            //    QueryResponse.AddSuccessMessage("Что-то дошло");
+            //}
+            //return QueryResponse.ToResult();
         }
 
         [HttpGet]
