@@ -230,6 +230,39 @@ namespace SystemStabilityAnalysis.Controllers
             return QueryResponse.ToResult();
         }
 
+        [HttpGet]
+        public object ValidateDiagramBeforeSave([FromQuery]string queryString)
+        {
+            if (string.IsNullOrEmpty(queryString))
+            {
+                QueryResponse.AddNegativeMessage("Строка пустая");
+
+            }
+            else
+            {
+                QueryResponse.AddSuccessMessage("График ок");
+            }
+            
+
+            return QueryResponse.ToResult();
+        }
+
+        [HttpGet]
+        public object ValidateChartBeforeSave([FromQuery]string queryString)
+        {
+            if (string.IsNullOrEmpty(queryString))
+            {
+                QueryResponse.AddNegativeMessage("Строка пустая");
+
+            }
+            else
+            {
+                QueryResponse.AddSuccessMessage("Диаграмма ок");
+            }
+            
+
+            return QueryResponse.ToResult();
+        }
         public class ParameterForCalculationChart
         {
             public List<string> namesSystems { get; set; }

@@ -342,9 +342,7 @@ namespace SystemStabilityAnalysis.Controllers
 
         [HttpGet]
         public object ValidateRestrictionsBeforeSave()
-        {
-            
-
+        {           
             if(ParameterUniversal.GetRestrictions().Count<1)
                 QueryResponse.AddNegativeMessage("Ограничения для сохранения не добавлены");
 
