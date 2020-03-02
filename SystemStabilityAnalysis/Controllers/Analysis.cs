@@ -200,6 +200,66 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
 
+        [HttpGet]
+        public object SaveChartToFile([FromQuery]string fileName)
+        {
+
+            //if (string.IsNullOrEmpty(fileName))
+            //{
+            //    QueryResponse.AddNegativeMessage("Имя файла не указано");
+            //    return QueryResponse.ToResult();
+            //}
+
+            //string filePath = Path.ChangeExtension(fileName, ".csv");
+
+            //MemoryStream memory = new MemoryStream();
+            //using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
+            //{
+            //    using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
+            //    {
+            //        csvWriter.Configuration.Delimiter = ";";
+
+            //        csvWriter.WriteRecords(StaticData.CurrentSystems.ParametersWithEnter.Values);
+            //    }
+
+            //}
+
+            //StaticData.CurrentSystems.Name = Path.GetFileNameWithoutExtension(filePath);
+            //return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
+
+            return null;
+        }
+
+        [HttpGet]
+        public object SaveDiagramToFile([FromQuery]string fileName)
+        {
+
+            //if (string.IsNullOrEmpty(fileName))
+            //{
+            //    QueryResponse.AddNegativeMessage("Имя файла не указано");
+            //    return QueryResponse.ToResult();
+            //}
+
+            //string filePath = Path.ChangeExtension(fileName, ".csv");
+
+            //MemoryStream memory = new MemoryStream();
+            //using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
+            //{
+            //    using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
+            //    {
+            //        csvWriter.Configuration.Delimiter = ";";
+
+            //        csvWriter.WriteRecords(StaticData.CurrentSystems.ParametersWithEnter.Values);
+            //    }
+
+            //}
+
+            //StaticData.CurrentSystems.Name = Path.GetFileNameWithoutExtension(filePath);
+            //return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
+
+            return null;
+        }
+
         public class ParameterForCalculationChart
         {
             public List<string> namesSystems { get; set; }

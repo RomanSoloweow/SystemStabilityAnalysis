@@ -16,6 +16,7 @@ using CsvHelper;
 using HeyRed.Mime;
 using System.Text;
 using System.Dynamic;
+using TemplateEngine.Docx;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -27,8 +28,24 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GetParameters()
         {
-            dynamic result = new ExpandoObject();
-            QueryResponse.Add(result);
+            
+            //System.IO.File.Copy("resultTemplate.docx", "resultTemplate2.docx");
+
+            //using (FileStream fstream = System.IO.File.Open("resultTemplate2.docx", FileMode.Open))
+            //{
+            //    List<FieldContent> fieldContents = new List<FieldContent>();
+            //    fieldContents.Add(new FieldContent("DeltaT", "55"));
+            //    fieldContents.Add(new FieldContent("N1", "5.4444"));
+            //    //string filePath = "resultTemplate2.dotx";
+            //    using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
+            //    {
+            //        outputDocument.FillContent(new Content(fieldContents.ToArray()));
+            //        outputDocument.SaveChanges();
+            //    }
+            //    ImageContent
+            //}
+            //System.IO.File.Delete("resultTemplate2.docx");
+
             var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToJson());

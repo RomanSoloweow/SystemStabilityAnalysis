@@ -1,20 +1,17 @@
-﻿using System;
+﻿using CsvHelper;
+using HeyRed.Mime;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using CsvHelper;
-using HeyRed.Mime;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using SystemStabilityAnalysis.Models.Parameters;
+using TemplateEngine.Docx;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -134,9 +131,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object SaveSystemToFile([FromQuery]string fileName)
         {
-
-            
-
+          
             if (string.IsNullOrEmpty(fileName))
             {
                 QueryResponse.AddNegativeMessage("Имя файла не указано");
@@ -164,6 +159,19 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object GenerateReport()
         {
+
+            List<FieldContent> fieldContents = new List<FieldContent>();
+            fieldContents.Add(new FieldContent("deltaT", "55"));
+            string filePath = "resultTemplate.dotx";
+            using (var outputDocument = new TemplateProcessor("resultTemplate.dotx")
+                .SetRemoveContentControls(true))
+            {
+                outputDocument.FillContent(new Content(fieldContents.ToArray()));
+                outputDocument.SaveChanges();
+            }
+
+            return null ;
+
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
             var memory = new MemoryStream();
@@ -174,6 +182,8 @@ namespace SystemStabilityAnalysis.Controllers
 
             memory.Position = 0;
             return File(memory, "text/csv", Path.ChangeExtension("отчет", ".docx"));
+
+
         }
 
         [HttpGet]
@@ -184,6 +194,7 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 QueryResponse.AddNegativeMessage("Невозможно сохранить систему т.к. данные некорректны");
             }
+
            return QueryResponse.ToResult();
         }
 
