@@ -21,42 +21,42 @@ namespace SystemStabilityAnalysis.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     [Produces("application/json")]
-    public class Systems : ControllerBase
+    public class Systems : BaseController
     {
         [HttpGet]
         public object GetParametersWithEnter()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("ParametersWithEnter", StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message));
-            queryResponse.AddNegativeMessages(message, true);
-            return queryResponse.ToResult();
+            
+            QueryResponse.Add("ParametersWithEnter", StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message));
+            QueryResponse.AddNegativeMessages(message, true);
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersWithCalculate()
         {
 
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("ParametersWithCalculate", StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message));
-            queryResponse.AddNegativeMessages(message, true);
-            return queryResponse.ToResult();
+            
+            QueryResponse.Add("ParametersWithCalculate", StaticData.CurrentSystems.GetParametersWithCalculate(out List<string> message));
+            QueryResponse.AddNegativeMessages(message, true);
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersForAnalysis()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("ParametersForAnalysis", StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message));
-            queryResponse.AddNegativeMessages(message, true);
-            queryResponse.Add("U", StaticData.CurrentSystems.GetParameterU(out string result));
-            queryResponse.Add("result", result);
-            return queryResponse.ToResult();
+            
+            QueryResponse.Add("ParametersForAnalysis", StaticData.CurrentSystems.GetParametersForAnalysis(out List<string> message));
+            QueryResponse.AddNegativeMessages(message, true);
+            QueryResponse.Add("U", StaticData.CurrentSystems.GetParameterU(out string result));
+            QueryResponse.Add("result", result);
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object Validate([FromQuery]string validateArr)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
             var Parameters = JsonConvert.DeserializeObject<List<ParameterForValidate>>(validateArr);
 
             List<object> parametersCorrect = new List<object>();
@@ -70,7 +70,7 @@ namespace SystemStabilityAnalysis.Controllers
                     resultVerification = parameterWithEnter.Verification(out message);
 
                     if (!resultVerification)
-                        queryResponse.AddNegativeMessage(message);
+                        QueryResponse.AddNegativeMessage(message);
 
                     parametersCorrect.Add(new
                     {
@@ -82,21 +82,21 @@ namespace SystemStabilityAnalysis.Controllers
                 }
             }
 
-            queryResponse.Add("parametersCorrect", parametersCorrect);
-            return queryResponse.ToResult();
+            QueryResponse.Add("parametersCorrect", parametersCorrect);
+            return QueryResponse.ToResult();
         }
 
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                queryResponse.AddNegativeMessage("Файл не выбран");
+                QueryResponse.AddNegativeMessage("Файл не выбран");
                   
             }
 
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 //bool resultVerification;
                 //string message;
@@ -120,27 +120,27 @@ namespace SystemStabilityAnalysis.Controllers
                         }
                         catch (Exception ex)
                         {
-                            queryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                            QueryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                         }
                     }
                 }
-                //queryResponse.AddRangeErrorWithIfNotEmpty(messages);
+                //QueryResponse.AddRangeErrorWithIfNotEmpty(messages);
             }
 
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object SaveSystemToFile([FromQuery]string fileName)
         {
 
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if (string.IsNullOrEmpty(fileName))
             {
-                queryResponse.AddNegativeMessage("Имя файла не указано");
-                return queryResponse.ToResult();
+                QueryResponse.AddNegativeMessage("Имя файла не указано");
+                return QueryResponse.ToResult();
             }
 
             string filePath = Path.ChangeExtension(fileName, ".csv");
@@ -179,12 +179,12 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateSystemBeforeSave()
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
             if(!StaticData.CurrentSystems.U.Value.HasValue)
             {
-                queryResponse.AddNegativeMessage("Невозможно сохранить систему т.к. данные некорректны");
+                QueryResponse.AddNegativeMessage("Невозможно сохранить систему т.к. данные некорректны");
             }
-           return queryResponse.ToResult();
+           return QueryResponse.ToResult();
         }
 
         public class ParameterForValidate

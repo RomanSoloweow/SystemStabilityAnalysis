@@ -33,9 +33,8 @@ namespace SystemStabilityAnalysis.Models.Parameters
             NameParameterForAnalysis.NoCorrect.DeleteAllRestrictions();
         }
 
-        public static object AddToRestriction(string name, ConditionType conditionType, double value, bool addToCondition, out bool correct)
+        public static dynamic AddToRestriction(string name, ConditionType conditionType, double value, bool addToCondition, out bool correct)
         {
-            string message;
             correct = true;
             if (Enum.TryParse(name, out NameParameterWithEnter parameterWithEnter))
             {

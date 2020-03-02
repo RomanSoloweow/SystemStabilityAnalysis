@@ -18,67 +18,67 @@ namespace SystemStabilityAnalysis.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     [Produces("application/json")]
-    public class Analysis : ControllerBase
+    public class Analysis : BaseController
     {
 
         [HttpGet]
         public object GetSystems()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("System", StaticData.Systems.Keys.ToList());
+            
+            QueryResponse.Add("System", StaticData.Systems.Keys.ToList());
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersForChart()
         {
 
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("ParametersForChart", StaticData.CurrentSystems.GetParametersForChart());
+            
+            QueryResponse.Add("ParametersForChart", StaticData.CurrentSystems.GetParametersForChart());
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetParametersForDiagram()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("ParametersForDiagram", StaticData.CurrentSystems.GetParametersForDiagram());
+            
+            QueryResponse.Add("ParametersForDiagram", StaticData.CurrentSystems.GetParametersForDiagram());
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetCalculationForChart([FromQuery]string queryString)
         {
             ParameterForCalculationChart parameterForCalculationChart = JsonConvert.DeserializeObject<ParameterForCalculationChart>(queryString);
-            QueryResponse queryResponse = new QueryResponse(); 
+             
 
             if (parameterForCalculationChart.namesSystems.Count < 1)
             {
-                queryResponse.AddNegativeMessage("Для построения графика необходимо выбрать одну или несколько систем");
+                QueryResponse.AddNegativeMessage("Для построения графика необходимо выбрать одну или несколько систем");
             }
             if (string.IsNullOrWhiteSpace(parameterForCalculationChart.parameterName))
             {
-                queryResponse.AddNegativeMessage("Для построения графика необходимо выбрать параметр");
+                QueryResponse.AddNegativeMessage("Для построения графика необходимо выбрать параметр");
             }
             if (!parameterForCalculationChart.From.HasValue)
             {
-                queryResponse.AddNegativeMessage("Для построения графика необходимо указать начальное значение параметра");
+                QueryResponse.AddNegativeMessage("Для построения графика необходимо указать начальное значение параметра");
             }
 
             if (!parameterForCalculationChart.To.HasValue)
             {
-                queryResponse.AddNegativeMessage("Для построения графика необходимо указать конечное значение параметра");
+                QueryResponse.AddNegativeMessage("Для построения графика необходимо указать конечное значение параметра");
             }
 
             if (!parameterForCalculationChart.CountDote.HasValue)
             {
-                queryResponse.AddNegativeMessage("Для построения графика необходимо указать количество точек");
+                QueryResponse.AddNegativeMessage("Для построения графика необходимо указать количество точек");
             }
 
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 List<object> calculations = new List<object>();
                 foreach (var nameSystem in parameterForCalculationChart.namesSystems)
@@ -86,12 +86,12 @@ namespace SystemStabilityAnalysis.Controllers
                     calculations.Add(StaticData.Systems[nameSystem].GetCalculationsForChart(parameterForCalculationChart));
                 }
 
-                queryResponse.Add("ParameterNameX", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName));
-                queryResponse.Add("ParameterNameY", StaticData.CurrentSystems.GetParameterDesignation("U"));
-                queryResponse.Add("Calculations", calculations);
+                QueryResponse.Add("ParameterNameX", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName));
+                QueryResponse.Add("ParameterNameY", StaticData.CurrentSystems.GetParameterDesignation("U"));
+                QueryResponse.Add("Calculations", calculations);
 
             }
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
 
         }
 
@@ -100,17 +100,17 @@ namespace SystemStabilityAnalysis.Controllers
         {
             ParameterForCalculationDiagram parameterForCalculationDiagram = JsonConvert.DeserializeObject<ParameterForCalculationDiagram>(queryString);
 
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if (parameterForCalculationDiagram.namesSystems.Count < 1)
             {
-                queryResponse.AddNegativeMessage("Для построения диаграммы необходимо выбрать одну или несколько систем");
+                QueryResponse.AddNegativeMessage("Для построения диаграммы необходимо выбрать одну или несколько систем");
             }
             if (string.IsNullOrWhiteSpace(parameterForCalculationDiagram.parameterName))
             {
-                queryResponse.AddNegativeMessage("Для построения диаграммы необходимо выбрать параметр");
+                QueryResponse.AddNegativeMessage("Для построения диаграммы необходимо выбрать параметр");
             }
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 List<object> calculations = new List<object>();
                 foreach (var nameSystem in parameterForCalculationDiagram.namesSystems)
@@ -123,23 +123,23 @@ namespace SystemStabilityAnalysis.Controllers
                     });
 
                 }
-                queryResponse.Add("ParameterName", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName));
-                queryResponse.Add("Calculations", calculations);
+                QueryResponse.Add("ParameterName", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName));
+                QueryResponse.Add("Calculations", calculations);
             }
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpPost]
         public object LoadSystemFromFile([FromQuery]IFormFile file)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                queryResponse.AddNegativeMessage("Файл не выбран");
+                QueryResponse.AddNegativeMessage("Файл не выбран");
 
             }
 
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
                 {
@@ -152,7 +152,7 @@ namespace SystemStabilityAnalysis.Controllers
                             List<ParameterWithEnter> parametersWithEnter = csvReader.GetRecords<ParameterWithEnter>().ToList();
                             if (parametersWithEnter.Count != HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Count)
                             {
-                                queryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                                QueryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                             }
                             else
                             {
@@ -168,27 +168,27 @@ namespace SystemStabilityAnalysis.Controllers
                         }
                         catch (Exception ex)
                         {
-                            queryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                            QueryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                         }
                     }
                 }
             }
 
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object DeleteSystem([FromQuery]string nameSystem)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
             if(string.IsNullOrEmpty(nameSystem))
             {
-                queryResponse.AddNegativeMessage("Система для удаления не указана");
+                QueryResponse.AddNegativeMessage("Система для удаления не указана");
             }
             else if(!StaticData.Systems.Keys.Contains(nameSystem))
             {
-                queryResponse.AddNegativeMessage($"Невозможно удалить систему. Система  с именем \"{nameSystem}\" не найдена");
+                QueryResponse.AddNegativeMessage($"Невозможно удалить систему. Система  с именем \"{nameSystem}\" не найдена");
             }
             else
             {
@@ -196,7 +196,7 @@ namespace SystemStabilityAnalysis.Controllers
             }
            
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
 

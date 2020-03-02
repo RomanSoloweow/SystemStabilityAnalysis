@@ -3,36 +3,32 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using SystemStabilityAnalysis.Helpers;
 
 namespace SystemStabilityAnalysis.Models
 {
-    public enum Status
-    {
-        negative = 0,
-        success,
-        info,
-        warning
-    }
-
-
-
-    public static class StatusExtension
-    {
-        public static string GetName(this Status parameter)
-        {
-            return Enum.GetName(typeof(Status), parameter);
-        }
-    }
-
+    
     public class QueryResponse
     {
-        private dynamic result = new ExpandoObject();
+        private enum Status
+        {
+            negative = 0,
+            success,
+            info,
+            warning
+        }
 
-        List<string> properties = new List<string>() { "status", "message", "header" };
+        public QueryResponse()
+        {
+            Clear();
+        }
+        private dynamic result;
 
-        private Status status = Status.success;
+        List<string> properties;
 
-        private List<string> messages = new List<string>();
+        private Status status;
+
+        private List<string> messages;
 
         public bool IsSuccess { get { return status == Status.success; } }
 
@@ -46,7 +42,7 @@ namespace SystemStabilityAnalysis.Models
         {
             if (IsNegative)
             {
-                throw new ArgumentException(paramName: "status", message: "Status already set as Success");
+                throw new ArgumentException(paramName: "status", message: "Status already set as negative");
             }
         }
 
@@ -55,15 +51,18 @@ namespace SystemStabilityAnalysis.Models
             CheckBeforeSet();
             status = Status.success;
         }
+
         private void Negative()
         {
             status = Status.negative;
         }
+
         private void Warning()
         {
             CheckBeforeSet();
             status = Status.warning;
         }
+
         private void Info()
         {
             CheckBeforeSet();
@@ -78,6 +77,7 @@ namespace SystemStabilityAnalysis.Models
             Negative();
             messages.Add(negativeMessage);
         }
+
         public void AddNegativeMessages(List<string> negativeMessages, bool checkOnEmpty = false)
         {
             if ((checkOnEmpty) && (negativeMessages.Count < 1))
@@ -153,13 +153,40 @@ namespace SystemStabilityAnalysis.Models
             properties.Add(name);
         }
 
+        public void Add(dynamic obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentException(message: "Object is null");
+            }
+            var Result = ((IDictionary<String, Object>)result);
+            var Obj = ((IDictionary<String, Object>)obj);
+            foreach (var property in Obj)
+            {
+                if ((string.IsNullOrEmpty(property.Key)) || (properties.Contains(property.Key)))
+                {
+                    throw new ArgumentException(message: "Property already exist");
+                }
+                Result[property.Key] = property.Value;
+                properties.Add(property.Key);
+            } 
+        }
+        private void Clear()
+        {
+            properties = new List<string>() { "status", "message", "header" };
+            result = new ExpandoObject();
+            messages = new List<string>();
+            status = Status.success;
+        }
+
         public object ToResult()
         {
-            result.status = status.GetName();
+            result.status = HelperEnum.GetName(status);
             result.message = messages;
-            result.header = status.GetName();
-
-            return result;
+            result.header = HelperEnum.GetName(status);
+            var resultForReturn = result;
+            Clear();
+            return resultForReturn;
         }
 
         

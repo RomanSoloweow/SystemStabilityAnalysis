@@ -255,7 +255,7 @@ namespace SystemStabilityAnalysis.Models
             throw new ArgumentException(paramName: designation, message: "Неккоректное условие");
         }
 
-        public object ToResponse()
+        public dynamic ToResponse()
         {
             if (!HelperEnum.IsDefault(ParameterWithEnter))
             {

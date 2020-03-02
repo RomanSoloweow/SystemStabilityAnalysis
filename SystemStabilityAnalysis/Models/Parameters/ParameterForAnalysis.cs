@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemStabilityAnalysis.Helpers;
@@ -171,15 +172,14 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public static object ToRestriction(this NameParameterForAnalysis parameter, ConditionType conditionType, double value)
         {
 
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("Name", parameter.GetDesignation());
-            queryResponse.Add("Description", parameter.GetDescription());
-            queryResponse.Add("Unit", parameter.GetUnit().GetDesignation());
-            queryResponse.Add("Condition", conditionType.GetDesignation());
-            queryResponse.Add("Value", value);
-            queryResponse.Add("RestrictionName", parameter.GetName());
-
-            return queryResponse.ToResult();
+            dynamic result = new ExpandoObject();
+            result.Name = parameter.GetDesignation();
+            result.Description = parameter.GetDescription();
+            result.Unit = parameter.GetUnit().GetDesignation();
+            result.Condition = conditionType.GetDesignation();
+            result.Value = value;
+            result.RestrictionName = parameter.GetName();
+            return result;
 
         }
 

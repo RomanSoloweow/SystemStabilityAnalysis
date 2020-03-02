@@ -22,63 +22,64 @@ namespace SystemStabilityAnalysis.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
     [Produces("application/json")]
-    public class Restrictions : ControllerBase
+    public class Restrictions : BaseController
     {
         [HttpGet]
         public object GetParameters()
         {
-            QueryResponse queryResponse = new QueryResponse();          
+            dynamic result = new ExpandoObject();
+            QueryResponse.Add(result);
             var ParametersWithEnter = HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Where(x => !StaticData.ConditionsForParameterWithEnter.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersWithCalculation = HelperEnum.GetValuesWithoutDefault<NameParameterWithCalculation>().Where(x => !StaticData.ConditionsForParameterWithCalculation.ContainsKey(x)).Select(x => x.ToJson());
             var ParametersForAnalysis = HelperEnum.GetValuesWithoutDefault<NameParameterForAnalysis>().Where(x => !StaticData.ConditionsForParameterForAnalysis.ContainsKey(x)).Select(x => x.ToJson());
-            queryResponse.Add("Properties", ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis));
+            QueryResponse.Add("Properties", ParametersWithEnter.Union(ParametersWithCalculation).Union(ParametersForAnalysis));
            
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetConditions()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("Conditions", HelperEnum.GetValuesWithoutDefault<ConditionType>().Select(x => x.ToJson()));
-            return queryResponse.ToResult();
+            
+            QueryResponse.Add("Conditions", HelperEnum.GetValuesWithoutDefault<ConditionType>().Select(x => x.ToJson()));
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object GetRestrictions()
         {
-            QueryResponse queryResponse = new QueryResponse();
-            queryResponse.Add("Restrictions", ParameterUniversal.GetRestrictions().Select(x => x.ToResponse()));
-            return queryResponse.ToResult();
+            
+            QueryResponse.Add("Restrictions", ParameterUniversal.GetRestrictions().Select(x => x.ToResponse()));
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
         public object AddRestriction(string parameter = null, string condition = null, string value = null)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             ConditionType conditionValue = ConditionType.NoCorrect;
             double Value = 0 ;
 
             if (string.IsNullOrEmpty(value))
             {
-                queryResponse.AddNegativeMessage("Значение ограничения не указано");
+                QueryResponse.AddNegativeMessage("Значение ограничения не указано");
             }
             else
             {
                 if (!double.TryParse(value, out Value))
                 {
-                    queryResponse.AddNegativeMessage(String.Format("Указанное значение \"{0}\" не является числом", value));
+                    QueryResponse.AddNegativeMessage(String.Format("Указанное значение \"{0}\" не является числом", value));
                 }
                 else if (!(Value > 0))
                 {
-                    queryResponse.AddNegativeMessage("Значение ограничения должно быть > 0");
+                    QueryResponse.AddNegativeMessage("Значение ограничения должно быть > 0");
                 }
             }
 
             if (string.IsNullOrEmpty(condition))
             {
-                queryResponse.AddNegativeMessage("Условие для ограничения не указано");
+                QueryResponse.AddNegativeMessage("Условие для ограничения не указано");
             }
             else
             {
@@ -86,43 +87,42 @@ namespace SystemStabilityAnalysis.Controllers
 
                 if (HelperEnum.IsDefault(conditionValue))
                 {
-                    queryResponse.AddNegativeMessage(String.Format("Условие типа \"{0}\" не найдено", condition));
+                    QueryResponse.AddNegativeMessage(String.Format("Условие типа \"{0}\" не найдено", condition));
                 }
             }
 
             if (string.IsNullOrEmpty(parameter))
             {
-                queryResponse.AddNegativeMessage("Параметр для ограничения не указан");
+                QueryResponse.AddNegativeMessage("Параметр для ограничения не указан");
             }
             else 
             {               
-               var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, queryResponse.IsSuccess, out bool correct);
+               var result = ParameterUniversal.AddToRestriction(parameter, conditionValue, Value, QueryResponse.IsSuccess, out bool correct);
 
-                if (queryResponse.IsSuccess)
+                if (QueryResponse.IsSuccess)
                 {
-                   return result;
+                    QueryResponse.Add(result);
                 }
-
-                if (!correct)
+                else if (!correct)
                 {
                    
-                    queryResponse.AddNegativeMessage(String.Format("Параметр с именем \"{0}\" не найден", parameter));
+                    QueryResponse.AddNegativeMessage(String.Format("Параметр с именем \"{0}\" не найден", parameter));
                 }
                
             }
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
 
         }
 
         [HttpGet]
         public object DeleteRestriction([FromQuery]string restrictionName = null)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if (string.IsNullOrEmpty(restrictionName))
             {
-                queryResponse.AddNegativeMessage("Ограничение не указано");
+                QueryResponse.AddNegativeMessage("Ограничение не указано");
             }
             else
             {
@@ -130,17 +130,17 @@ namespace SystemStabilityAnalysis.Controllers
 
                 if(!correct)
                 {
-                    queryResponse.AddNegativeMessage(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
+                    QueryResponse.AddNegativeMessage(String.Format("Ограничение с именем \"{0}\" не найдено", restrictionName));
                 }
 
                 if(!contains)
                 {
-                    queryResponse.AddNegativeMessage("Ограничение для данного параметра не найдено");
+                    QueryResponse.AddNegativeMessage("Ограничение для данного параметра не найдено");
                 }
                
             }
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
@@ -148,21 +148,21 @@ namespace SystemStabilityAnalysis.Controllers
         {
             ParameterUniversal.DeleteAllRestriction();
 
-            QueryResponse queryResponse = new QueryResponse();
-            return queryResponse.ToResult();
+            
+            return QueryResponse.ToResult();
         }
 
         //[HttpPost]
         //public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         //{
-        //    QueryResponse queryResponse = new QueryResponse();
+        //    
 
         //    if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
         //    {
-        //        queryResponse.AddError("Файл не выбран.");
-        //        return queryResponse.ToResult();
+        //        QueryResponse.AddError("Файл не выбран.");
+        //        return QueryResponse.ToResult();
         //    }
-        //    if (queryResponse.IsCorrect)
+        //    if (QueryResponse.IsCorrect)
         //    {
         //        List<object> Restrictions = new List<object>();
         //        using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
@@ -180,7 +180,7 @@ namespace SystemStabilityAnalysis.Controllers
 
         //                        if (restriction.AddedToRestriction())
         //                        {
-        //                            queryResponse.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
+        //                            QueryResponse.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
         //                        }
         //                        else
         //                        {
@@ -191,7 +191,7 @@ namespace SystemStabilityAnalysis.Controllers
         //                            }
         //                            else
         //                            {
-        //                                queryResponse.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
+        //                                QueryResponse.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
 
         //                                break;
         //                            }
@@ -200,56 +200,56 @@ namespace SystemStabilityAnalysis.Controllers
         //                }
         //                catch (Exception ex)
         //                {
-        //                    queryResponse.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
-        //                    return queryResponse.ToResult();
+        //                    QueryResponse.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+        //                    return QueryResponse.ToResult();
         //                }
         //            }
         //        }
 
-        //        if (!queryResponse.IsCorrect)
-        //            return queryResponse.ToResult();
+        //        if (!QueryResponse.IsCorrect)
+        //            return QueryResponse.ToResult();
 
         //    }
-        //    return queryResponse.ToResult();
+        //    return QueryResponse.ToResult();
         //}
 
 
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                queryResponse.AddNegativeMessage("Файл не выбран.");
+                QueryResponse.AddNegativeMessage("Файл не выбран.");
             }
 
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 ParameterUniversal.DeleteAllRestriction();
 
                 if (!RestrictionsFromFile(file, out List<string> message))
-                    queryResponse.AddNegativeMessages(message);
+                    QueryResponse.AddNegativeMessages(message);
             }
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
         [HttpPost]
         public object AddRestrictionsFromFile([FromQuery]IFormFile file)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
-                queryResponse.AddNegativeMessage("Файл не выбран.");
+                QueryResponse.AddNegativeMessage("Файл не выбран.");
             }
 
-            if (queryResponse.IsSuccess)
+            if (QueryResponse.IsSuccess)
             {
                 if (!RestrictionsFromFile(file, out List<string> message))
-                    queryResponse.AddNegativeMessages(message);
+                    QueryResponse.AddNegativeMessages(message);
             }
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
 
@@ -298,12 +298,12 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet] 
         public object SaveRestrictionsToFile([FromQuery]string fileName)
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if (string.IsNullOrEmpty(fileName))
             {
-                queryResponse.AddNegativeMessage("Имя файла не указано");
-                return queryResponse.ToResult();
+                QueryResponse.AddNegativeMessage("Имя файла не указано");
+                return QueryResponse.ToResult();
             }
 
             string filePath = Path.ChangeExtension(fileName, ".csv");
@@ -326,12 +326,12 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateRestrictionsBeforeSave()
         {
-            QueryResponse queryResponse = new QueryResponse();
+            
 
             if(ParameterUniversal.GetRestrictions().Count<1)
-                queryResponse.AddNegativeMessage("Ограничения для сохранения не добавлены");
+                QueryResponse.AddNegativeMessage("Ограничения для сохранения не добавлены");
 
-            return queryResponse.ToResult();
+            return QueryResponse.ToResult();
         }
 
     }
