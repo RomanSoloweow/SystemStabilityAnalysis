@@ -1231,11 +1231,11 @@ function exportDiag() {
     if (msg.status != "negative") {
       var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg")
       $.ajax({
-        method: "POST",
+        method: "GET",
         url: `Analysis/SaveDiagramToFile`,
-        data: {diagram: url_base64jp.replace("data:image/png;base64,", "")}
+        //data: {diagram: url_base64jp.replace("data:image/png;base64,", "")}
       }).done(function(msg){
-        var blob=new Blob(msg);
+        var blob=new Blob([msg]);
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
