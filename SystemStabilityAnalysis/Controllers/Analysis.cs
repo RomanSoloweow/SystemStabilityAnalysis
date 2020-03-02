@@ -201,63 +201,25 @@ namespace SystemStabilityAnalysis.Controllers
 
 
         [HttpGet]
-        public object SaveChartToFile([FromQuery]string fileName)
+        public object SaveChartToFile([FromQuery]string chart)
         {
+            if (string.IsNullOrEmpty(chart))
+            {
+                QueryResponse.AddNegativeMessage("Строка пустая");
 
-            //if (string.IsNullOrEmpty(fileName))
-            //{
-            //    QueryResponse.AddNegativeMessage("Имя файла не указано");
-            //    return QueryResponse.ToResult();
-            //}
-
-            //string filePath = Path.ChangeExtension(fileName, ".csv");
-
-            //MemoryStream memory = new MemoryStream();
-            //using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
-            //{
-            //    using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
-            //    {
-            //        csvWriter.Configuration.Delimiter = ";";
-
-            //        csvWriter.WriteRecords(StaticData.CurrentSystems.ParametersWithEnter.Values);
-            //    }
-
-            //}
-
-            //StaticData.CurrentSystems.Name = Path.GetFileNameWithoutExtension(filePath);
-            //return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
-
-            return null;
+            }
+            return QueryResponse.ToResult();
         }
 
         [HttpGet]
-        public object SaveDiagramToFile([FromQuery]string fileName)
+        public object SaveDiagramToFile([FromQuery]string diagram)
         {
+            if (string.IsNullOrEmpty(diagram))
+            {
+                QueryResponse.AddNegativeMessage("Строка пустая");
 
-            //if (string.IsNullOrEmpty(fileName))
-            //{
-            //    QueryResponse.AddNegativeMessage("Имя файла не указано");
-            //    return QueryResponse.ToResult();
-            //}
-
-            //string filePath = Path.ChangeExtension(fileName, ".csv");
-
-            //MemoryStream memory = new MemoryStream();
-            //using (StreamWriter streamWriter = new StreamWriter(memory, Encoding.UTF8))
-            //{
-            //    using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.CurrentCulture))
-            //    {
-            //        csvWriter.Configuration.Delimiter = ";";
-
-            //        csvWriter.WriteRecords(StaticData.CurrentSystems.ParametersWithEnter.Values);
-            //    }
-
-            //}
-
-            //StaticData.CurrentSystems.Name = Path.GetFileNameWithoutExtension(filePath);
-            //return File(memory.ToArray(), MimeTypesMap.GetMimeType(filePath), filePath);
-
-            return null;
+            }
+            return QueryResponse.ToResult();
         }
 
         public class ParameterForCalculationChart
