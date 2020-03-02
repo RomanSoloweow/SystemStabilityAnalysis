@@ -25,7 +25,7 @@ namespace SystemStabilityAnalysis.Controllers
         public object GetSystems()
         {
             
-            QueryResponse.Add("System", StaticData.Systems.Keys.ToList());
+            QueryResponse.Add("Systems", StaticData.Systems.Keys.ToList());
 
             return QueryResponse.ToResult();
         }

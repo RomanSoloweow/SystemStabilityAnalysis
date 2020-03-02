@@ -142,12 +142,20 @@ namespace SystemStabilityAnalysis.Models
 
         public void Add(string name, object value)
         {
-            name = name?.ToLower();
+    
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException(message: "property is empty or null");
+            }
 
-            if ((string.IsNullOrEmpty(name))||(properties.Contains(name)))
+            name = char.ToUpper(name[0]) + name.Substring(1);
+
+            if ((properties.Contains(name)))
             {
                 throw new ArgumentException(message: "Property already exist");
             }
+
+
 
             ((IDictionary<String, Object>)result)[name] = value;
             properties.Add(name);
@@ -161,14 +169,16 @@ namespace SystemStabilityAnalysis.Models
             }
             var Result = ((IDictionary<String, Object>)result);
             var Obj = ((IDictionary<String, Object>)obj);
+            string name;
             foreach (var property in Obj)
             {
                 if ((string.IsNullOrEmpty(property.Key)) || (properties.Contains(property.Key)))
                 {
                     throw new ArgumentException(message: "Property already exist");
                 }
-                Result[property.Key] = property.Value;
-                properties.Add(property.Key);
+                name = char.ToUpper(property.Key[0]) + property.Key.Substring(1);
+                Result[name] = property.Value;
+                properties.Add(name);
             } 
         }
         private void Clear()
