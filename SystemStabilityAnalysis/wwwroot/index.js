@@ -1177,15 +1177,24 @@ function exportChart() {
           url: `Analysis/SaveChartToFile`,
           data: {chart: url_base64jp.replace("data:image/png;base64,", "")}
         }).done(function(msg){
+          var blob=new Blob([msg.fileData]);
+          const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.style.display = 'none';
-          a.href = url_base64jp;
-          a.download = "График.png";
+          a.href = url //url_base64jp;
+          a.download = `График.${msg.fileType}`;
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(a.href);
+
+          // const a = document.createElement('a');
+          // a.style.display = 'none';
+          // a.href = url_base64jp;
+          // a.download = "График.png";
+          // document.body.appendChild(a);
+          // a.click();
+          // window.URL.revokeObjectURL(a.href);
         });
-        window.URL.revokeObjectURL(a.href);
       if (msg.message.length > 0) {
         notification(msg.status,  msg.header, msg.message,event.target)
       }
@@ -1199,6 +1208,21 @@ function exportDiag() {
     params.namesSystems.push($(element).text())
   });
   params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
+  // fetch('Analysis/SaveDiagramToFile?diagram=3')
+  // .then(resp => resp.blob())
+  // .then(blob => {
+  //   const url = window.URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.style.display = 'none';
+  //   a.href = url;
+  //   // the filename you want
+  //   a.download = 'todo-1.csv';
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
+  //   alert('your file has downloaded!'); // or you know, something with better UX...
+  // })
+  // .catch(() => alert('oh no!'));
   $.ajax({
     method: "GET",
     url: "Analysis/ValidateDiagramBeforeSave",
@@ -1211,10 +1235,12 @@ function exportDiag() {
         url: `Analysis/SaveDiagramToFile`,
         data: {diagram: url_base64jp.replace("data:image/png;base64,", "")}
       }).done(function(msg){
+        var blob=new Blob(msg);
+        const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url_base64jp;
-        a.download = "Диаграмма.png";
+        a.href = url //url_base64jp;
+        a.download = `Диаграмма.csv`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
