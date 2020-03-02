@@ -208,6 +208,10 @@ namespace SystemStabilityAnalysis.Controllers
                 QueryResponse.AddNegativeMessage("Строка пустая");
 
             }
+            else
+            {
+                QueryResponse.AddSuccessMessage("Что-то дошло");
+            }
             return QueryResponse.ToResult();
         }
 
@@ -218,6 +222,10 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 QueryResponse.AddNegativeMessage("Строка пустая");
 
+            }
+            else
+            {
+                QueryResponse.AddSuccessMessage("Что-то дошло");
             }
             return QueryResponse.ToResult();
         }
