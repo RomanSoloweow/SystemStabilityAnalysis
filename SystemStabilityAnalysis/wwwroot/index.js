@@ -32,8 +32,8 @@ $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click();
 $(".download-system-1").click(downloadSystem1);
 $(".ui.button.upload-csv4").click(uploadCsv4);
-$(".export-diag").click(() => exportCanvas("diagram", "SaveDiagramToFile"));
-$(".export-chart").click(() => exportCanvas("chart", "SaveChartToFile"));
+$(".export-diag").click(exportDiag);
+$(".export-chart").click(exportChart);
 
 $('.ui.dropdown.names').change(function(){
   setTimeout(()=>{
@@ -554,14 +554,12 @@ function createLinearChart(event){
     url: "Analysis/GetCalculationForChart",
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
-      if (msg.status != "negative")
-        showChart4(msg)
-      if (msg.message.length > 0) {
-        notification(msg.status,  msg.header, msg.message,event.target)
-      }
+    if (msg.status != "negative")
+      showChart4(msg)
+    if (msg.message.length > 0) {
+      notification(msg.status,  msg.header, msg.message,event.target)
+    }
   });
-  Result = JSON.parse("{\u0022ParameterSelect\u0022:\u0022Tn\u0022,\u0022Tn\u0022:[20.0,20.11111111111111,20.22222222222222,20.333333333333332,20.444444444444443,20.555555555555554,20.666666666666664,20.777777777777775,20.888888888888886],\u0022P\u0022:[2.434181973074066E-07,2.1785025870934773E-07,1.9496790177364581E-07,1.744890408809124E-07,1.5616121992637724E-07,1.3975849976991407E-07,1.2507867355899056E-07,1.11940773583199E-07,1.0018284036333434E-07]}")
-
 }
 
 function createDiagram(event){
@@ -581,7 +579,6 @@ function createDiagram(event){
     if (msg.message.length > 0) {
       notification(msg.status,  msg.header, msg.message,event.target)
     }
-    
   });
 }
 
@@ -1157,14 +1154,60 @@ function secondCTab(event) {
   }); 
 };
 
-function exportCanvas(canvasId, method) {
-  var url_base64jp = $(`#${canvasId}`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = `Analysis/${method}?chart=${url_base64jp}`;
-  console.log(a.href) 
-  a.download = "График.jpg";
-  document.body.appendChild(a);
-  a.click();
-  window.URL.revokeObjectURL(a.href);
+
+function exportChart() {
+  let params = {}
+  params.namesSystems = []
+  $("[data-tab='third/c']").find(".ui.label.transition.visible").each(function( index, element  ) {
+    params.namesSystems.push($(element).text())
+  });
+  params.from = $(".linear-chart-from").val();
+  params.to = $(".linear-chart-to").val();
+  params.countDote = $(".linear-chart-dots-count").val();
+  params.parameterName = $(".ui.param-chart").find(".item.active").attr("data-value");
+  $.ajax({
+    method: "GET",
+    url: "Analysis/ValidateChartBeforeSave",
+    data: {queryString: JSON.stringify(params)}
+  }).done(function(msg){
+      if (msg.status != "negative")
+        var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = `Analysis/SaveChartToFile?chart=${url_base64jp}`; 
+        a.download = "График.jpg";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(a.href);
+      if (msg.message.length > 0) {
+        notification(msg.status,  msg.header, msg.message,event.target)
+      }
+  });
+}
+
+function exportDiag() {
+  let params = {}
+  params.namesSystems = []
+  $("[data-tab='third/b']").find(".ui.label.transition.visible").each(function( index, element  ) {
+    params.namesSystems.push($(element).text())
+  });
+  params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
+  $.ajax({
+    method: "GET",
+    url: "Analysis/ValidateDiagramBeforeSave",
+    data: {queryString: JSON.stringify(params)}
+  }).done(function(msg){
+    if (msg.status != "negative")
+      var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = `Analysis/SaveDiagramToFile?diagram=${url_base64jp}`; 
+      a.download = "Диаграмма.jpg";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(a.href);
+    if (msg.message.length > 0) {
+      notification(msg.status,  msg.header, msg.message,event.target)
+    }
+  });
 }
