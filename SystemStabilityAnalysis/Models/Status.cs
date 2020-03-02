@@ -148,7 +148,7 @@ namespace SystemStabilityAnalysis.Models
                 throw new ArgumentException(message: "property is empty or null");
             }
 
-            name = char.ToUpper(name[0]) + name.Substring(1);
+            name = char.ToLower(name[0]) + name.Substring(1);
 
             if ((properties.Contains(name)))
             {
