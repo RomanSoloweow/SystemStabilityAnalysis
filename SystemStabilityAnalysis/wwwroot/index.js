@@ -1158,11 +1158,11 @@ function secondCTab(event) {
 };
 
 function exportCanvas(canvasId, method) {
-  var url_base64jp = $(`#${canvasId}`)[0].toDataURL("image/jpg");
-  //<a id="link2" download="ChartJpg.jpg">Save as jpg</a>
+  var url_base64jp = $(`#${canvasId}`)[0].toDataURL("image/jpg").replace("data:image/png;base64,", "");
   const a = document.createElement('a');
   a.style.display = 'none';
   a.href = `Analysis/${method}?chart=${url_base64jp}`;
+  console.log(a.href) 
   a.download = "График.jpg";
   document.body.appendChild(a);
   a.click();
