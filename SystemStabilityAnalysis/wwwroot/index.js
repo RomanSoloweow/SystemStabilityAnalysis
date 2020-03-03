@@ -1183,7 +1183,10 @@ function exportChart() {
         $.ajax({
           method: "POST",
           url: `Analysis/SaveChartToFile`,
-          data: {chart: url_base64jp.replace("data:image/png;base64,", "")}
+          data: {chart: url_base64jp.replace("data:image/png;base64,", "")},
+          cache:false,
+          contentType: false,
+          processData: false
         }).done(function(msg){
           var blob = new Blob([msg.fileData]);
           const url = window.URL.createObjectURL(blob);
