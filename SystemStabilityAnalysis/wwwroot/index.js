@@ -1178,15 +1178,12 @@ function exportChart() {
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
       if (msg.status != "negative")
-        var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg");
+        var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})//("image/jpg");
         console.log(url_base64jp)
         $.ajax({
           method: "POST",
           url: `Analysis/SaveChartToFile`,
-          data: {chart: url_base64jp.replace("data:image/png;base64,", "")},
-          cache:false,
-          contentType: false,
-          processData: false
+          data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
         }).done(function(msg){
           var blob = new Blob([msg.fileData]);
           const url = window.URL.createObjectURL(blob);
