@@ -32,7 +32,7 @@ $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click();
 $(".download-system-1").click(downloadSystem1);
 $(".ui.button.upload-csv4").click(uploadCsv4);
-$(".export-diag").click(exportDiag1);
+$(".export-diag").click(exportDiag);
 $(".export-chart").click(exportChart);
 
 $('.ui.dropdown.names').change(function(){
@@ -1161,7 +1161,8 @@ function secondCTab(event) {
 };
 
 
-function exportChart() {
+function exportChart(event) {
+
   let params = {}
   params.namesSystems = []
   $("[data-tab='third/c']").find(".ui.label.transition.visible").each(function( index, element  ) {
@@ -1171,88 +1172,98 @@ function exportChart() {
   params.to = $(".linear-chart-to").val();
   params.countDote = $(".linear-chart-dots-count").val();
   params.parameterName = $(".ui.param-chart").find(".item.active").attr("data-value");
-    
-  $.ajax({
-    method: "GET",
-    url: "Analysis/ValidateChartBeforeSave",
-    data: {queryString: JSON.stringify(params)}
-  }).done(function(msg){
-      if (msg.status != "negative")
-
-          // var canvas = document.getElementById('chart');
-          // var image = canvas.toDataURL({  //В image всегда приходит null
-          //     format: 'jpeg',
-          //     quality: 1
-          // });
-      
-      
-          // $.ajax({
-          //     type: 'POST',
-          //     url: "Analysis/SaveChartToFile",
-          //     data: {imageData : image},
-          //     contentType: 'application/json; charset=utf-8',
-          //     dataType: 'json',
-          //     success: function (data, status) {
-          //         alert('success')
-          //     }
-          // })
-
-        var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})//("image/jpg");
-        console.log(url_base64jp)
-        $.ajax({
-          method: "POST",
-          url: `Analysis/SaveChartToFile`,
-          data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
-        }).done(function(msg){
-          var blob = new Blob([msg.fileData]);
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url //url_base64jp;
-          a.download = `График.csv`;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(a.href);
-
-          // const a = document.createElement('a');
-          // a.style.display = 'none';
-          // a.href = url_base64jp;
-          // a.download = "График.png";
-          // document.body.appendChild(a);
-          // a.click();
-          // window.URL.revokeObjectURL(a.href);
-        });
+  if ($(event.target).parent().parent().find(".ui.input.save-chart1").length == 0) {
+    $.ajax({
+      method: "GET",
+      url: "Analysis/ValidateChartBeforeSave",
+      data: {queryString: JSON.stringify(params)}
+    }).done(function(msg){
+      if (msg.status != "negative") {
+        element = $(event.target).is( ":button" ) ? $(event.target).parent() : $(event.target).parent().parent
+        element.before(`
+        <div class="field">
+        <label>&ensp;<br></label>
+          <div class="ui input save-chart1 ">
+            <input type="text" placeholder="Имя">
+          </div>
+          </div>
+        `);
+      } 
       if (msg.message.length > 0) {
         notification(msg.status,  msg.header, msg.message,event.target)
       }
-  });
-}
+    });
+  }
+  else {
+    filename = $(".ui.input.save-chart1").find("input").val();
+    if (filename.length > 0) {
+      $(".ui.input.save-chart1").removeClass("error")
+      var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})
+      $.ajax({
+        method: "POST",
+        url: `Analysis/SaveChartToFile`,
+        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
+      }).done(function(msg){
+        var blob = new Blob([msg.fileData]);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url //url_base64jp;
+        a.download = `График.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(a.href);
 
-
-function base64ToBlob(base64, mime) 
-{
-    mime = mime || '';
-    var sliceSize = 1024;
-    var byteChars = window.atob(base64);
-    var byteArrays = [];
-
-    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-        var slice = byteChars.slice(offset, offset + sliceSize);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
+        // const a = document.createElement('a');
+        // a.style.display = 'none';
+        // a.href = url_base64jp;
+        // a.download = "График.png";
+        // document.body.appendChild(a);
+        // a.click();
+        // window.URL.revokeObjectURL(a.href);
+      });
     }
+    else {
+      notification("error","Ошибка",["Введите имя файла"],event.target)
+      $(".ui.input.save-system").addClass("error")
+    }
+  }
 
-    return new Blob(byteArrays, {type: mime});
+
+
+    
+  // $.ajax({
+  //   method: "GET",
+  //   url: "Analysis/ValidateChartBeforeSave",
+  //   data: {queryString: JSON.stringify(params)}
+  // }).done(function(msg){
+  //     if (msg.status != "negative") {
+  //         console.log( $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent())
+  //         element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
+  //         element.before(`
+  //           <div class="ui input save-chart1">
+  //             <input type="text" placeholder="Имя">
+  //           </div>
+  //         `);
+  //         let filename = $(".ui.input.save-chart1").find("input").val();
+  //         if (filename.length > 0) {
+  //           $(".ui.input.save-chart1").removeClass("error")
+              
+  //         }
+  //         else {
+  //           notification("error","Ошибка",["Введите имя файла"],event.target)
+  //           $(".ui.input.save-chart1").addClass("error")
+  //         }
+  //       }
+        
+  //     if (msg.message.length > 0) {
+  //       notification(msg.status,  msg.header, msg.message,event.target)
+  //     }
+  // });
 }
 
-function exportDiag() {
+
+function exportDiag(event) {
   let params = {}
   params.namesSystems = []
   $("[data-tab='third/b']").find(".ui.label.transition.visible").each(function( index, element  ) {
@@ -1274,46 +1285,76 @@ function exportDiag() {
   //   alert('your file has downloaded!'); // or you know, something with better UX...
   // })
   // .catch(() => alert('oh no!'));
-  $.ajax({
-    method: "GET",
-    url: "Analysis/ValidateDiagramBeforeSave",
-    data: {queryString: JSON.stringify(params)}
-  }).done(function(msg){
-    if (msg.status != "negative") {
-      var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg")
+
+  if ($(event.target).parent().parent().find(".ui.input.save-diagram1").length == 0) {
+    $.ajax({
+      method: "GET",
+      url: "Analysis/ValidateDiagramBeforeSave",
+      data: {queryString: JSON.stringify(params)}
+    }).done(function(msg){
+      if (msg.status != "negative") {
+        element = $(event.target).is( ":button" ) ? $(event.target).parent() : $(event.target).parent().parent
+        console.log(element)
+        element.before(`
+        <div class="field">
+        <label>&ensp;<br></label>
+          <div class="ui input save-diagram1 ">
+            <input type="text" placeholder="Имя">
+          </div>
+          </div>
+        `);
+      } 
+      if (msg.message.length > 0) {
+        notification(msg.status,  msg.header, msg.message,event.target)
+      }
+    });
+  }
+  else {
+    filename = $(".ui.input.save-diagram1").find("input").val();
+    if (filename.length > 0) {
+      $(".ui.input.save-diagram1").removeClass("error")
+      var url_base64jp = $(`#diagram`)[0].toDataURL({format: 'jpg', quality: 1})
       $.ajax({
-        method: "GET",
+        method: "POST",
         url: `Analysis/SaveDiagramToFile`,
-        //data: {diagram: url_base64jp.replace("data:image/png;base64,", "")}
+        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
       }).done(function(msg){
-        var blob=new Blob([msg]);
+        var blob = new Blob([msg.fileData]);
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url //url_base64jp;
-        a.download = `Диаграмма`;
+        a.download = `Диаграмма.csv`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
+
+        // const a = document.createElement('a');
+        // a.style.display = 'none';
+        // a.href = url_base64jp;
+        // a.download = "График.png";
+        // document.body.appendChild(a);
+        // a.click();
+        // window.URL.revokeObjectURL(a.href);
       });
     }
-    if (msg.message.length > 0) {
-      notification(msg.status,  msg.header, msg.message,event.target)
+    else {
+      notification("error","Ошибка",["Введите имя файла"],event.target)
+      $(".ui.input.save-system").addClass("error")
     }
-  });
-}
+  }
 
 
-function exportDiag1() {
-  var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg");
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = url_base64jp;
-  a.download = "График.png";
-  document.body.appendChild(a);
-  a.click();
-  window.URL.revokeObjectURL(a.href);
-  url1 = url_base64jp //.replace(/^data:image\/(png|jpg);base64,/, "")
-  console.log(url1)
-  console.log(decodeURIComponent(escape(window.atob(url1))))
+//   $.ajax({
+//     method: "GET",
+//     url: "Analysis/ValidateDiagramBeforeSave",
+//     data: {queryString: JSON.stringify(params)}
+//   }).done(function(msg){
+//     if (msg.status != "negative")
+      
+      
+//     if (msg.message.length > 0) {
+//       notification(msg.status,  msg.header, msg.message,event.target)
+//     }
+// });
 }
