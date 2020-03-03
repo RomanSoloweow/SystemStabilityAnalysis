@@ -1202,7 +1202,8 @@ function exportChart(event) {
       $.ajax({
         method: "POST",
         url: `Analysis/SaveChartToFile`,
-        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
+        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, ""),
+        filename: filename}
       }).done(function(msg){
         var blob = new Blob([msg.fileData]);
         const url = window.URL.createObjectURL(blob);
@@ -1213,14 +1214,6 @@ function exportChart(event) {
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
-
-        // const a = document.createElement('a');
-        // a.style.display = 'none';
-        // a.href = url_base64jp;
-        // a.download = "График.png";
-        // document.body.appendChild(a);
-        // a.click();
-        // window.URL.revokeObjectURL(a.href);
       });
     }
     else {
@@ -1228,38 +1221,6 @@ function exportChart(event) {
       $(".ui.input.save-system").addClass("error")
     }
   }
-
-
-
-    
-  // $.ajax({
-  //   method: "GET",
-  //   url: "Analysis/ValidateChartBeforeSave",
-  //   data: {queryString: JSON.stringify(params)}
-  // }).done(function(msg){
-  //     if (msg.status != "negative") {
-  //         console.log( $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent())
-  //         element = $(event.target).is( ":button" ) ? $(event.target) : $(event.target).parent()
-  //         element.before(`
-  //           <div class="ui input save-chart1">
-  //             <input type="text" placeholder="Имя">
-  //           </div>
-  //         `);
-  //         let filename = $(".ui.input.save-chart1").find("input").val();
-  //         if (filename.length > 0) {
-  //           $(".ui.input.save-chart1").removeClass("error")
-              
-  //         }
-  //         else {
-  //           notification("error","Ошибка",["Введите имя файла"],event.target)
-  //           $(".ui.input.save-chart1").addClass("error")
-  //         }
-  //       }
-        
-  //     if (msg.message.length > 0) {
-  //       notification(msg.status,  msg.header, msg.message,event.target)
-  //     }
-  // });
 }
 
 
@@ -1270,22 +1231,6 @@ function exportDiag(event) {
     params.namesSystems.push($(element).text())
   });
   params.parameterName = $(".ui.param-diag").find(".item.active").attr("data-value");
-  // fetch('Analysis/SaveDiagramToFile?diagram=3')
-  // .then(resp => resp.blob())
-  // .then(blob => {
-  //   const url = window.URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   a.style.display = 'none';
-  //   a.href = url;
-  //   // the filename you want
-  //   a.download = 'todo-1.csv';
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  //   alert('your file has downloaded!'); // or you know, something with better UX...
-  // })
-  // .catch(() => alert('oh no!'));
-
   if ($(event.target).parent().parent().find(".ui.input.save-diagram1").length == 0) {
     $.ajax({
       method: "GET",
@@ -1317,7 +1262,9 @@ function exportDiag(event) {
       $.ajax({
         method: "POST",
         url: `Analysis/SaveDiagramToFile`,
-        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
+        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, ""),
+        filename: filename
+      }
       }).done(function(msg){
         var blob = new Blob([msg.fileData]);
         const url = window.URL.createObjectURL(blob);
@@ -1328,14 +1275,6 @@ function exportDiag(event) {
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
-
-        // const a = document.createElement('a');
-        // a.style.display = 'none';
-        // a.href = url_base64jp;
-        // a.download = "График.png";
-        // document.body.appendChild(a);
-        // a.click();
-        // window.URL.revokeObjectURL(a.href);
       });
     }
     else {
@@ -1343,18 +1282,4 @@ function exportDiag(event) {
       $(".ui.input.save-system").addClass("error")
     }
   }
-
-
-//   $.ajax({
-//     method: "GET",
-//     url: "Analysis/ValidateDiagramBeforeSave",
-//     data: {queryString: JSON.stringify(params)}
-//   }).done(function(msg){
-//     if (msg.status != "negative")
-      
-      
-//     if (msg.message.length > 0) {
-//       notification(msg.status,  msg.header, msg.message,event.target)
-//     }
-// });
 }
