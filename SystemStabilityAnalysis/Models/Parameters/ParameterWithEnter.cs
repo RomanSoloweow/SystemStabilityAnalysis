@@ -275,6 +275,10 @@ namespace SystemStabilityAnalysis.Models.Parameters
         [Ignore]
         public NameParameterWithEnter TypeParameter { get; set; }
 
+        [Ignore]
+        public string Name { get { return TypeParameter.GetName(); } }
+
+
         public ParameterWithEnter()
         {
 

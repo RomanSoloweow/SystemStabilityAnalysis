@@ -19,7 +19,7 @@ namespace SystemStabilityAnalysis.Models
             U = new ParameterU(this, () => { return (ρ * f * (h.Pow(3.0))) / ((a * (q.Pow(3.0))) * (q + d)) - ((b + f) * (h.Pow(4.0))) / (a * (q.Pow(4.0))); });
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null;
 
         public ParameterU U { get; set; }
 

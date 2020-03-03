@@ -123,7 +123,7 @@ namespace SystemStabilityAnalysis.Controllers
                 }
                 //QueryResponse.AddRangeErrorWithIfNotEmpty(messages);
             }
-
+            StaticData.CurrentSystems.SetAsCorrect();
 
             return QueryResponse.ToResult();
         }
@@ -157,33 +157,42 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
-        public object GenerateReport()
+        public object GenerateReport([FromQuery]string fileName)
         {
 
-            //List<FieldContent> fieldContents = new List<FieldContent>();
-            //fieldContents.Add(new FieldContent("deltaT", "55"));
-            //string filePath = "resultTemplate.dotx";
-            //using (var outputDocument = new TemplateProcessor("resultTemplate.dotx")
-            //    .SetRemoveContentControls(true))
-            //{
-            //    outputDocument.FillContent(new Content(fieldContents.ToArray()));
-            //    outputDocument.SaveChanges();
-            //}
+            fileName = Path.GetFileNameWithoutExtension(fileName);
 
-            //return null ;
+            StaticData.CurrentSystems.Name = fileName;
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
+            string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+            
+            System.IO.File.Copy("resultTemplate.docx", filePath);
 
+            using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
+            {
+                List<FieldContent> fieldContents = new List<FieldContent>();
+                fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithEnter.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
+                fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithCalculation.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
+                fieldContents.AddRange(StaticData.CurrentSystems.ParametersForAnalysis.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
+                fieldContents.Add(new FieldContent(StaticData.CurrentSystems.U.Name, StaticData.CurrentSystems.U.Value.ToString()));
+                fieldContents.Add(new FieldContent("nameSystem", StaticData.CurrentSystems.Name));
+                fieldContents.Add(new FieldContent("Result", StaticData.CurrentSystems.U.GetResult()));
+                using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(new Content(fieldContents.ToArray()));
+                    outputDocument.SaveChanges();
+                }
+               
+            }
             var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            using (var stream = new FileStream(filePath, FileMode.Open))
             {
                 stream.CopyTo(memory);
             }
+            System.IO.File.Delete(filePath);
 
             memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("test", ".csv"));
-
-
+            return File(memory, MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
         [HttpGet]

@@ -29,21 +29,26 @@ namespace SystemStabilityAnalysis.Models.Parameters
 
             }
         }
-        public string GetResult()
+        public string GetResult(string newName = null)
         {
             if (Value.HasValue)
             {
+                if (!string.IsNullOrEmpty(newName))
+                    StaticData.CurrentSystems.Name = newName;
+
+                string name = string.IsNullOrEmpty(StaticData.CurrentSystems.Name)? " ": " \""+StaticData.CurrentSystems.Name+"\" ";
+                string value = propertiesSystem.deltaT.Value.Value.ToString();
                 if (Value.Value > 0)
                 {
-                    return String.Format("Cистема устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема{0}устойчива в течении периода \"{1} суток\" при заданных условиях и ограничениях.", name, value);
                 }
                 else if (Value.Value == 0)
                 {
-                    return String.Format("Cистема находится на пределе своей устойчивости в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема{0}находится на пределе своей устойчивости в течении периода \"{1} суток\"  при заданных условиях и ограничениях.", name, value);
                 }
                 else
                 {
-                    return String.Format("Cистема не устойчива в течении периода \"{0}\" при заданных условиях и ограничениях.", propertiesSystem.deltaT.Value.Value.ToString());
+                    return String.Format("Cистема{0}не устойчива в течении периода \"{1} суток\" при заданных условиях и ограничениях.", name, value);
                 }
             }
             else
