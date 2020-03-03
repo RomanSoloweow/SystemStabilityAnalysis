@@ -166,7 +166,7 @@ namespace SystemStabilityAnalysis.Controllers
 
             string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
             
-            System.IO.File.Copy("resultTemplate.docx", filePath);
+            System.IO.File.Copy("SystemReportTemplate.docx", filePath);
 
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {

@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using SystemStabilityAnalysis.Models.Parameters;
+using TemplateEngine.Docx;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -201,8 +202,29 @@ namespace SystemStabilityAnalysis.Controllers
 
 
         [HttpPost]
-        public object SaveChartToFile(string chart)
+        public object SaveChartToFile([FromForm]string chart, [FromForm]string fileName)
         {
+
+            //byte[] imageBytes = Convert.FromBase64String(chart);
+
+            ////string fileName = "test";
+            //string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+
+            //System.IO.File.Copy("ChartReportTemplate.docx", filePath);
+
+            //using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
+            //{
+            //    List<IContentItem> fieldContents = new List<IContentItem>();
+            //    fieldContents.Add(new ImageContent("Chart", imageBytes));
+            //    using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
+            //    {
+            //        outputDocument.FillContent(new Content(fieldContents.ToArray()));
+            //        outputDocument.SaveChanges();
+            //    }
+
+            //}
+
+
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
             var memory = new MemoryStream();
@@ -210,10 +232,15 @@ namespace SystemStabilityAnalysis.Controllers
             {
                 stream.CopyTo(memory);
             }
-
-            memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("chart", ".csv"));
-
+            var t = new
+            {
+                fileData = File(memory, "text/csv", Path.ChangeExtension("chart", ".csv")),
+                fileType = "csv"
+            };
+            return t;
+            //memory.Position = 0;
+            //return ;
+            //return null;
             //if (string.IsNullOrEmpty(chart))
             //{
             //    QueryResponse.AddNegativeMessage("Строка пустая");
@@ -227,7 +254,7 @@ namespace SystemStabilityAnalysis.Controllers
         }
 
         [HttpGet]
-        public object SaveDiagramToFile([FromForm ]byte[] diagram)
+        public object SaveDiagramToFile([FromForm]string diagram)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
