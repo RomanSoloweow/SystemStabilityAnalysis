@@ -1178,31 +1178,50 @@ function exportChart() {
     data: {queryString: JSON.stringify(params)}
   }).done(function(msg){
       if (msg.status != "negative")
-        var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})//("image/jpg");
-        console.log(url_base64jp)
-        $.ajax({
-          method: "POST",
-          url: `Analysis/SaveChartToFile`,
-          data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
-        }).done(function(msg){
-          var blob = new Blob([msg.fileData]);
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url //url_base64jp;
-          a.download = `График.csv`;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(a.href);
 
-          // const a = document.createElement('a');
-          // a.style.display = 'none';
-          // a.href = url_base64jp;
-          // a.download = "График.png";
-          // document.body.appendChild(a);
-          // a.click();
-          // window.URL.revokeObjectURL(a.href);
-        });
+          var canvas = document.getElementById('chart');
+          var image = canvas.toDataURL({  //В image всегда приходит null
+              format: 'jpeg',
+              quality: 1
+          });
+      
+      
+          $.ajax({
+              type: 'POST',
+              url: "Analysis/SaveChartToFile",
+              data: '{ "imageData" : "' + image + '" }',
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json',
+              success: function (data, status) {
+                  alert('success')
+              }
+          })
+
+        // var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})//("image/jpg");
+        // console.log(url_base64jp)
+        // $.ajax({
+        //   method: "POST",
+        //   url: `Analysis/SaveChartToFile`,
+        //   data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")}
+        // }).done(function(msg){
+        //   var blob = new Blob([msg.fileData]);
+        //   const url = window.URL.createObjectURL(blob);
+        //   const a = document.createElement('a');
+        //   a.style.display = 'none';
+        //   a.href = url //url_base64jp;
+        //   a.download = `График.csv`;
+        //   document.body.appendChild(a);
+        //   a.click();
+        //   window.URL.revokeObjectURL(a.href);
+
+        //   // const a = document.createElement('a');
+        //   // a.style.display = 'none';
+        //   // a.href = url_base64jp;
+        //   // a.download = "График.png";
+        //   // document.body.appendChild(a);
+        //   // a.click();
+        //   // window.URL.revokeObjectURL(a.href);
+        // });
       if (msg.message.length > 0) {
         notification(msg.status,  msg.header, msg.message,event.target)
       }
