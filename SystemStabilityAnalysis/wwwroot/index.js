@@ -32,7 +32,7 @@ $(".rezet-zoom-chart").click(()=> window.myLine.resetZoom());
 $(".rezet-zoom-diag").click();
 $(".download-system-1").click(downloadSystem1);
 $(".ui.button.upload-csv4").click(uploadCsv4);
-$(".export-diag").click(exportDiag);
+$(".export-diag").click(exportDiag1);
 $(".export-chart").click(exportChart);
 
 $('.ui.dropdown.names').change(function(){
@@ -1179,18 +1179,18 @@ function exportChart() {
   }).done(function(msg){
       if (msg.status != "negative")
         var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg");
-        console.log(btoa(url_base64jp))
+        console.log(url_base64jp)
         $.ajax({
           method: "POST",
           url: `Analysis/SaveChartToFile`,
           data: {chart: url_base64jp.replace("data:image/png;base64,", "")}
         }).done(function(msg){
-          var blob=new Blob([msg.fileData]);
+          var blob = new Blob([msg.fileData]);
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.style.display = 'none';
           a.href = url //url_base64jp;
-          a.download = `График.${msg.fileType}`;
+          a.download = `График.csv`;
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(a.href);
@@ -1258,4 +1258,19 @@ function exportDiag() {
       notification(msg.status,  msg.header, msg.message,event.target)
     }
   });
+}
+
+
+function exportDiag1() {
+  var url_base64jp = $(`#diagram`)[0].toDataURL("image/jpg");
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url_base64jp;
+  a.download = "График.png";
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(a.href);
+  url1 = url_base64jp //.replace(/^data:image\/(png|jpg);base64,/, "")
+  console.log(url1)
+  console.log(decodeURIComponent(escape(window.atob(url1))))
 }
