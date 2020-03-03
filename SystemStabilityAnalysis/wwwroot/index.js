@@ -1179,23 +1179,40 @@ function exportChart() {
   }).done(function(msg){
       if (msg.status != "negative")
 
-          var canvas = document.getElementById('chart');
-          var image = canvas.toDataURL({  //В image всегда приходит null
-              format: 'jpeg',
-              quality: 1
-          });
+          var url = "Analysis/SaveChartToFile";                
+          var image = $(`#chart`)[0].toDataURL("image/jpg");
+          var base64ImageContent = image.replace(/^data:image\/(png|jpg);base64,/, "");
+          var blob = base64ToBlob(base64ImageContent, 'image/png');                
+          var formData = new FormData();
+          formData.append('imageData', blob);
+          
+      $.ajax({
+          url: url, 
+          type: "POST", 
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: formData})
+              .done(function(e){
+                  alert('done!');
+              });
+          // var canvas = document.getElementById('chart');
+          // var image = canvas.toDataURL({  //В image всегда приходит null
+          //     format: 'jpeg',
+          //     quality: 1
+          // });
       
       
-          $.ajax({
-              type: 'POST',
-              url: "Analysis/SaveChartToFile",
-              data: {imageData : image},
-              contentType: 'application/json; charset=utf-8',
-              dataType: 'json',
-              success: function (data, status) {
-                  alert('success')
-              }
-          })
+          // $.ajax({
+          //     type: 'POST',
+          //     url: "Analysis/SaveChartToFile",
+          //     data: {imageData : image},
+          //     contentType: 'application/json; charset=utf-8',
+          //     dataType: 'json',
+          //     success: function (data, status) {
+          //         alert('success')
+          //     }
+          // })
 
         // var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})//("image/jpg");
         // console.log(url_base64jp)
@@ -1226,6 +1243,30 @@ function exportChart() {
         notification(msg.status,  msg.header, msg.message,event.target)
       }
   });
+}
+
+
+function base64ToBlob(base64, mime) 
+{
+    mime = mime || '';
+    var sliceSize = 1024;
+    var byteChars = window.atob(base64);
+    var byteArrays = [];
+
+    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+        var slice = byteChars.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: mime});
 }
 
 function exportDiag() {
