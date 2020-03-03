@@ -265,17 +265,19 @@ function saveFile(event){
   else {
     filename = $(".ui.input.save-system").find("input").val();
     if (filename.length > 0) {
-        const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `${filename}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
+      $(".ui.input.save-system").removeClass("error")
+      const url = `Restrictions/SaveRestrictionsToFile?filename=${filename}`;
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `${filename}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
     }
     else {
-      notification("Error","Ошибка",["Введите имя файла"],event.target)
+      notification("error","Ошибка",["Введите имя файла"],event.target)
+      $(".ui.input.save-system").addClass("error")
     }
   }
 }
@@ -303,6 +305,7 @@ function saveFile1(event){
   else {
     filename = $(".ui.input.save-system1").find("input").val();
     if (filename.length > 0) {
+      $(".save-system1").removeClass("error");
       const url = `Systems/SaveSystemToFile?filename=${filename}`;
         const a = document.createElement('a');
         a.style.display = 'none';
@@ -316,7 +319,8 @@ function saveFile1(event){
       
     }
     else {
-      notification("Error","Ошибка",["Введите имя файла"],event.target)
+      notification("error","Ошибка",["Введите имя файла"],event.target)
+      $(".save-system1").addClass("error");
     }
   }
 }
@@ -644,7 +648,7 @@ async function AJAXSubmit (oFormElement) {
   });
   
   } catch (error) {
-    notification("Error", error,"first")
+    notification("error", error,"first")
     console.error('Error:', error);
   }
   }
@@ -803,7 +807,7 @@ async function AJAXSubmit1 (oFormElement) {
   });
   
   } catch (error) {
-    notification("Error", msg.message,"second")
+    notification("error", msg.message,"second")
     console.error('Error:', error);
   }
   }
@@ -832,6 +836,7 @@ function generateReport(event){
   else {
     filename = $(".ui.input.save-system2").find("input").val();
     if (filename.length > 0) {
+      $(".ui.input.save-system2").removeClass("error")
       const url = `Systems/GenerateReport?filename=${filename}`;
       const a = document.createElement('a');
       a.style.display = 'none';
@@ -843,7 +848,8 @@ function generateReport(event){
       window.URL.revokeObjectURL(url);
     }
     else {
-      notification("Error","Ошибка",["Введите имя файла"],event.target)
+      notification("error","Ошибка",["Введите имя файла"],event.target)
+      $(".ui.input.save-system2").addClass("error")
     }
   }
 }
@@ -947,7 +953,7 @@ async function AJAXSubmit2 (oFormElement) {
   });
   
   } catch (error) {
-    notification("Error", msg.message,"third/a")
+    notification("error", msg.message,"third/a")
     console.error('Error:', error);
   }
   }
@@ -1026,7 +1032,7 @@ async function AJAXSubmit2 (oFormElement) {
     });
     
     } catch (error) {
-      notification("Error", msg.message,"first")
+      notification("error", msg.message,"first")
       console.error('Error:', error);
     }
     }
@@ -1165,6 +1171,7 @@ function exportChart() {
   params.to = $(".linear-chart-to").val();
   params.countDote = $(".linear-chart-dots-count").val();
   params.parameterName = $(".ui.param-chart").find(".item.active").attr("data-value");
+    
   $.ajax({
     method: "GET",
     url: "Analysis/ValidateChartBeforeSave",
@@ -1172,6 +1179,7 @@ function exportChart() {
   }).done(function(msg){
       if (msg.status != "negative")
         var url_base64jp = $(`#chart`)[0].toDataURL("image/jpg");
+        console.log(btoa(url_base64jp))
         $.ajax({
           method: "POST",
           url: `Analysis/SaveChartToFile`,
@@ -1240,7 +1248,7 @@ function exportDiag() {
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url //url_base64jp;
-        a.download = `Диаграмма.csv`;
+        a.download = `Диаграмма`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
