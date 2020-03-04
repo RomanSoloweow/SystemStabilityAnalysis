@@ -182,13 +182,14 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpPost]
         public object SaveDataChart([FromForm]string chart)
         {
+            StaticData.DataChart = chart;
             return QueryResponse.ToResult();
         }
 
         [HttpPost]
         public object SaveDataDiagram([FromForm]string diagram)
         {
-
+            StaticData.DataDiagram = diagram;
             return QueryResponse.ToResult();
         }
 
@@ -196,71 +197,46 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object SaveChartToFile([FromQuery]string fileName)
         {
+            byte[] chart = Convert.FromBase64String(StaticData.DataChart);
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                stream.CopyTo(memory);
-            }
-
-            memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("diagram", ".csv"));
-
-
-            byte[] imageBytes = Convert.FromBase64String("");
-            //List<IContentItem> fieldContents = new List<IContentItem>();
-
-
-            //string fileName = "test";
             string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
 
             System.IO.File.Copy("ChartReportTemplate.docx", filePath);
-            //using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
-            //{
-            //    fieldContents.Add(new ImageContent("chart", imageBytes));
-            //    using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
-            //    {
-            //        outputDocument.FillContent(new Content(fieldContents.ToArray()));
-            //        //outputDocument.FillContent(new Content(listContent));
-            //        //outputDocument.FillContent(valuesToFill);
-            //        outputDocument.SaveChanges();
-            //    }
-            //}
+
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
-                fieldContents.Add(new ImageContent("chart", imageBytes));
-                ListContent listContent = new ListContent("Projects List");
-                ListItemContent contentItems;
-                TableContent tableContent;
-
-                List<FieldContent> rows = new List<FieldContent>();
 
 
-                List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
-                List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
-                List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
+                //ListContent listContent = new ListContent("Projects List");
+                //ListItemContent contentItems;
+                //TableContent tableContent;
 
-                for (int i = 0; i < tablets.Count; i++)
-                {
-                    rows.Clear();
-                    rows.Add(new FieldContent("Name", names[i]));
-                    rows.Add(new FieldContent("Role", roles[i]));
-                    tableContent = TableContent.Create("Team members");
-                    tableContent.AddRow(rows.ToArray());
-                    contentItems = new ListItemContent("Project", tablets[i]);
-                    contentItems.AddTable(tableContent);
-                    listContent.AddItem(contentItems);
+                //List<FieldContent> rows = new List<FieldContent>();
 
 
-                    //contentItems = new ListItemContent("Project", "Project one");
-                    //contentItems.AddTable(TableContent.Create("Team members", tableRow.ToArray()));
-                    //listContent.AddItem(contentItems);
+                //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
+                //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
+                //List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
 
-                }
-                fieldContents.Add(listContent);
+                //for (int i = 0; i < tablets.Count; i++)
+                //{
+                //    rows.Clear();
+                //    rows.Add(new FieldContent("Name", names[i]));
+                //    rows.Add(new FieldContent("Role", roles[i]));
+                //    tableContent = TableContent.Create("Team members");
+                //    tableContent.AddRow(rows.ToArray());
+                //    contentItems = new ListItemContent("Project", tablets[i]);
+                //    contentItems.AddTable(tableContent);
+                //    listContent.AddItem(contentItems);
+
+
+                //    //contentItems = new ListItemContent("Project", "Project one");
+                //    //contentItems.AddTable(TableContent.Create("Team members", tableRow.ToArray()));
+                //    //listContent.AddItem(contentItems);
+
+                //}
+                //fieldContents.Add(listContent);
                 //fieldContents.Add(listContent);
                 //   List<FieldContent> fieldForTable = new List<FieldContent>();
                 //   fieldForTable.Add(new FieldContent("nameParameterX","Test x"));
@@ -278,18 +254,15 @@ namespace SystemStabilityAnalysis.Controllers
 
 
 
-
-                //fieldContents.Add(new ImageContent("Chart", imageBytes));
+                fieldContents.Add(new ImageContent("chart", chart));
                 using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(new Content(fieldContents.ToArray()));
-                    //outputDocument.FillContent(new Content(listContent));
-                    //outputDocument.FillContent(valuesToFill);
                     outputDocument.SaveChanges();
                 }
 
             }
-
+            System.IO.File.Delete(filePath);
 
             //var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
 
@@ -317,32 +290,81 @@ namespace SystemStabilityAnalysis.Controllers
             //    QueryResponse.AddSuccessMessage("Что-то дошло");
             //}
             //return QueryResponse.ToResult();
+
+            return null;
         }
 
         [HttpGet]
         public object SaveDiagramToFile([FromQuery]string fileName)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
+            byte[] chart = Convert.FromBase64String(StaticData.DataDiagram);
 
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+
+            System.IO.File.Copy("DiagramReportTemplate.docx", filePath);
+
+            using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
-                stream.CopyTo(memory);
+                List<IContentItem> fieldContents = new List<IContentItem>();
+
+
+                //ListContent listContent = new ListContent("Projects List");
+                //ListItemContent contentItems;
+                //TableContent tableContent;
+
+                //List<FieldContent> rows = new List<FieldContent>();
+
+
+                //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
+                //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
+                //List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
+
+                //for (int i = 0; i < tablets.Count; i++)
+                //{
+                //    rows.Clear();
+                //    rows.Add(new FieldContent("Name", names[i]));
+                //    rows.Add(new FieldContent("Role", roles[i]));
+                //    tableContent = TableContent.Create("Team members");
+                //    tableContent.AddRow(rows.ToArray());
+                //    contentItems = new ListItemContent("Project", tablets[i]);
+                //    contentItems.AddTable(tableContent);
+                //    listContent.AddItem(contentItems);
+
+
+                //    //contentItems = new ListItemContent("Project", "Project one");
+                //    //contentItems.AddTable(TableContent.Create("Team members", tableRow.ToArray()));
+                //    //listContent.AddItem(contentItems);
+
+                //}
+                //fieldContents.Add(listContent);
+                //fieldContents.Add(listContent);
+                //   List<FieldContent> fieldForTable = new List<FieldContent>();
+                //   fieldForTable.Add(new FieldContent("nameParameterX","Test x"));
+                //   fieldForTable.Add(new FieldContent("nameParameterY", "Test y"));
+                //   fieldForTable.Add(new FieldContent("parameterX", "10"));
+                //   fieldForTable.Add(new FieldContent("parameterY", "15"));
+
+
+                //   TableContent sustem1 = new TableContent("system", new TableRowContent(fieldForTable));
+                //   List<ListItemContent> tablets = new List<ListItemContent>() { sustem1 };
+                //ListItemContent contentItems = new ListItemContent("systems", );
+
+                //   fieldContents.Add(contentItems);
+
+
+
+
+                fieldContents.Add(new ImageContent("diagram", chart));
+                using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(new Content(fieldContents.ToArray()));
+                    outputDocument.SaveChanges();
+                }
+
             }
+            System.IO.File.Delete(filePath);
 
-            memory.Position = 0;
-            return File(memory, "text/csv", Path.ChangeExtension("diagram", ".csv"));
-
-            //if (string.IsNullOrEmpty(diagram))
-            //{
-            //    QueryResponse.AddNegativeMessage("Строка пустая");
-
-            //}
-            //else
-            //{
-            //    QueryResponse.AddSuccessMessage("Что-то дошло");
-            //}
-            //return QueryResponse.ToResult();
+            return null;
         }
 
 

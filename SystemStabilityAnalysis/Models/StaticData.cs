@@ -28,7 +28,7 @@ namespace SystemStabilityAnalysis.Models
         public static Dictionary<NameParameterWithCalculation, Condition> ConditionsForParameterWithCalculation { get; set; } = new Dictionary<NameParameterWithCalculation, Condition>();
 
         public static Dictionary<NameParameterForAnalysis, Condition> ConditionsForParameterForAnalysis { get; set; } = new Dictionary<NameParameterForAnalysis, Condition>();
-    
+
         public static void SaveCurrentSystem()
         {
             AddSystem(CurrentSystems);
@@ -36,5 +36,8 @@ namespace SystemStabilityAnalysis.Models
 
         public static dynamic ChartCalculation { get; set; } = new ExpandoObject();
         public static dynamic DiagramCalculation { get; set; } = new ExpandoObject();
+
+        public static string DataChart{get;set;}
+        public static string DataDiagram { get; set; }
     }
 }
