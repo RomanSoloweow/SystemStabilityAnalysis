@@ -205,24 +205,26 @@ namespace SystemStabilityAnalysis.Controllers
         public object SaveChartToFile([FromForm]string chart, [FromForm]string fileName)
         {
 
-            //byte[] imageBytes = Convert.FromBase64String(chart);
+            
 
-            ////string fileName = "test";
-            //string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+            byte[] imageBytes = Convert.FromBase64String(chart);
 
-            //System.IO.File.Copy("ChartReportTemplate.docx", filePath);
+            //string fileName = "test";
+            string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
 
-            //using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
-            //{
-            //    List<IContentItem> fieldContents = new List<IContentItem>();
-            //    fieldContents.Add(new ImageContent("Chart", imageBytes));
-            //    using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
-            //    {
-            //        outputDocument.FillContent(new Content(fieldContents.ToArray()));
-            //        outputDocument.SaveChanges();
-            //    }
+            System.IO.File.Copy("ChartReportTemplate.docx", filePath);
 
-            //}
+            using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
+            {
+                List<IContentItem> fieldContents = new List<IContentItem>();
+                fieldContents.Add(new ImageContent("Chart", imageBytes));
+                using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(new Content(fieldContents.ToArray()));
+                    outputDocument.SaveChanges();
+                }
+
+            }
 
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
