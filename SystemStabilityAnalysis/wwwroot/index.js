@@ -1207,7 +1207,7 @@ function exportChart(event) {
       }).done(function(msg){
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = "Analysis/SaveChartToFile";
+        a.href = `Analysis/SaveChartToFile?filename=${filename}`;
         a.download = `График`;
         document.body.appendChild(a);
         a.click();
@@ -1259,13 +1259,12 @@ function exportDiag(event) {
       $.ajax({
         method: "POST",
         url: `Analysis/SaveDataDiagram`,
-        data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, ""),
-        filename: filename
+        data: {diagram: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, "")
       }
       }).done(function(msg){
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = "Analysis/SaveDiagramToFile" //url_base64jp;
+        a.href = `Analysis/SaveDiagramToFile?filename=${filename}` //url_base64jp;
         a.download = `Диаграмма`;
         document.body.appendChild(a);
         a.click();
