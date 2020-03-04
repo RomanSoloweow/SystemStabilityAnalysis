@@ -171,8 +171,33 @@ namespace SystemStabilityAnalysis.Controllers
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<FieldContent> fieldContents = new List<FieldContent>();
-                fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithEnter.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
-                fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithCalculation.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
+                Condition condition;
+                foreach(var parameterWithEnter in StaticData.CurrentSystems.ParametersWithEnter.Values)
+                {
+                    fieldContents.Add(new FieldContent(parameterWithEnter.Name, parameterWithEnter.Value.ToString()));
+                    if (StaticData.ConditionsForParameterWithEnter.TryGetValue(parameterWithEnter.TypeParameter, out condition))
+                    {
+                        fieldContents.Add(new FieldContent("Restriction"+parameterWithEnter.Name, condition.Designation + " " + condition.Value));
+                    }
+                    else
+                    {
+                        fieldContents.Add(new FieldContent("Restriction" + parameterWithEnter.Name,"> 0"));
+                    }
+                }
+                foreach (var parameterWithCalculation in StaticData.CurrentSystems.ParametersWithCalculation.Values)
+                {
+                    fieldContents.Add(new FieldContent(parameterWithCalculation.Name, parameterWithCalculation.Value.ToString()));
+                    if (StaticData.ConditionsForParameterWithCalculation.TryGetValue(parameterWithCalculation.TypeParameter, out condition))
+                    {
+                        fieldContents.Add(new FieldContent("Restriction" + parameterWithCalculation.Name, condition.Designation + " " + condition.Value));
+                    }
+                    else
+                    {
+                        fieldContents.Add(new FieldContent("Restriction" + parameterWithCalculation.Name, "> 0"));
+                    }
+                }
+                //fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithEnter.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
+                //fieldContents.AddRange(StaticData.CurrentSystems.ParametersWithCalculation.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
                 fieldContents.AddRange(StaticData.CurrentSystems.ParametersForAnalysis.Values.Select(x => new FieldContent(x.Name, x.Value.ToString())));
                 fieldContents.Add(new FieldContent(StaticData.CurrentSystems.U.Name, StaticData.CurrentSystems.U.Value.ToString()));
                 fieldContents.Add(new FieldContent("nameSystem", StaticData.CurrentSystems.Name));

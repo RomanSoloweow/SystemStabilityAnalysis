@@ -27,14 +27,14 @@ namespace SystemStabilityAnalysis.Models
         public void InitialParametersWithCalculation()
         {
 
-            Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, () => { return (N1 * R1 + P1 * Rv2) * Lc; });
-            Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, () => { return (N1 * R1 + P1 * Rv2) * Lc * deltaT; });
-            Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, () => { return (N2 * R2) * Lc; });
-            Rf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf2, () => { return (N2 * R2) * Lc * deltaT; });
-            Rcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt3, () => { return (N3 * R3) * Lc; });
-            Rf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf3, () => { return (N3 * R3) * Lc * deltaT; });
-            Rcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt, () => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2) + (N3 * R3)) * Lc; });
-            R = new ParameterWithCalculation(this, NameParameterWithCalculation.R, () => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2) + (N3 * R3)) * Lc * deltaT; });
+            Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, () => { return (N1 * R1 + P1 * Rv2); });
+            Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, () => { return (N1 * R1 + P1 * Rv2) * deltaT; });
+            Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, () => { return (N2 * R2); });
+            Rf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf2, () => { return (N2 * R2) * deltaT; });
+            Rcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt3, () => { return (N3 * R3); });
+            Rf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf3, () => { return (N3 * R3) * deltaT; });
+            Rcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt, () => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2) + (N3 * R3)); });
+            R = new ParameterWithCalculation(this, NameParameterWithCalculation.R, () => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2) + (N3 * R3)) * deltaT; });
             Wсyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wсyt1, () => { return N1 * W1 + Wv2 * P1; });
             Wf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf1, () => { return (N1 * W1 + Wv2 * P1) * deltaT; });
             Wcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt2, () => { return N2 * W2; });
@@ -47,16 +47,16 @@ namespace SystemStabilityAnalysis.Models
             Smin1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin1, () => { return (N1 * W1 + Wv2 * P1) / (Lc * Tc); });
             Smin2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin2, () => { return (N2 * W2) / (Lc * Tc); });
             Smin3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin3, () => { return (N3 * W3) / (Lc * Tc); });
-            SminC = new ParameterWithCalculation(this, NameParameterWithCalculation.SminC, () => { return (N1 * W1 + Wv2 * P1 + N2 * W2 + N3 * W3) / (Lc * Tc); });
-            Smin = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin, () => { return (N1 * W1 + Wv2 * P1 + N2 * W2 + N3 * W3) / (Tc); });
-            S1 = new ParameterWithCalculation(this, NameParameterWithCalculation.S1, () => { return (N1 * W1 + Wv2 * P1) / (Lc * Tc) + Sn1; });
-            S2 = new ParameterWithCalculation(this, NameParameterWithCalculation.S2, () => { return (N2 * W2) / (Lc * Tc) + Sn2; });
-            S3 = new ParameterWithCalculation(this, NameParameterWithCalculation.S3, () => { return (N3 * W3) / (Lc * Tc) + Sn3; });
-            Sс = new ParameterWithCalculation(this, NameParameterWithCalculation.Sс, () => { return (N1 * W1 + Wv2 * P1 + N2 * W2 + N3 * W3) / (Lc * Tc) + Sn1 + Sn2 + Sn3; });
-            S = new ParameterWithCalculation(this, NameParameterWithCalculation.S, () => { return (N1 * W1 + Wv2 * P1 + N2 * W2 + N3 * W3) * deltaT / Tc + (Sn1 + Sn2 + Sn3) * Lc * deltaT; });
-            SN1 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN1, () => { return (N1 * W1 + Wv2 * P1) * deltaT / Tc + Sn1 * Lc * deltaT; });
-            SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, () => { return (N2 * W2) * deltaT / Tc + Sn2 * Lc * deltaT; });
-            SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, () => { return (N3 * W3) * deltaT / Tc + Sn3 * Lc * deltaT; });
+            SminC = new ParameterWithCalculation(this, NameParameterWithCalculation.SminC, () => { return (Smin1+Smin2+Smin3) ; });
+            Smin = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin, () => { return ((Smin1 + Smin2 + Smin3)*Lc); });
+            S1 = new ParameterWithCalculation(this, NameParameterWithCalculation.S1, () => { return (Smin1 + Sn1); });
+            S2 = new ParameterWithCalculation(this, NameParameterWithCalculation.S2, () => { return (Smin2 + Sn2); });
+            S3 = new ParameterWithCalculation(this, NameParameterWithCalculation.S3, () => { return (Smin3 + Sn3); });
+            Sс = new ParameterWithCalculation(this, NameParameterWithCalculation.Sс, () => { return (S1+S2+S3); });
+            S = new ParameterWithCalculation(this, NameParameterWithCalculation.S, () => { return ((Smin1+Smin2+Smin3)+(Sn1+Sn2+Sn3)*deltaT)*Lc; });
+            SN1 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN1, () => { return ((Smin1 + deltaT * Sn1) * Lc); });
+            SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, () => { return ((Smin2 + deltaT * Sn2) * Lc); });
+            SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, () => { return ((Smin3 + deltaT * Sn3) * Lc); });
 
             //Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, (Rcyt1) => { return (N1*R1 + P1*Rv2)*Lc; });
             //Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, (Rf1) => { return (N1*R1 + P1*Rv2)*Lc*deltaT; });
@@ -245,17 +245,21 @@ namespace SystemStabilityAnalysis.Models
 
             return result;
         }
-        //public bool VerificationParametersWithCalculation(List<NameParameterWithCalculation> parametersWithCalculation)
-        //{
-        //    bool result = true;
+        public bool VerificationParametersWithCalculation(List<NameParameterWithCalculation> parametersWithCalculation, out List<string> message)
+        {
+            message = new List<string>();
+            bool result = true;
+            foreach (var parameterWithCalculation in parametersWithCalculation)
+            {
+                if (!ParametersWithCalculation[parameterWithCalculation].isCorrect)
+                {
+                    message.Add(ParametersWithCalculation[parameterWithCalculation].Designation);
+                    result = false;
+                }
+            }
 
-        //    foreach (var parameterWithCalculation in parametersWithCalculation)
-        //    {
-        //        result = result & ParametersWithCalculation[parameterWithCalculation].Verification().IsCorrect;
-        //    }
-
-        //    return true;
-        //}
+            return result;
+        }
 
 
     }

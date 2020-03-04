@@ -144,15 +144,14 @@ namespace SystemStabilityAnalysis.Models.Parameters
             { NameParameterWithCalculation.SN3, TypeRound.Ceiling}
         };
 
-        public static Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>> Dependences = new Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>>()
+        public static Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>> DependencesWithParametersWithEnter = new Dictionary<NameParameterWithCalculation, List<NameParameterWithEnter>>()
         {
             { NameParameterWithCalculation.Rcyt1, new List<NameParameterWithEnter>()
             {   
                 NameParameterWithEnter.N1,
                 NameParameterWithEnter.R1,
                 NameParameterWithEnter.P1,
-                NameParameterWithEnter.Rv2,
-                NameParameterWithEnter.Lc
+                NameParameterWithEnter.Rv2
                 }},
             { NameParameterWithCalculation.Rf1, new List<NameParameterWithEnter>()
             {
@@ -160,33 +159,28 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 NameParameterWithEnter.R1,
                 NameParameterWithEnter.P1,
                 NameParameterWithEnter.Rv2,
-                NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.Rcyt2, new List<NameParameterWithEnter>()
             {
                 NameParameterWithEnter.N2,
-                NameParameterWithEnter.R2,
-                NameParameterWithEnter.Lc
+                NameParameterWithEnter.R2
             }},
             { NameParameterWithCalculation.Rf2, new List<NameParameterWithEnter>()
             {
                 NameParameterWithEnter.N2,
                 NameParameterWithEnter.R2,
-                NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.Rcyt3, new List<NameParameterWithEnter>()
             {
                 NameParameterWithEnter.N3,
-                NameParameterWithEnter.R3,
-                NameParameterWithEnter.Lc
+                NameParameterWithEnter.R3
             }},
             { NameParameterWithCalculation.Rf3, new List<NameParameterWithEnter>()
             {
                 NameParameterWithEnter.N3,
                 NameParameterWithEnter.R3,
-                NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.Rcyt, new List<NameParameterWithEnter>()
@@ -198,8 +192,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 NameParameterWithEnter.N2,
                 NameParameterWithEnter.R2,
                 NameParameterWithEnter.N3,
-                NameParameterWithEnter.R3,
-                NameParameterWithEnter.Lc
+                NameParameterWithEnter.R3
                 }},
             { NameParameterWithCalculation.R, new List<NameParameterWithEnter>()
             {
@@ -211,7 +204,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 NameParameterWithEnter.R2,
                 NameParameterWithEnter.N3,
                 NameParameterWithEnter.R3,
-                NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.Wсyt1, new List<NameParameterWithEnter>()
@@ -297,83 +289,25 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 NameParameterWithEnter.Lc,
                 NameParameterWithEnter.Tс
             }},
-            { NameParameterWithCalculation.SminC, new List<NameParameterWithEnter>()
-            {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.Lc,
-                NameParameterWithEnter.Tс
-            }},
             { NameParameterWithCalculation.Smin, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.Tс
+                NameParameterWithEnter.Lc
             }},
             { NameParameterWithCalculation.S1, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.Lc,
-                NameParameterWithEnter.Tс,
-                NameParameterWithEnter.Sn2
+                NameParameterWithEnter.Sn1
             }},
             { NameParameterWithCalculation.S2, new List<NameParameterWithEnter>()
             { 
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.Lc,
-                NameParameterWithEnter.Tс,
                 NameParameterWithEnter.Sn2
             }},
             { NameParameterWithCalculation.S3, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.Lc,
-                NameParameterWithEnter.Tс,
                 NameParameterWithEnter.Sn3
             }},
-            { NameParameterWithCalculation.Sс, new List<NameParameterWithEnter>()
-            {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.Lc,
-                NameParameterWithEnter.Tс,
-                NameParameterWithEnter.Sn2,
-                NameParameterWithEnter.Sn3}},
             { NameParameterWithCalculation.S, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.DeltaT,
-                NameParameterWithEnter.Tс,
+                NameParameterWithEnter.Sn1,
                 NameParameterWithEnter.Sn2,
                 NameParameterWithEnter.Sn3,
                 NameParameterWithEnter.Lc,
@@ -381,33 +315,71 @@ namespace SystemStabilityAnalysis.Models.Parameters
             }},
             { NameParameterWithCalculation.SN1, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N1,
-                NameParameterWithEnter.W1,
-                NameParameterWithEnter.Wv2,
-                NameParameterWithEnter.P1,
-                NameParameterWithEnter.Tс,
-                NameParameterWithEnter.Sn2,
+                NameParameterWithEnter.Sn1,
                 NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.SN2, new List<NameParameterWithEnter>()
             {
-                NameParameterWithEnter.N2,
-                NameParameterWithEnter.W2,
-                NameParameterWithEnter.DeltaT,
-                NameParameterWithEnter.Tс,
                 NameParameterWithEnter.Sn2,
                 NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
             }},
             { NameParameterWithCalculation.SN3, new List<NameParameterWithEnter>(){
-                NameParameterWithEnter.N3,
-                NameParameterWithEnter.W3,
-                NameParameterWithEnter.DeltaT,
-                NameParameterWithEnter.Tс,
                 NameParameterWithEnter.Sn3,
                 NameParameterWithEnter.Lc,
                 NameParameterWithEnter.DeltaT
+            }}
+        };
+
+        public static Dictionary<NameParameterWithCalculation, List<NameParameterWithCalculation>> DependencesWithParametersWithCalculation = new Dictionary<NameParameterWithCalculation, List<NameParameterWithCalculation>>()
+        {
+            { NameParameterWithCalculation.SminC, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin1,
+                NameParameterWithCalculation.Smin2,
+                NameParameterWithCalculation.Smin3,
+            }},
+            { NameParameterWithCalculation.Smin, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin1,
+                NameParameterWithCalculation.Smin2,
+                NameParameterWithCalculation.Smin3,
+            }},
+            {   NameParameterWithCalculation.S1, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin1
+            }},
+            {   NameParameterWithCalculation.S2, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin2
+            }},
+            {   NameParameterWithCalculation.S3, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin3
+            }},
+            { NameParameterWithCalculation.S, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin1,
+                NameParameterWithCalculation.Smin2,
+                NameParameterWithCalculation.Smin3
+            }},
+            { NameParameterWithCalculation.Sс, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.S1,
+                NameParameterWithCalculation.S2,
+                NameParameterWithCalculation.S3
+            }},
+            {   NameParameterWithCalculation.SN1, new List<NameParameterWithCalculation>()
+            {
+               NameParameterWithCalculation.Smin1
+            }},
+            {   NameParameterWithCalculation.SN2, new List<NameParameterWithCalculation>()
+            {
+                NameParameterWithCalculation.Smin2
+            }},
+            {   NameParameterWithCalculation.SN3, new List<NameParameterWithCalculation>(){
+                NameParameterWithCalculation.Smin3
             }}
         };
 
@@ -423,16 +395,29 @@ namespace SystemStabilityAnalysis.Models.Parameters
             }
         }
 
-        public static List<NameParameterWithEnter> GetDependences(this NameParameterWithCalculation parameter)
+        public static List<NameParameterWithEnter> GetDependencesWithParametersWithEnter(this NameParameterWithCalculation parameter)
         {
             List<NameParameterWithEnter> dependences = new List<NameParameterWithEnter>();
-            if (Dependences.TryGetValue(parameter, out dependences))
+            if (DependencesWithParametersWithEnter.TryGetValue(parameter, out dependences))
             {
                 return dependences;
             }
             else
             {
+                return new List<NameParameterWithEnter>();
+            }
+        }
+
+        public static List<NameParameterWithCalculation> GetDependencesWithParametersWithCalculation(this NameParameterWithCalculation parameter)
+        {
+            List<NameParameterWithCalculation> dependences = new List<NameParameterWithCalculation>();
+            if (DependencesWithParametersWithCalculation.TryGetValue(parameter, out dependences))
+            {
                 return dependences;
+            }
+            else
+            {
+                return new List<NameParameterWithCalculation>();
             }
         }
 
@@ -607,7 +592,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
         public bool Verification(out string message)
         {
             message = "";
-            isCorrect = propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependences(), out List<string> messages);
+            isCorrect = propertiesSystem.VerificationParametersWithEnter(TypeParameter.GetDependencesWithParametersWithEnter(), out List<string> messages);
+
+            isCorrect = isCorrect&propertiesSystem.VerificationParametersWithCalculation(TypeParameter.GetDependencesWithParametersWithCalculation(), out List<string> messages2);
+            
+            messages.AddRange(messages2);
             string postfix = string.Format("Проверьте правильность полей: {0}", string.Join(',', messages));
             if (!Value.HasValue)
             {
@@ -631,6 +620,73 @@ namespace SystemStabilityAnalysis.Models.Parameters
                 }
             }
             return isCorrect;
+        }
+
+        public static double? operator +(ParameterWithCalculation c1, double? c2)
+        {
+            return c1.Value + c2;
+        }
+        public static double? operator +(double? c1, ParameterWithCalculation c2)
+        {
+            return c1 + c2.Value;
+        }
+        public static double? operator *(ParameterWithCalculation c1, double? c2)
+        {
+            return c1.Value * c2;
+        }
+        public static double? operator *(double? c1, ParameterWithCalculation c2)
+        {
+            return c1 * c2.Value;
+        }
+        public static double? operator -(ParameterWithCalculation c1, double? c2)
+        {
+            return c1.Value - c2;
+        }
+        public static double? operator -(double? c1, ParameterWithCalculation c2)
+        {
+            return c1 - c2.Value;
+        }
+        public static double? operator /(ParameterWithCalculation c1, double? c2)
+        {
+            return c1.Value / c2;
+        }
+        public static double? operator /(double? c1, ParameterWithCalculation c2)
+        {
+            return c1 / c2.Value;
+        }
+        public static double? operator *(ParameterWithCalculation c1, ParameterWithCalculation c2)
+        {
+            return c1.Value * c2.Value;
+        }
+        public static double? operator /(ParameterWithCalculation c1, ParameterWithCalculation c2)
+        {
+            return c1.Value / c2.Value;
+        }
+        public static double? operator +(ParameterWithCalculation c1, ParameterWithCalculation c2)
+        {
+            return c1.Value + c2.Value;
+        }
+        public static double? operator -(ParameterWithCalculation c1, ParameterWithCalculation c2)
+        {
+            return c1.Value - c2.Value;
+        }
+
+
+        public static double? operator *(ParameterWithCalculation c1, ParameterWithEnter c2)
+        {
+            return c1.Value * c2.Value;
+        }
+        public static double? operator /(ParameterWithCalculation c1, ParameterWithEnter c2)
+        {
+            return c1.Value / c2.Value;
+        }
+        public static double? operator +(ParameterWithCalculation c1, ParameterWithEnter c2)
+        {
+            return c1.Value + c2.Value;
+        }
+        public static double? operator -(ParameterWithCalculation c1, ParameterWithEnter c2)
+        {
+            return c1.Value - c2.Value;
         }
     }
 }

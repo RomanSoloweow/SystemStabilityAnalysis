@@ -100,10 +100,10 @@ namespace SystemStabilityAnalysis.Models
 
         public string Name { get { return ConditionType.GetName(); } }
 
-        public string Description { get { return ConditionType.GetDesignation();} }
+        public string Designation { get { return ConditionType.GetDesignation();} }
 
         [JsonIgnore]
-        public string ErrorMessage{ get { return string.Format("{0} {1}", Description, Value.ToString());} }
+        public string ErrorMessage{ get { return string.Format("{0} {1}", Designation, Value.ToString());} }
 
         public Condition(ConditionType conditionType, double value)
         {
