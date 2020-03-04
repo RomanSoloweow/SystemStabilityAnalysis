@@ -11,7 +11,9 @@ let config =
     }],
 
     options: {
-        maintainAspectRatio: false,
+        aspectRatio : 16/9,
+        maintainAspectRatio: true,
+        //responsive: false,
         legend: {
             display: false,
             position: 'top',
