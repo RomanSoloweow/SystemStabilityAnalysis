@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models.Parameters;
 using static SystemStabilityAnalysis.Controllers.Analysis;
 
@@ -164,29 +165,54 @@ namespace SystemStabilityAnalysis.Models
             double step = (parameterForCalculationChart.To.Value - parameterForCalculationChart.From.Value) / parameterForCalculationChart.CountDote.Value;
             double CurentValue = parameterForCalculationChart.From.Value - step;
 
-             Enum.TryParse(parameterName, out NameParameterWithEnter parameterWithEnter);
-           
-                parameterValue = ParametersWithEnter[parameterWithEnter].Value;
+            Enum.TryParse(parameterName, out NameParameterWithEnter parameterWithEnter);
 
-                for (int i = 0; i < parameterForCalculationChart.CountDote.Value; i++)
+            parameterValue = ParametersWithEnter[parameterWithEnter].Value;
+
+            for (int i = 0; i < parameterForCalculationChart.CountDote.Value; i++)
+            {
+                CurentValue += step;
+                ParametersWithEnter[parameterWithEnter].Value = CurentValue;
+                values.Add(new
                 {
-                    CurentValue += step;
-                    ParametersWithEnter[parameterWithEnter].Value = CurentValue;
-                    values.Add(new
-                    {
-                        x= CurentValue,
-                        y = U.Value.Value
-                    });
-                }
+                    x = CurentValue,
+                    y = U.Value.Value
+                });
+            }
 
-               ParametersWithEnter[parameterWithEnter].Value= parameterValue;
+            ParametersWithEnter[parameterWithEnter].Value = parameterValue;
 
-               return new
-               {
-                   values = values,
-                   nameSystem = Name
-               };
+            return new
+            {
+                values = values,
+                nameSystem = Name
+            };
         }
+
+        //public ChartCalculation GetCalculationsForChart(ParameterForCalculationChart parameterForCalculationChart)
+        //{
+        //    List<Coords> values = new List<Coords>();
+        //    string parameterName = parameterForCalculationChart.parameterName;
+        //    double? parameterValue;
+        //    double step = (parameterForCalculationChart.To.Value - parameterForCalculationChart.From.Value) / parameterForCalculationChart.CountDote.Value;
+        //    double CurentValue = parameterForCalculationChart.From.Value - step;
+
+        //    Enum.TryParse(parameterName, out NameParameterWithEnter parameterWithEnter);
+
+        //    parameterValue = ParametersWithEnter[parameterWithEnter].Value;
+
+        //    for (int i = 0; i < parameterForCalculationChart.CountDote.Value; i++)
+        //    {
+        //        CurentValue += step;
+        //        ParametersWithEnter[parameterWithEnter].Value = CurentValue;
+        //        values.Add(new Coords(CurentValue, U.Value.Value));
+        //    }
+
+        //    ParametersWithEnter[parameterWithEnter].Value = parameterValue;
+
+        //    return new ChartCalculation(values, Name);
+        //}
+
 
         public void SetAsCorrect()
         {

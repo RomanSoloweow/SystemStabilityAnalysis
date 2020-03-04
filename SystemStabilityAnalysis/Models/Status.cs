@@ -18,25 +18,38 @@ namespace SystemStabilityAnalysis.Models
             warning
         }
 
+        private Dictionary<Status, string> Headers { get; } = new Dictionary<Status, string>()
+        {
+            {Status.negative,   "Ошибка" },
+            {Status.success,    "Успешно" },
+            {Status.info,       "Информация" },
+            {Status.warning,    "Предупреждение" },
+        };
+
+        private string _header
+        {
+            get { return Headers[_status]; }
+        }
+
         public QueryResponse()
         {
             Clear();
         }
-        private dynamic result;
+        private dynamic _result;
 
-        List<string> properties;
+        private List<string> _properties;
 
-        private Status status;
+        private Status _status;
 
-        private List<string> messages;
+        public List<string> Messages { get; private set; }
 
-        public bool IsSuccess { get { return status == Status.success; } }
+        public bool IsSuccess { get { return _status == Status.success; } }
 
-        public bool IsNegative { get { return status == Status.negative; } }
+        public bool IsNegative { get { return _status == Status.negative; } }
 
-        public bool IsWarning { get { return status == Status.warning; } }
+        public bool IsWarning { get { return _status == Status.warning; } }
 
-        public bool IsInfo { get { return status == Status.info; } }
+        public bool IsInfo { get { return _status == Status.info; } }
 
         private void CheckBeforeSet()
         {
@@ -49,24 +62,24 @@ namespace SystemStabilityAnalysis.Models
         private void Success()
         {
             CheckBeforeSet();
-            status = Status.success;
+            _status = Status.success;
         }
 
         private void Negative()
         {
-            status = Status.negative;
+            _status = Status.negative;
         }
 
         private void Warning()
         {
             CheckBeforeSet();
-            status = Status.warning;
+            _status = Status.warning;
         }
 
         private void Info()
         {
             CheckBeforeSet();
-            status = Status.info;
+            _status = Status.info;
         }
 
         public void AddNegativeMessage(string negativeMessage, bool checkOnEmpty = false)
@@ -75,7 +88,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Negative();
-            messages.Add(negativeMessage);
+            Messages.Add(negativeMessage);
         }
 
         public void AddNegativeMessages(List<string> negativeMessages, bool checkOnEmpty = false)
@@ -84,7 +97,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Negative();
-            messages.AddRange(negativeMessages);
+            Messages.AddRange(negativeMessages);
         }
 
         public void AddSuccessMessage(string successMessage, bool checkOnEmpty = false)
@@ -93,15 +106,16 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Success();
-            messages.Add(successMessage);
+            Messages.Add(successMessage);
         }
+
         public void AddSuccessMessages(List<string> successMessages, bool checkOnEmpty = false)
         {
             if ((checkOnEmpty) && (successMessages.Count < 1))
                 return;
 
             Success();
-            messages.AddRange(successMessages);
+            Messages.AddRange(successMessages);
         }
 
         public void AddWarningMessage(string warningMessage, bool checkOnEmpty = false)
@@ -110,7 +124,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Warning();
-            messages.Add(warningMessage);
+            Messages.Add(warningMessage);
         }
 
         public void AddWarningMessages(List<string> warningMessages, bool checkOnEmpty = false)
@@ -119,7 +133,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Warning();
-            messages.AddRange(warningMessages);
+            Messages.AddRange(warningMessages);
         }
 
         public void AddInfoMessage(string infoMessage, bool checkOnEmpty = false)
@@ -128,7 +142,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Info();
-            messages.Add(infoMessage);
+            Messages.Add(infoMessage);
         }
 
         public void AddInfoMessages(List<string> infoMessages, bool checkOnEmpty = false)
@@ -137,7 +151,7 @@ namespace SystemStabilityAnalysis.Models
                 return;
 
             Info();
-            messages.AddRange(infoMessages);
+            Messages.AddRange(infoMessages);
         }
 
         public void Add(string name, object value)
@@ -150,15 +164,15 @@ namespace SystemStabilityAnalysis.Models
 
             name = char.ToLower(name[0]) + name.Substring(1);
 
-            if ((properties.Contains(name)))
+            if ((_properties.Contains(name)))
             {
                 throw new ArgumentException(message: "Property already exist");
             }
 
 
 
-            ((IDictionary<String, Object>)result)[name] = value;
-            properties.Add(name);
+            ((IDictionary<String, Object>)_result)[name] = value;
+            _properties.Add(name);
         }
 
         public void Add(dynamic obj)
@@ -167,39 +181,50 @@ namespace SystemStabilityAnalysis.Models
             {
                 throw new ArgumentException(message: "Object is null");
             }
-            var Result = ((IDictionary<String, Object>)result);
+            var Result = ((IDictionary<String, Object>)_result);
             var Obj = ((IDictionary<String, Object>)obj);
             string name;
             foreach (var property in Obj)
             {
-                if ((string.IsNullOrEmpty(property.Key)) || (properties.Contains(property.Key)))
+                if ((string.IsNullOrEmpty(property.Key)) || (_properties.Contains(property.Key)))
                 {
                     throw new ArgumentException(message: "Property already exist");
                 }
-                name = char.ToUpper(property.Key[0]) + property.Key.Substring(1);
+                name = char.ToLower(property.Key[0]) + property.Key.Substring(1);
                 Result[name] = property.Value;
-                properties.Add(name);
+                _properties.Add(name);
             } 
         }
+
         private void Clear()
         {
-            properties = new List<string>() { "status", "message", "header" };
-            result = new ExpandoObject();
-            messages = new List<string>();
-            status = Status.success;
+            _properties = new List<string>() { "status", "message", "header" };
+            _result = new ExpandoObject();
+            Messages = new List<string>();
+            _status = Status.success;
         }
 
         public object ToResult()
         {
-            result.status = HelperEnum.GetName(status);
-            result.message = messages;
-            result.header = HelperEnum.GetName(status);
-            var resultForReturn = result;
+            _result.status = HelperEnum.GetName(_status);
+            _result.message = Messages;
+            _result.header = _header;
+            var resultForReturn = _result;
             Clear();
             return resultForReturn;
         }
 
-        
+        //public Response Export()
+        //{
+        //    return new Response() {Status = (int)status, Messages = messages };
+        //}
+
+        //public void Import(Response response)
+        //{
+        //    status =  (Status)response.Status;
+        //    messages.AddRange(response.Messages);
+        //}
     }
+
 
 }

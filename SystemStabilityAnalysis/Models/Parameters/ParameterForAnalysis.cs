@@ -47,6 +47,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterForAnalysis.d, UnitType.NoType},
             {NameParameterForAnalysis.h, UnitType.NoType},
         };
+
         public static Dictionary<NameParameterForAnalysis, List<NameParameterWithEnter>> Dependences = new Dictionary<NameParameterForAnalysis, List<NameParameterWithEnter>>()
         {
             {NameParameterForAnalysis.ρ, new List<NameParameterWithEnter>(){ NameParameterWithEnter.P1, NameParameterWithEnter.N1 }},
@@ -57,6 +58,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             {NameParameterForAnalysis.d, new List<NameParameterWithEnter>(){ NameParameterWithEnter.D2, NameParameterWithEnter.N2 }},
              {NameParameterForAnalysis.h, new List<NameParameterWithEnter>(){ NameParameterWithEnter.H3, NameParameterWithEnter.N3 }}
         };
+        
         public static string GetDescription(this NameParameterForAnalysis parameter)
         {
             if (Descriptions.TryGetValue(parameter, out string description))
@@ -135,20 +137,11 @@ namespace SystemStabilityAnalysis.Models.Parameters
             StaticData.ConditionsForParameterForAnalysis.Add(parameter, new Condition(conditionType, value));
             parameter.VerificateParameterForCurrentSystem();
         }
+
         private static void VerificateParameterForCurrentSystem(this NameParameterForAnalysis parameter)
         {
             StaticData.CurrentSystems.ParametersForAnalysis[parameter].Verification(out string message);
         }
-        //public static bool AddToRestrictions(this NameParameterForAnalysis parameter, ConditionType conditionType, double value, out string message)
-        //{
-        //    message = null;
-        //    if (!StaticData.ConditionsForParameterForAnalysis.TryAdd(parameter, new Condition(conditionType, value)))
-        //    {
-        //        message = string.Format("Ограничение для параметра {0} уже добавлено", parameter.GetDesignation());
-        //        return false;
-        //    }
-        //    return false;
-        //}
 
         public static bool DeleteFromRestrictions(this NameParameterForAnalysis parameter)
         {

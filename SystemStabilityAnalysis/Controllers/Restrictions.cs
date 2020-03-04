@@ -151,68 +151,6 @@ namespace SystemStabilityAnalysis.Controllers
             return QueryResponse.ToResult();
         }
 
-        //[HttpPost]
-        //public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
-        //{
-        //    
-
-        //    if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
-        //    {
-        //        QueryResponse.AddError("Файл не выбран.");
-        //        return QueryResponse.ToResult();
-        //    }
-        //    if (QueryResponse.IsCorrect)
-        //    {
-        //        List<object> Restrictions = new List<object>();
-        //        using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
-        //        {
-        //            using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-        //            {
-
-        //                csvReader.Configuration.Delimiter = ";";
-        //                //csvReader.Configuration.HasHeaderRecord = false;
-        //                try
-        //                {
-        //                    List<Restriction> restrictions = csvReader.GetRecords<Restriction>().ToList();
-        //                    foreach (var restriction in restrictions)
-        //                    {
-
-        //                        if (restriction.AddedToRestriction())
-        //                        {
-        //                            QueryResponse.AddError(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
-        //                        }
-        //                        else
-        //                        {
-        //                            bool correct = restriction.AddToRestriction();
-        //                            if (correct)
-        //                            {
-        //                                Restrictions.Add(restriction.ToResponse());
-        //                            }
-        //                            else
-        //                            {
-        //                                QueryResponse.AddError(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
-
-        //                                break;
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    QueryResponse.AddError(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
-        //                    return QueryResponse.ToResult();
-        //                }
-        //            }
-        //        }
-
-        //        if (!QueryResponse.IsCorrect)
-        //            return QueryResponse.ToResult();
-
-        //    }
-        //    return QueryResponse.ToResult();
-        //}
-
-
         [HttpPost]
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {

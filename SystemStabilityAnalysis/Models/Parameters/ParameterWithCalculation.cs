@@ -485,16 +485,6 @@ namespace SystemStabilityAnalysis.Models.Parameters
             return StaticData.ConditionsForParameterWithCalculation.Keys.Contains(parameter);
         }
 
-        //public static bool AddToRestrictions(this NameParameterWithCalculation parameter, ConditionType conditionType, double value, out string message)
-        //{
-        //    message = null;
-        //    if (!StaticData.ConditionsForParameterWithCalculation.TryAdd(parameter, new Condition(conditionType, value)))
-        //    {
-        //        message = string.Format("Ограничение для параметра {0} уже добавлено", parameter.GetDesignation());
-        //        return false;
-        //    }
-        //    return false;
-        //}
         public static void AddToRestrictions(this NameParameterWithCalculation parameter, ConditionType conditionType, double value)
         {           
             StaticData.ConditionsForParameterWithCalculation.Add(parameter, new Condition(conditionType, value));
@@ -510,6 +500,7 @@ namespace SystemStabilityAnalysis.Models.Parameters
             parameter.VerificateParameterForCurrentSystem();
             return true;
         }
+
         private static void VerificateParameterForCurrentSystem(this NameParameterWithCalculation parameter)
         {
             StaticData.CurrentSystems.ParametersWithCalculation[parameter].Verification(out string message);

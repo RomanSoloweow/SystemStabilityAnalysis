@@ -58,36 +58,6 @@ namespace SystemStabilityAnalysis.Models
             SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, () => { return ((Smin2 + deltaT * Sn2) * Lc); });
             SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, () => { return ((Smin3 + deltaT * Sn3) * Lc); });
 
-            //Rcyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt1, (Rcyt1) => { return (N1*R1 + P1*Rv2)*Lc; });
-            //Rf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf1, (Rf1) => { return (N1*R1 + P1*Rv2)*Lc*deltaT; });
-            //Rcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt2, (Rcyt2) => { return (N2 * R2) * Lc; });
-            //Rf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf2, (Rf2) => { return (N2*R2)*Lc*deltaT; });
-            //Rcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt3, (Rcyt3) => { return (N3*R3)*Lc; });
-            //Rf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Rf3, (Rf3) => { return (N3 * R3) * Lc * deltaT; });
-            //Rcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Rcyt, (Rcyt) => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2) + (N3 * R3))* Lc;  });
-            //R = new ParameterWithCalculation(this, NameParameterWithCalculation.R, (R) => { return ((N1 * R1 + P1 * Rv2) + (N2 * R2)+ (N3 * R3)) * Lc * deltaT; });
-            //Wсyt1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wсyt1, (Wсyt1) => { return N1*W1 + Wv2*P1; });
-            //Wf1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf1, (Wf1) => { return (N1*W1 + Wv2*P1)*deltaT; });
-            //Wcyt2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt2, (Wcyt2) => { return N2*W2; });
-            //Wf2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf2, (Wf2) => { return N2*W2*deltaT; });
-            //Wcyt3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt3, (Wcyt3) => { return N3 * W3; });
-            //Wf3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Wf3, (Wf3) => { return N3 * W3 * deltaT; });
-            //Wcyt = new ParameterWithCalculation(this, NameParameterWithCalculation.Wcyt, (Wcyt) => { return N1*W1 + Wv2*P1 + N2*W2 + N3*W3; });
-            //W = new ParameterWithCalculation(this, NameParameterWithCalculation.W, (W) => { return (N1*W1 + Wv2*P1 + N2*W2 + N3*W3)*deltaT; });
-
-            //Smin1 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin1, (Smin1) => { return (N1*W1 + Wv2*P1)/(Lc*Tc); });
-            //Smin2 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin2, (Smin2) => { return (N2 * W2)/(Lc * Tc); });
-            //Smin3 = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin3, (Smin3) => { return (N3 * W3) / (Lc * Tc); });
-            //SminC = new ParameterWithCalculation(this, NameParameterWithCalculation.SminC, (SminC) => { return (N1*W1 + Wv2*P1 + N2*W2 + N3*W3)/(Lc*Tc); });
-            //Smin = new ParameterWithCalculation(this, NameParameterWithCalculation.Smin, (Smin) => { return (N1*W1 + Wv2*P1 + N2*W2 + N3*W3) / (Tc); });
-            //S1 = new ParameterWithCalculation(this, NameParameterWithCalculation.S1, (S1) => { return (N1*W1 + Wv2*P1)/(Lc*Tc) + Sn1; });
-            //S2 = new ParameterWithCalculation(this, NameParameterWithCalculation.S2, (S2) => { return (N2 * W2)/(Lc * Tc) + Sn2;});
-            //S3 = new ParameterWithCalculation(this, NameParameterWithCalculation.S3, (S3) => { return (N3 * W3) / (Lc * Tc) + Sn3; });
-            //Sс = new ParameterWithCalculation(this, NameParameterWithCalculation.Sс, (Sс) => { return (N1*W1 + Wv2*P1 + N2*W2 + N3*W3) / (Lc*Tc) + Sn1 + Sn2 + Sn3; });
-            //S = new ParameterWithCalculation(this, NameParameterWithCalculation.S, (S) => { return (N1 * W1 + Wv2 * P1 + N2 * W2 + N3 * W3) * deltaT / Tc + (Sn1 + Sn2 + Sn3) * Lc * deltaT; });
-            //SN1 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN1, (SN1) => { return (N1*W1 + Wv2*P1)*deltaT /Tc + Sn1*Lc*deltaT; });
-            //SN2 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN2, (SN2) => { return (N2 * W2) * deltaT/Tc + Sn2 * Lc * deltaT; });
-            //SN3 = new ParameterWithCalculation(this, NameParameterWithCalculation.SN3, (SN3) => { return (N3 * W3) * deltaT / Tc + Sn3 * Lc * deltaT; });
         }
 
         public Dictionary<NameParameterWithCalculation, ParameterWithCalculation> ParametersWithCalculation { get; protected set; } = new Dictionary<NameParameterWithCalculation, ParameterWithCalculation>();
@@ -135,12 +105,6 @@ namespace SystemStabilityAnalysis.Models
             q = new ParameterForAnalysis(this, NameParameterForAnalysis.q, () => { return Q2 / N2; });
             d = new ParameterForAnalysis(this, NameParameterForAnalysis.d, () => { return D2 / N2; });
             h = new ParameterForAnalysis(this, NameParameterForAnalysis.h, () => { return H3 / N3; });
-            //ρ = new ParameterForAnalysis(this, NameParameterForAnalysis.ρ, (ρ) => { return P1 / N1; });
-            //a = new ParameterForAnalysis(this, NameParameterForAnalysis.a, (a) => { return A1 / N1; });
-            //b = new ParameterForAnalysis(this, NameParameterForAnalysis.b, (b) => { return B1 / N1; });
-            //f = new ParameterForAnalysis(this, NameParameterForAnalysis.f, (f) => { return F1 / N1; });
-            //q = new ParameterForAnalysis(this, NameParameterForAnalysis.q, (q) => { return Q2 / N2; });
-            //d = new ParameterForAnalysis(this, NameParameterForAnalysis.d, (d) => { return D2 / N2; });
 
         }
         public Dictionary<NameParameterForAnalysis, ParameterForAnalysis> ParametersForAnalysis { get; protected set; } = new Dictionary<NameParameterForAnalysis, ParameterForAnalysis>();
@@ -245,6 +209,7 @@ namespace SystemStabilityAnalysis.Models
 
             return result;
         }
+
         public bool VerificationParametersWithCalculation(List<NameParameterWithCalculation> parametersWithCalculation, out List<string> message)
         {
             message = new List<string>();

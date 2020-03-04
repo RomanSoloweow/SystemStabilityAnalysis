@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models.Parameters;
 
+using SystemStabilityAnalysis.Models;
+using System.Dynamic;
+
 namespace SystemStabilityAnalysis.Models
 {
     public static class StaticData
     {
-
         public static Dictionary<string, SystemForAnalys> Systems { get; private set; } = new Dictionary<string, SystemForAnalys>();
 
         public static SystemForAnalys CurrentSystems { get; set; } = new SystemForAnalys("Test");
@@ -31,5 +33,8 @@ namespace SystemStabilityAnalysis.Models
         {
             AddSystem(CurrentSystems);
         }
+
+        public static dynamic ChartCalculation { get; set; } = new ExpandoObject();
+        public static dynamic DiagramCalculation { get; set; } = new ExpandoObject();
     }
 }
