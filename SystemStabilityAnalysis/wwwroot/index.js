@@ -1201,16 +1201,14 @@ function exportChart(event) {
       var url_base64jp = $(`#chart`)[0].toDataURL({format: 'jpg', quality: 1})
       $.ajax({
         method: "POST",
-        url: `Analysis/SaveChartToFile`,
+        url: `Analysis/SaveDataChart`,
         data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, ""),
         filename: filename}
       }).done(function(msg){
-        var blob = new Blob([msg.fileData]);
-        const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url //url_base64jp;
-        a.download = `График.csv`;
+        a.href = "Analysis/SaveChartToFile";
+        a.download = `График`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);
@@ -1239,7 +1237,6 @@ function exportDiag(event) {
     }).done(function(msg){
       if (msg.status != "negative") {
         element = $(event.target).is( ":button" ) ? $(event.target).parent() : $(event.target).parent().parent
-        console.log(element)
         element.before(`
         <div class="field">
         <label>&ensp;<br></label>
@@ -1261,17 +1258,15 @@ function exportDiag(event) {
       var url_base64jp = $(`#diagram`)[0].toDataURL({format: 'jpg', quality: 1})
       $.ajax({
         method: "POST",
-        url: `Analysis/SaveDiagramToFile`,
+        url: `Analysis/SaveDataDiagram`,
         data: {chart: url_base64jp.replace(/^data:image\/(png|jpg);base64,/, ""),
         filename: filename
       }
       }).done(function(msg){
-        var blob = new Blob([msg.fileData]);
-        const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url //url_base64jp;
-        a.download = `Диаграмма.csv`;
+        a.href = "Analysis/SaveDiagramToFile" //url_base64jp;
+        a.download = `Диаграмма`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(a.href);

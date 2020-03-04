@@ -94,8 +94,8 @@ let config1 =
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      aspectRatio : 16/9,
+      maintainAspectRatio: true,
       scales: {
         xAxes: [{
           ticks: {
