@@ -157,41 +157,9 @@ namespace SystemStabilityAnalysis.Models
             }
         }
 
-        public object GetCalculationsForChart(ParameterForCalculationChart parameterForCalculationChart)
-        {
-            List<object> values = new List<object>();
-            string parameterName = parameterForCalculationChart.parameterName;
-            double? parameterValue;
-            double step = (parameterForCalculationChart.To.Value - parameterForCalculationChart.From.Value) / parameterForCalculationChart.CountDote.Value;
-            double CurentValue = parameterForCalculationChart.From.Value - step;
-
-            Enum.TryParse(parameterName, out NameParameterWithEnter parameterWithEnter);
-
-            parameterValue = ParametersWithEnter[parameterWithEnter].Value;
-
-            for (int i = 0; i < parameterForCalculationChart.CountDote.Value; i++)
-            {
-                CurentValue += step;
-                ParametersWithEnter[parameterWithEnter].Value = CurentValue;
-                values.Add(new
-                {
-                    x = CurentValue,
-                    y = U.Value.Value
-                });
-            }
-
-            ParametersWithEnter[parameterWithEnter].Value = parameterValue;
-
-            return new
-            {
-                values = values,
-                nameSystem = Name
-            };
-        }
-
-        //public ChartCalculation GetCalculationsForChart(ParameterForCalculationChart parameterForCalculationChart)
+        //public object GetCalculationsForChart(ParameterForCalculationChart parameterForCalculationChart)
         //{
-        //    List<Coords> values = new List<Coords>();
+        //    List<object> values = new List<object>();
         //    string parameterName = parameterForCalculationChart.parameterName;
         //    double? parameterValue;
         //    double step = (parameterForCalculationChart.To.Value - parameterForCalculationChart.From.Value) / parameterForCalculationChart.CountDote.Value;
@@ -205,13 +173,45 @@ namespace SystemStabilityAnalysis.Models
         //    {
         //        CurentValue += step;
         //        ParametersWithEnter[parameterWithEnter].Value = CurentValue;
-        //        values.Add(new Coords(CurentValue, U.Value.Value));
+        //        values.Add(new
+        //        {
+        //            x = CurentValue,
+        //            y = U.Value.Value
+        //        });
         //    }
 
         //    ParametersWithEnter[parameterWithEnter].Value = parameterValue;
 
-        //    return new ChartCalculation(values, Name);
+        //    return new
+        //    {
+        //        values = values,
+        //        nameSystem = Name
+        //    };
         //}
+
+        public ChartCalculation GetCalculationsForChart(ParameterForCalculationChart parameterForCalculationChart)
+        {
+            List<Coords> values = new List<Coords>();
+            string parameterName = parameterForCalculationChart.parameterName;
+            double? parameterValue;
+            double step = (parameterForCalculationChart.To.Value - parameterForCalculationChart.From.Value) / parameterForCalculationChart.CountDote.Value;
+            double CurentValue = parameterForCalculationChart.From.Value - step;
+
+            Enum.TryParse(parameterName, out NameParameterWithEnter parameterWithEnter);
+
+            parameterValue = ParametersWithEnter[parameterWithEnter].Value;
+
+            for (int i = 0; i < parameterForCalculationChart.CountDote.Value; i++)
+            {
+                CurentValue += step;
+                ParametersWithEnter[parameterWithEnter].Value = CurentValue;
+                values.Add(new Coords(CurentValue, U.Value.Value));
+            }
+
+            ParametersWithEnter[parameterWithEnter].Value = parameterValue;
+
+            return new ChartCalculation(values, Name);
+        }
 
 
         public void SetAsCorrect()

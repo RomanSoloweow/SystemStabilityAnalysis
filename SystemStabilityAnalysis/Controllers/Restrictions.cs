@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
-using System.Text.Json;
 using SystemStabilityAnalysis.Models.Parameters;
 using Microsoft.AspNetCore.Http;
 using System.IO;
@@ -15,8 +11,6 @@ using System.Globalization;
 using CsvHelper;
 using HeyRed.Mime;
 using System.Text;
-using System.Dynamic;
-using TemplateEngine.Docx;
 
 namespace SystemStabilityAnalysis.Controllers
 {
@@ -117,8 +111,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object DeleteRestriction([FromQuery]string restrictionName = null)
         {
-            
-
+           
             if (string.IsNullOrEmpty(restrictionName))
             {
                 QueryResponse.AddNegativeMessage("Ограничение не указано");
@@ -146,7 +139,6 @@ namespace SystemStabilityAnalysis.Controllers
         public object DeleteAllRestriction()
         {
             ParameterUniversal.DeleteAllRestriction();
-
             
             return QueryResponse.ToResult();
         }
@@ -155,7 +147,6 @@ namespace SystemStabilityAnalysis.Controllers
         public object LoadRestrictionsFromFile([FromQuery]IFormFile file)
         {
             
-
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 QueryResponse.AddNegativeMessage("Файл не выбран.");
@@ -175,7 +166,6 @@ namespace SystemStabilityAnalysis.Controllers
         public object AddRestrictionsFromFile([FromQuery]IFormFile file)
         {
             
-
             if ((file == null) || (string.IsNullOrEmpty(file.FileName)))
             {
                 QueryResponse.AddNegativeMessage("Файл не выбран.");
@@ -189,54 +179,10 @@ namespace SystemStabilityAnalysis.Controllers
             return QueryResponse.ToResult();
         }
 
-
-        private bool RestrictionsFromFile(IFormFile file , out List<string> message)
-        {
-            message = new List<string>();
-
-            using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
-            {
-                using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-                {
-
-                    csvReader.Configuration.Delimiter = ";";
-                    try
-                    {
-                        List<Restriction> restrictions = csvReader.GetRecords<Restriction>().ToList();
-                        foreach (var restriction in restrictions)
-                        {
-
-                            if (restriction.AddedToRestriction())
-                            {
-                                message.Add(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
-                            }
-                            else
-                            {
-                                if(!restriction.AddToRestriction())
-                                {
-                                    message.Add(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        message.Add(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
-                    }
-                }
-            }
-            return message.Count()<1;
-
-        }
-
-
         [HttpGet] 
         public object SaveRestrictionsToFile([FromQuery]string fileName)
         {
             
-
             if (string.IsNullOrEmpty(fileName))
             {
                 QueryResponse.AddNegativeMessage("Имя файла не указано");
@@ -267,6 +213,47 @@ namespace SystemStabilityAnalysis.Controllers
                 QueryResponse.AddNegativeMessage("Ограничения для сохранения не добавлены");
 
             return QueryResponse.ToResult();
+        }
+
+        private bool RestrictionsFromFile(IFormFile file, out List<string> message)
+        {
+            message = new List<string>();
+
+            using (StreamReader streamReader = new StreamReader(file.OpenReadStream()))
+            {
+                using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+                {
+
+                    csvReader.Configuration.Delimiter = ";";
+                    try
+                    {
+                        List<Restriction> restrictions = csvReader.GetRecords<Restriction>().ToList();
+                        foreach (var restriction in restrictions)
+                        {
+
+                            if (restriction.AddedToRestriction())
+                            {
+                                message.Add(String.Format("Ограничение для  параметра {0} уже добавлено.", restriction.GetName()));
+                            }
+                            else
+                            {
+                                if (!restriction.AddToRestriction())
+                                {
+                                    message.Add(String.Format("Файл содержит не корректный параметр {0}", restriction.GetName()));
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Add(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
+                    }
+                }
+            }
+            return message.Count() < 1;
+
         }
 
     }

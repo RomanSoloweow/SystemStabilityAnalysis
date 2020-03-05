@@ -4,12 +4,11 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SystemStabilityAnalysis.Helpers;
 using SystemStabilityAnalysis.Models;
 using SystemStabilityAnalysis.Models.Parameters;
@@ -22,7 +21,6 @@ namespace SystemStabilityAnalysis.Controllers
     [Produces("application/json")]
     public class Analysis : BaseController
     {
-
         [HttpGet]
         public object GetSystems()
         {
@@ -58,22 +56,20 @@ namespace SystemStabilityAnalysis.Controllers
 
             if (QueryResponse.IsSuccess)
             {
-                List<object> calculations = new List<object>();
+                ChartCalculationResult chartCalculationResult = new ChartCalculationResult();
+                chartCalculationResult.calculations = new List<ChartCalculation>();
                 foreach (var nameSystem in parameterForCalculationChart.namesSystems)
                 {
-                    calculations.Add(StaticData.Systems[nameSystem].GetCalculationsForChart(parameterForCalculationChart));
+                    chartCalculationResult.calculations.Add(StaticData.Systems[nameSystem].GetCalculationsForChart(parameterForCalculationChart));
                 }
-                StaticData.ChartCalculation = new ExpandoObject();
-                StaticData.ChartCalculation.Calculations = calculations;
-                StaticData.ChartCalculation.ParameterNameX = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName);
-                StaticData.ChartCalculation.ParameterNameY = StaticData.CurrentSystems.GetParameterDesignation("U");
-                QueryResponse.Add(StaticData.ChartCalculation);
+                chartCalculationResult.parameterNameX = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName);
+                chartCalculationResult.parameterNameY = StaticData.CurrentSystems.GetParameterDesignation("U");
 
+                StaticData.ChartCalculation = chartCalculationResult;
 
-                //QueryResponse.Add("ParameterNameX", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationChart.parameterName));
-                //QueryResponse.Add("ParameterNameY", StaticData.CurrentSystems.GetParameterDesignation("U"));
-                //QueryResponse.Add("Calculations", calculations);
-
+                QueryResponse.Add("ParameterNameX", chartCalculationResult.parameterNameX);
+                QueryResponse.Add("ParameterNameY", chartCalculationResult.parameterNameY);
+                QueryResponse.Add("Calculations", chartCalculationResult.calculations.Select(x=>x.ToObject()));
             }
             return QueryResponse.ToResult();
 
@@ -178,7 +174,6 @@ namespace SystemStabilityAnalysis.Controllers
             return QueryResponse.ToResult();
         }
 
-
         [HttpPost]
         public object SaveDataChart([FromForm]string chart)
         {
@@ -193,63 +188,72 @@ namespace SystemStabilityAnalysis.Controllers
             return QueryResponse.ToResult();
         }
 
-
         [HttpGet]
         public object SaveChartToFile([FromQuery]string fileName)
         {
             byte[] chart = Convert.FromBase64String(StaticData.DataChart);
 
-            string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+            string filePath = Path.ChangeExtension(fileName + " отчет с графиком", ".docx");
 
-            System.IO.File.Copy("ChartReportTemplate.docx", filePath);
+            System.IO.File.Copy("TemplatesReportsWord/ChartReportTemplate.docx", filePath);
 
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
 
 
-                //ListContent listContent = new ListContent("Projects List");
-                //ListItemContent contentItems;
-                //TableContent tableContent;
+                ListContent listContent = new ListContent("systems");
+                ListItemContent contentItems;
+                TableContent tableContent;
 
-                //List<FieldContent> rows = new List<FieldContent>();
+                List<FieldContent> rows = new List<FieldContent>();
 
-
+                //fieldContents.Add(new FieldContent("nameParameterX", "Name2"));
+                //fieldContents.Add(new FieldContent("nameParameterY", "Role2"));
                 //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
                 //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
                 //List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
 
-                //for (int i = 0; i < tablets.Count; i++)
+
+                //foreach(var calculations in StaticData.DataChart.Calculations)
                 //{
-                //    rows.Clear();
-                //    rows.Add(new FieldContent("Name", names[i]));
-                //    rows.Add(new FieldContent("Role", roles[i]));
-                //    tableContent = TableContent.Create("Team members");
-                //    tableContent.AddRow(rows.ToArray());
-                //    contentItems = new ListItemContent("Project", tablets[i]);
-                //    contentItems.AddTable(tableContent);
-                //    listContent.AddItem(contentItems);
-
-
-                //    //contentItems = new ListItemContent("Project", "Project one");
-                //    //contentItems.AddTable(TableContent.Create("Team members", tableRow.ToArray()));
-                //    //listContent.AddItem(contentItems);
 
                 //}
+                foreach(var  calculation in StaticData.ChartCalculation.calculations)
+                {
+                    tableContent = TableContent.Create("systemsMembers");
+                    foreach (var value in calculation.values)
+                    {
+                        rows.Clear();
+                        rows.Add(new FieldContent("parameterX", value.X.ToString()));
+                        rows.Add(new FieldContent("parameterY", value.Y.ToString()));
+                        tableContent.AddRow(rows.ToArray());
+                    }
+
+                    contentItems = new ListItemContent("system", calculation.nameSystem);
+                    contentItems.AddTable(tableContent);
+                    listContent.AddItem(contentItems);                 
+                }
+
+                fieldContents.Add(listContent);
+                fieldContents.Add(new FieldContent("nameParameterX", StaticData.ChartCalculation.parameterNameX));
+                fieldContents.Add(new FieldContent("nameParameterY", StaticData.ChartCalculation.parameterNameY));
+
                 //fieldContents.Add(listContent);
-                //fieldContents.Add(listContent);
-                //   List<FieldContent> fieldForTable = new List<FieldContent>();
-                //   fieldForTable.Add(new FieldContent("nameParameterX","Test x"));
-                //   fieldForTable.Add(new FieldContent("nameParameterY", "Test y"));
-                //   fieldForTable.Add(new FieldContent("parameterX", "10"));
-                //   fieldForTable.Add(new FieldContent("parameterY", "15"));
+                //List<FieldContent> fieldForTable = new List<FieldContent>();
 
 
-                //   TableContent sustem1 = new TableContent("system", new TableRowContent(fieldForTable));
-                //   List<ListItemContent> tablets = new List<ListItemContent>() { sustem1 };
+                //fieldForTable.Add(new FieldContent("nameParameterX", "Test x"));
+                //fieldForTable.Add(new FieldContent("nameParameterY", "Test y"));
+                //fieldForTable.Add(new FieldContent("parameterX", "10"));
+                //fieldForTable.Add(new FieldContent("parameterY", "15"));
+
+
+                //TableContent sustem1 = new TableContent("system", new TableRowContent(fieldForTable));
+                //List<ListItemContent> tablets = new List<ListItemContent>() { sustem1 };
                 //ListItemContent contentItems = new ListItemContent("systems", );
 
-                //   fieldContents.Add(contentItems);
+                //fieldContents.Add(contentItems);
 
 
 
@@ -299,21 +303,16 @@ namespace SystemStabilityAnalysis.Controllers
         {
             byte[] chart = Convert.FromBase64String(StaticData.DataDiagram);
 
-            string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
+            string filePath = Path.ChangeExtension(fileName + " отчет с диаграммой", ".docx");
 
-            System.IO.File.Copy("DiagramReportTemplate.docx", filePath);
+            System.IO.File.Copy("TemplatesReportsWord/DiagramReportTemplate.docx", filePath);
 
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
 
-
-                //ListContent listContent = new ListContent("Projects List");
-                //ListItemContent contentItems;
-                //TableContent tableContent;
-
-                //List<FieldContent> rows = new List<FieldContent>();
-
+                TableContent tableContent = TableContent.Create("Team members");
+                List<FieldContent> rows = new List<FieldContent>();
 
                 //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
                 //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
@@ -322,13 +321,10 @@ namespace SystemStabilityAnalysis.Controllers
                 //for (int i = 0; i < tablets.Count; i++)
                 //{
                 //    rows.Clear();
-                //    rows.Add(new FieldContent("Name", names[i]));
-                //    rows.Add(new FieldContent("Role", roles[i]));
+                //    //rows.Add(new FieldContent("Name", names[i]));
+                //    //rows.Add(new FieldContent("Role", roles[i]));
                 //    tableContent = TableContent.Create("Team members");
                 //    tableContent.AddRow(rows.ToArray());
-                //    contentItems = new ListItemContent("Project", tablets[i]);
-                //    contentItems.AddTable(tableContent);
-                //    listContent.AddItem(contentItems);
 
 
                 //    //contentItems = new ListItemContent("Project", "Project one");
@@ -336,23 +332,6 @@ namespace SystemStabilityAnalysis.Controllers
                 //    //listContent.AddItem(contentItems);
 
                 //}
-                //fieldContents.Add(listContent);
-                //fieldContents.Add(listContent);
-                //   List<FieldContent> fieldForTable = new List<FieldContent>();
-                //   fieldForTable.Add(new FieldContent("nameParameterX","Test x"));
-                //   fieldForTable.Add(new FieldContent("nameParameterY", "Test y"));
-                //   fieldForTable.Add(new FieldContent("parameterX", "10"));
-                //   fieldForTable.Add(new FieldContent("parameterY", "15"));
-
-
-                //   TableContent sustem1 = new TableContent("system", new TableRowContent(fieldForTable));
-                //   List<ListItemContent> tablets = new List<ListItemContent>() { sustem1 };
-                //ListItemContent contentItems = new ListItemContent("systems", );
-
-                //   fieldContents.Add(contentItems);
-
-
-
 
                 fieldContents.Add(new ImageContent("diagram", chart));
                 using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
@@ -367,11 +346,10 @@ namespace SystemStabilityAnalysis.Controllers
             return null;
         }
 
-
         [HttpGet]
         public object ValidateChartBeforeSave([FromQuery]string queryString)
         {
-            ParameterForCalculationChart parameterForCalculationChart = ValidateChart(queryString);
+            //ParameterForCalculationChart parameterForCalculationChart = ValidateChart(queryString);
 
             return QueryResponse.ToResult();
         }

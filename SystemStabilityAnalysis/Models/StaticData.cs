@@ -34,7 +34,7 @@ namespace SystemStabilityAnalysis.Models
             AddSystem(CurrentSystems);
         }
 
-        public static dynamic ChartCalculation { get; set; } = new ExpandoObject();
+        public static ChartCalculationResult ChartCalculation { get; set; } = new ChartCalculationResult();
         public static dynamic DiagramCalculation { get; set; } = new ExpandoObject();
 
         public static string DataChart{get;set;}

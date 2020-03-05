@@ -25,7 +25,7 @@ namespace SystemStabilityAnalysis.Controllers
         {
             
             QueryResponse.Add("ParametersWithEnter", StaticData.CurrentSystems.GetParametersWithEnter(out List<string> message));
-            //QueryResponse.AddNegativeMessages(message, true);
+            QueryResponse.AddWarningMessages(message, true);
             return QueryResponse.ToResult();
         }
 
@@ -166,7 +166,7 @@ namespace SystemStabilityAnalysis.Controllers
 
             string filePath = Path.ChangeExtension(fileName + " отчет", ".docx");
             
-            System.IO.File.Copy("SystemReportTemplate.docx", filePath);
+            System.IO.File.Copy("TemplatesReportsWord/SystemReportTemplate.docx", filePath);
 
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
