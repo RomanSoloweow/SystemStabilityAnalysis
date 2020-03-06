@@ -33,10 +33,10 @@ namespace SystemStabilityAnalysis.Models
         {
             AddSystem(CurrentSystems);
         }
-
+        
         public static ChartCalculationResult ChartCalculation { get; set; } = new ChartCalculationResult();
         public static DiagramCalculationResult DiagramCalculation { get; set; } = new DiagramCalculationResult();
-
+        //public static dynamic DiagramCalculation { get; set; } = new ExpandoObject();
         public static string DataChart{get;set;}
         public static string DataDiagram { get; set; }
     }

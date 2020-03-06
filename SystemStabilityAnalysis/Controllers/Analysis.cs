@@ -92,6 +92,23 @@ namespace SystemStabilityAnalysis.Controllers
                 StaticData.DiagramCalculation = diagramCalculationResult;
                 QueryResponse.Add("ParameterName", diagramCalculationResult.parameterName);
                 QueryResponse.Add("Calculations", diagramCalculationResult.calculations);
+
+                //List<object> calculations = new List<object>();
+                //foreach (var nameSystem in parameterForCalculationDiagram.namesSystems)
+                //{
+                //    calculations.Add(new
+                //    {
+
+                //        NameSystem = nameSystem,
+                //        Value = StaticData.Systems[nameSystem].GetParameterValue(parameterForCalculationDiagram.parameterName)
+                //    });
+                //}
+                //StaticData.DiagramCalculation = new ExpandoObject();
+                //StaticData.DiagramCalculation.ParameterName = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName);
+                //StaticData.DiagramCalculation.Calculations = calculations;
+                //QueryResponse.Add(StaticData.DiagramCalculation);
+                //QueryResponse.Add("ParameterName", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName));
+                //QueryResponse.Add("Calculations", calculations);
             }
             return QueryResponse.ToResult();
         }

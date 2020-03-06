@@ -13,9 +13,9 @@ namespace SystemStabilityAnalysis.Helpers
             nameSystem = _nameSystem;
         }
 
-        public double values { get; set; }
-
         public string nameSystem { get; set; }
+
+        public double values { get; set; }
 
         public object ToObject()
         {
