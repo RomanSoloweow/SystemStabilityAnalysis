@@ -82,24 +82,16 @@ namespace SystemStabilityAnalysis.Controllers
 
             if (QueryResponse.IsSuccess)
             {
-                List<object> calculations = new List<object>();
+                DiagramCalculationResult diagramCalculationResult = new DiagramCalculationResult();
+                diagramCalculationResult.calculations = new List<DiagramCalculation>();
                 foreach (var nameSystem in parameterForCalculationDiagram.namesSystems)
                 {
-                    calculations.Add(new
-                    {
-
-                        NameSystem = nameSystem,
-                        Value = StaticData.Systems[nameSystem].GetParameterValue(parameterForCalculationDiagram.parameterName)
-                    });
-
+                    diagramCalculationResult.calculations.Add(new DiagramCalculation(StaticData.Systems[nameSystem].GetParameterValue(parameterForCalculationDiagram.parameterName), nameSystem));
                 }
-
-                StaticData.DiagramCalculation = new ExpandoObject();
-                StaticData.DiagramCalculation.ParameterName = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName);
-                StaticData.DiagramCalculation.Calculations = calculations;
-                QueryResponse.Add(StaticData.DiagramCalculation);
-                //QueryResponse.Add("ParameterName", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName));
-                //QueryResponse.Add("Calculations", calculations);
+                diagramCalculationResult.parameterName = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName);
+                StaticData.DiagramCalculation = diagramCalculationResult;
+                QueryResponse.Add("ParameterName", diagramCalculationResult.parameterName);
+                QueryResponse.Add("Calculations", diagramCalculationResult.calculations);
             }
             return QueryResponse.ToResult();
         }

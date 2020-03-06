@@ -30,6 +30,5 @@ namespace SystemStabilityAnalysis.Helpers
         public List<ChartCalculation> calculations { get; set; }
         public string parameterNameX { get; set; }
         public string parameterNameY { get; set; }
-
     }
 }
