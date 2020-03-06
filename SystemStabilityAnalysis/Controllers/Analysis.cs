@@ -200,25 +200,12 @@ namespace SystemStabilityAnalysis.Controllers
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
-
-
                 ListContent listContent = new ListContent("systems");
                 ListItemContent contentItems;
                 TableContent tableContent;
 
                 List<FieldContent> rows = new List<FieldContent>();
 
-                //fieldContents.Add(new FieldContent("nameParameterX", "Name2"));
-                //fieldContents.Add(new FieldContent("nameParameterY", "Role2"));
-                //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
-                //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
-                //List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
-
-
-                //foreach(var calculations in StaticData.DataChart.Calculations)
-                //{
-
-                //}
                 foreach(var  calculation in StaticData.ChartCalculation.calculations)
                 {
                     tableContent = TableContent.Create("systemsMembers");
@@ -238,25 +225,6 @@ namespace SystemStabilityAnalysis.Controllers
                 fieldContents.Add(listContent);
                 fieldContents.Add(new FieldContent("nameParameterX", StaticData.ChartCalculation.parameterNameX));
                 fieldContents.Add(new FieldContent("nameParameterY", StaticData.ChartCalculation.parameterNameY));
-
-                //fieldContents.Add(listContent);
-                //List<FieldContent> fieldForTable = new List<FieldContent>();
-
-
-                //fieldForTable.Add(new FieldContent("nameParameterX", "Test x"));
-                //fieldForTable.Add(new FieldContent("nameParameterY", "Test y"));
-                //fieldForTable.Add(new FieldContent("parameterX", "10"));
-                //fieldForTable.Add(new FieldContent("parameterY", "15"));
-
-
-                //TableContent sustem1 = new TableContent("system", new TableRowContent(fieldForTable));
-                //List<ListItemContent> tablets = new List<ListItemContent>() { sustem1 };
-                //ListItemContent contentItems = new ListItemContent("systems", );
-
-                //fieldContents.Add(contentItems);
-
-
-
 
                 fieldContents.Add(new ImageContent("chart", chart));
                 using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
@@ -301,7 +269,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object SaveDiagramToFile([FromQuery]string fileName)
         {
-            byte[] chart = Convert.FromBase64String(StaticData.DataDiagram);
+            byte[] diagram = Convert.FromBase64String(StaticData.DataDiagram);
 
             string filePath = Path.ChangeExtension(fileName + " отчет с диаграммой", ".docx");
 
@@ -310,30 +278,33 @@ namespace SystemStabilityAnalysis.Controllers
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
+                //ListItemContent contentItems;
+                TableContent tableContent;
 
-                TableContent tableContent = TableContent.Create("Team members");
                 List<FieldContent> rows = new List<FieldContent>();
 
-                //List<string> tablets = new List<string>() { "Project one", "Project two", "Project three" };
-                //List<string> names = new List<string>() { "Eric", "Kel", "Bob" };
-                //List<string> roles = new List<string>() { "Program Manager", "Developer", "blalbla" };
-
-                //for (int i = 0; i < tablets.Count; i++)
+                tableContent = TableContent.Create("systemMembers");
+                //foreach (var value in calculation.values)
                 //{
                 //    rows.Clear();
-                //    //rows.Add(new FieldContent("Name", names[i]));
-                //    //rows.Add(new FieldContent("Role", roles[i]));
-                //    tableContent = TableContent.Create("Team members");
+                //    rows.Add(new FieldContent("parameterX", value.X.ToString()));
+                //    rows.Add(new FieldContent("parameterY", value.Y.ToString()));
                 //    tableContent.AddRow(rows.ToArray());
-
-
-                //    //contentItems = new ListItemContent("Project", "Project one");
-                //    //contentItems.AddTable(TableContent.Create("Team members", tableRow.ToArray()));
-                //    //listContent.AddItem(contentItems);
-
                 //}
+                rows.Clear();
+                rows.Add(new FieldContent("nameSystem", "Авто"));
+                rows.Add(new FieldContent("parameterValue", 15.ToString()));
+                tableContent.AddRow(rows.ToArray());
 
-                fieldContents.Add(new ImageContent("diagram", chart));
+                rows.Clear();
+                rows.Add(new FieldContent("nameSystem", "Авто2"));
+                rows.Add(new FieldContent("parameterValue", 35.ToString()));
+                tableContent.AddRow(rows.ToArray());
+
+                fieldContents.Add(tableContent);
+                fieldContents.Add(new FieldContent("nameParameter", "U"));
+
+                //fieldContents.Add(new ImageContent("diagram", diagram));
                 using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(new Content(fieldContents.ToArray()));
@@ -357,7 +328,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateDiagramBeforeSave([FromQuery]string queryString)
         {
-            ParameterForCalculationDiagram parameterForCalculationDiagram = ValidateDiagram(queryString);
+            //ParameterForCalculationDiagram parameterForCalculationDiagram = ValidateDiagram(queryString);
 
             return QueryResponse.ToResult();
         }
