@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using HeyRed.Mime;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -92,23 +93,6 @@ namespace SystemStabilityAnalysis.Controllers
                 StaticData.DiagramCalculation = diagramCalculationResult;
                 QueryResponse.Add("ParameterName", diagramCalculationResult.parameterName);
                 QueryResponse.Add("Calculations", diagramCalculationResult.calculations);
-
-                //List<object> calculations = new List<object>();
-                //foreach (var nameSystem in parameterForCalculationDiagram.namesSystems)
-                //{
-                //    calculations.Add(new
-                //    {
-
-                //        NameSystem = nameSystem,
-                //        Value = StaticData.Systems[nameSystem].GetParameterValue(parameterForCalculationDiagram.parameterName)
-                //    });
-                //}
-                //StaticData.DiagramCalculation = new ExpandoObject();
-                //StaticData.DiagramCalculation.ParameterName = StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName);
-                //StaticData.DiagramCalculation.Calculations = calculations;
-                //QueryResponse.Add(StaticData.DiagramCalculation);
-                //QueryResponse.Add("ParameterName", StaticData.CurrentSystems.GetParameterDesignation(parameterForCalculationDiagram.parameterName));
-                //QueryResponse.Add("Calculations", calculations);
             }
             return QueryResponse.ToResult();
         }
@@ -133,14 +117,20 @@ namespace SystemStabilityAnalysis.Controllers
                         csvReader.Configuration.Delimiter = ";";
                         try
                         {
+
                             List<ParameterWithEnter> parametersWithEnter = csvReader.GetRecords<ParameterWithEnter>().ToList();
+                            string nameSystem = Path.GetFileNameWithoutExtension(file.FileName);
                             if (parametersWithEnter.Count != HelperEnum.GetValuesWithoutDefault<NameParameterWithEnter>().Count)
                             {
                                 QueryResponse.AddNegativeMessage(String.Format("Файл {0} не корректен, выберите файл, сохраненный системой", file.FileName));
                             }
+                            else if(StaticData.Systems.Keys.Contains(nameSystem))
+                            {
+                                QueryResponse.AddNegativeMessage(String.Format("Система с именем {0} уже была добавлена", nameSystem));
+                            }
                             else
                             {
-                                string nameSystem = Path.GetFileNameWithoutExtension(file.FileName);
+                                
                                 SystemForAnalys systemForAnalys = new SystemForAnalys(nameSystem);
                                 foreach (var parameterWithEnter in parametersWithEnter)
                                 {
@@ -214,16 +204,19 @@ namespace SystemStabilityAnalysis.Controllers
                 TableContent tableContent;
 
                 List<FieldContent> rows = new List<FieldContent>();
-
+                int number;
                 foreach(var  calculation in StaticData.ChartCalculation.calculations)
                 {
+                    number = 1;
                     tableContent = TableContent.Create("systemsMembers");
                     foreach (var value in calculation.values)
                     {
                         rows.Clear();
+                        rows.Add(new FieldContent("number", number.ToString()+"."));
                         rows.Add(new FieldContent("parameterX", value.X.ToString()));
                         rows.Add(new FieldContent("parameterY", value.Y.ToString()));
                         tableContent.AddRow(rows.ToArray());
+                        number++;
                     }
 
                     contentItems = new ListItemContent("system", calculation.nameSystem);
@@ -243,36 +236,15 @@ namespace SystemStabilityAnalysis.Controllers
                 }
 
             }
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
             System.IO.File.Delete(filePath);
 
-            //var path = Path.Combine(Directory.GetCurrentDirectory(), "test.csv");
-
-            //var memory = new MemoryStream();
-            //using (var stream = new FileStream(path, FileMode.Open))
-            //{
-            //    stream.CopyTo(memory);
-            //}
-            //var t = new
-            //{
-            //    fileData = File(memory, "text/csv", Path.ChangeExtension("chart", ".csv")),
-            //    fileType = "csv"
-            //};
-            //return t;
-            //memory.Position = 0;
-            //return ;
-            //return null;
-            //if (string.IsNullOrEmpty(chart))
-            //{
-            //    QueryResponse.AddNegativeMessage("Строка пустая");
-
-            //}
-            //else
-            //{
-            //    QueryResponse.AddSuccessMessage("Что-то дошло");
-            //}
-            //return QueryResponse.ToResult();
-
-            return null;
+            memory.Position = 0;
+            return File(memory, MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
         [HttpGet]
@@ -287,33 +259,21 @@ namespace SystemStabilityAnalysis.Controllers
             using (FileStream fstream = System.IO.File.Open(filePath, FileMode.Open))
             {
                 List<IContentItem> fieldContents = new List<IContentItem>();
-                //ListItemContent contentItems;
                 TableContent tableContent;
-
                 List<FieldContent> rows = new List<FieldContent>();
 
                 tableContent = TableContent.Create("systemMembers");
-                //foreach (var value in calculation.values)
-                //{
-                //    rows.Clear();
-                //    rows.Add(new FieldContent("parameterX", value.X.ToString()));
-                //    rows.Add(new FieldContent("parameterY", value.Y.ToString()));
-                //    tableContent.AddRow(rows.ToArray());
-                //}
-                rows.Clear();
-                rows.Add(new FieldContent("nameSystem", "Авто"));
-                rows.Add(new FieldContent("parameterValue", 15.ToString()));
-                tableContent.AddRow(rows.ToArray());
-
-                rows.Clear();
-                rows.Add(new FieldContent("nameSystem", "Авто2"));
-                rows.Add(new FieldContent("parameterValue", 35.ToString()));
-                tableContent.AddRow(rows.ToArray());
-
+                foreach (var calculation in StaticData.DiagramCalculation.calculations)
+                {
+                    rows.Clear();
+                    rows.Add(new FieldContent("nameSystem", calculation.nameSystem));
+                    rows.Add(new FieldContent("parameterValue", calculation.value.ToString()));
+                    tableContent.AddRow(rows.ToArray());
+                }
                 fieldContents.Add(tableContent);
-                fieldContents.Add(new FieldContent("nameParameter", "U"));
+                fieldContents.Add(new FieldContent("nameParameter", StaticData.DiagramCalculation.parameterName));
 
-                //fieldContents.Add(new ImageContent("diagram", diagram));
+                fieldContents.Add(new ImageContent("diagram", diagram));
                 using (var outputDocument = new TemplateProcessor(fstream).SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(new Content(fieldContents.ToArray()));
@@ -321,15 +281,21 @@ namespace SystemStabilityAnalysis.Controllers
                 }
 
             }
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                stream.CopyTo(memory);
+            }
             System.IO.File.Delete(filePath);
 
-            return null;
+            memory.Position = 0;
+            return File(memory, MimeTypesMap.GetMimeType(filePath), filePath);
         }
 
         [HttpGet]
         public object ValidateChartBeforeSave([FromQuery]string queryString)
         {
-            //ParameterForCalculationChart parameterForCalculationChart = ValidateChart(queryString);
+            ParameterForCalculationChart parameterForCalculationChart = ValidateChart(queryString);
 
             return QueryResponse.ToResult();
         }
@@ -337,7 +303,7 @@ namespace SystemStabilityAnalysis.Controllers
         [HttpGet]
         public object ValidateDiagramBeforeSave([FromQuery]string queryString)
         {
-            //ParameterForCalculationDiagram parameterForCalculationDiagram = ValidateDiagram(queryString);
+            ParameterForCalculationDiagram parameterForCalculationDiagram = ValidateDiagram(queryString);
 
             return QueryResponse.ToResult();
         }

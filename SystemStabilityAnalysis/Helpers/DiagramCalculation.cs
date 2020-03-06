@@ -7,22 +7,22 @@ namespace SystemStabilityAnalysis.Helpers
 {
     public struct DiagramCalculation
     {
-        public DiagramCalculation(double _values, string _nameSystem)
+        public DiagramCalculation(double _value, string _nameSystem)
         {
-            values = _values;
+            value = _value;
             nameSystem = _nameSystem;
         }
 
         public string nameSystem { get; set; }
 
-        public double values { get; set; }
+        public double value { get; set; }
 
         public object ToObject()
         {
             return new
             {
                 nameSystem,
-                values = values
+                value = value
             };
         }
     }
