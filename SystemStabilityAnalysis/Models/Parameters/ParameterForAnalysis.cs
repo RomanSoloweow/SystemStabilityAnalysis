@@ -166,12 +166,12 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
 
             dynamic result = new ExpandoObject();
-            result.Name = parameter.GetDesignation();
-            result.Description = parameter.GetDescription();
-            result.Unit = parameter.GetUnit().GetDesignation();
-            result.Condition = conditionType.GetDesignation();
-            result.Value = value;
-            result.RestrictionName = parameter.GetName();
+            result.name = parameter.GetDesignation();
+            result.description = parameter.GetDescription();
+            result.unit = parameter.GetUnit().GetDesignation();
+            result.condition = conditionType.GetDesignation();
+            result.value = value;
+            result.restrictionName = parameter.GetName();
             return result;
 
         }

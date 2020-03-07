@@ -66,9 +66,9 @@ namespace SystemStabilityAnalysis.Models.Parameters
         {
             return new
             {
-                Name = Designation,
-                Description = Description,
-                Value = Name
+                name = Designation,
+                description = Description,
+                value = Name
             };
         }
         public bool Verification(out string message)
